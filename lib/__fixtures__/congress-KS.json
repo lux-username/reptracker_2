@@ -1,0 +1,147 @@
+{
+    "members": [
+        {
+            "bioguideId": "S001228",
+            "depiction": {
+                "attribution": "Image courtesy of the Member",
+                "imageUrl": "https://www.congress.gov/img/member/67745ec50b34857ecc909185_200.jpg"
+            },
+            "district": 2,
+            "name": "Schmidt, Derek",
+            "partyName": "Republican",
+            "state": "Kansas",
+            "terms": {
+                "item": [
+                    {
+                        "chamber": "House of Representatives",
+                        "startYear": 2025
+                    }
+                ]
+            },
+            "updateDate": "2026-07-08T07:40:27Z",
+            "url": "https://api.congress.gov/v3/member/S001228?format=json"
+        },
+        {
+            "bioguideId": "M000871",
+            "depiction": {
+                "attribution": "Image courtesy of the Member",
+                "imageUrl": "https://www.congress.gov/img/member/m000871_200.jpg"
+            },
+            "district": 1,
+            "name": "Mann, Tracey",
+            "partyName": "Republican",
+            "state": "Kansas",
+            "terms": {
+                "item": [
+                    {
+                        "chamber": "House of Representatives",
+                        "startYear": 2021
+                    }
+                ]
+            },
+            "updateDate": "2026-07-08T07:40:24Z",
+            "url": "https://api.congress.gov/v3/member/M000871?format=json"
+        },
+        {
+            "bioguideId": "D000629",
+            "depiction": {
+                "attribution": "Image courtesy of the Member",
+                "imageUrl": "https://www.congress.gov/img/member/d000629_200.jpg"
+            },
+            "district": 3,
+            "name": "Davids, Sharice",
+            "partyName": "Democratic",
+            "state": "Kansas",
+            "terms": {
+                "item": [
+                    {
+                        "chamber": "House of Representatives",
+                        "startYear": 2019
+                    }
+                ]
+            },
+            "updateDate": "2026-07-08T07:40:23Z",
+            "url": "https://api.congress.gov/v3/member/D000629?format=json"
+        },
+        {
+            "bioguideId": "E000298",
+            "depiction": {
+                "attribution": "Image courtesy of the Member",
+                "imageUrl": "https://www.congress.gov/img/member/e000298_200.jpg"
+            },
+            "district": 4,
+            "name": "Estes, Ron",
+            "partyName": "Republican",
+            "state": "Kansas",
+            "terms": {
+                "item": [
+                    {
+                        "chamber": "House of Representatives",
+                        "startYear": 2017
+                    }
+                ]
+            },
+            "updateDate": "2026-07-08T07:40:23Z",
+            "url": "https://api.congress.gov/v3/member/E000298?format=json"
+        },
+        {
+            "bioguideId": "M000934",
+            "depiction": {
+                "attribution": "<a href=\"http://www.senate.gov/artandhistory/history/common/generic/Photo_Collection_of_the_Senate_Historical_Office.htm\">Courtesy U.S. Senate Historical Office</a>",
+                "imageUrl": "https://www.congress.gov/img/member/m000934_200.jpg"
+            },
+            "district": null,
+            "name": "Moran, Jerry",
+            "partyName": "Republican",
+            "state": "Kansas",
+            "terms": {
+                "item": [
+                    {
+                        "chamber": "House of Representatives",
+                        "endYear": 2011,
+                        "startYear": 1997
+                    },
+                    {
+                        "chamber": "Senate",
+                        "startYear": 2011
+                    }
+                ]
+            },
+            "updateDate": "2026-03-08T10:32:04Z",
+            "url": "https://api.congress.gov/v3/member/M000934?format=json"
+        },
+        {
+            "bioguideId": "M001198",
+            "depiction": {
+                "attribution": "Congressional Pictorial Directory",
+                "imageUrl": "https://www.congress.gov/img/member/m001198_200.jpg"
+            },
+            "district": null,
+            "name": "Marshall, Roger",
+            "partyName": "Republican",
+            "state": "Kansas",
+            "terms": {
+                "item": [
+                    {
+                        "chamber": "House of Representatives",
+                        "endYear": 2021,
+                        "startYear": 2017
+                    },
+                    {
+                        "chamber": "Senate",
+                        "startYear": 2021
+                    }
+                ]
+            },
+            "updateDate": "2026-03-08T10:31:55Z",
+            "url": "https://api.congress.gov/v3/member/M001198?format=json"
+        }
+    ],
+    "pagination": {
+        "count": 6
+    },
+    "request": {
+        "contentType": "application/json",
+        "format": "json"
+    }
+}

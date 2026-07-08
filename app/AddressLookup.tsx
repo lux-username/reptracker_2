@@ -1,0 +1,193 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import type { DistrictCandidate, LookupResult, Rep } from "@/lib/types";
+import { lookupAction, resolveCandidateAction } from "./actions";
+
+// Issue #2 delivers the *lookup* — identifying who a constituent's reps are.
+// The rich per-rep section layout (committees, contact, upcoming decisions) is
+// Issue #3, so results here are deliberately an identity-level summary.
+
+const ORDINAL: Record<string, string> = { "1": "st", "2": "nd", "3": "rd" };
+function districtLabel(state: string, district: number, nonVoting: boolean): string {
+  if (district === 0) return nonVoting ? `${state} (at-large)` : `${state} at-large`;
+  const suffix = ORDINAL[String(district % 10)] && !(district >= 11 && district <= 13)
+    ? ORDINAL[String(district % 10)]
+    : "th";
+  return `${state}-${String(district).padStart(2, "0")} (${district}${suffix} district)`;
+}
+
+function readableName(name: string): string {
+  const [last, rest] = name.split(",", 2);
+  return rest ? `${rest.trim()} ${last.trim()}` : name;
+}
+
+const ROLE_LABEL: Record<NonNullable<Rep["houseRole"]>, string> = {
+  representative: "Representative",
+  delegate: "Delegate",
+  "resident-commissioner": "Resident Commissioner",
+};
+
+function RepCard({ rep }: { rep: Rep }) {
+  const role =
+    rep.chamber === "senate" ? "Senator" : rep.houseRole ? ROLE_LABEL[rep.houseRole] : "Representative";
+  return (
+    <li className="flex items-center gap-4 rounded-lg border border-slate-200 p-4">
+      {rep.imageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={rep.imageUrl}
+          alt={`${readableName(rep.name)}, ${rep.party} ${rep.state}`}
+          className="h-14 w-14 shrink-0 rounded-full object-cover"
+        />
+      ) : (
+        <div className="h-14 w-14 shrink-0 rounded-full bg-slate-100" aria-hidden />
+      )}
+      <div>
+        <p className="font-semibold text-slate-900">{readableName(rep.name)}</p>
+        <p className="text-sm text-slate-600">
+          {role} · {rep.party}
+          {rep.chamber === "house" && rep.district !== null
+            ? ` · ${districtLabel(rep.state, rep.district, rep.houseRole !== "representative")}`
+            : ` · ${rep.state}`}
+        </p>
+      </div>
+    </li>
+  );
+}
+
+function Results({ result }: { result: Extract<LookupResult, { status: "resolved" }> }) {
+  const { reps } = result;
+  return (
+    <section aria-live="polite" className="flex flex-col gap-4">
+      <h2 className="text-xl font-semibold text-slate-900">
+        Your federal representatives
+      </h2>
+      {reps.delegateBanner && (
+        <p
+          role="note"
+          className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900"
+        >
+          {reps.delegateBanner}
+        </p>
+      )}
+      <ul className="flex flex-col gap-3">
+        {reps.houseMember && <RepCard rep={reps.houseMember} />}
+        {reps.senators.map((s) => (
+          <RepCard key={s.bioguideId} rep={s} />
+        ))}
+      </ul>
+      {!reps.houseMember && (
+        <p className="text-sm text-slate-500">
+          This seat appears to be vacant in the current Congress.
+        </p>
+      )}
+      <p className="text-xs text-slate-400">
+        Detailed per-rep sections (committee roles, contact info, upcoming
+        decisions) are coming next.
+      </p>
+    </section>
+  );
+}
+
+function Disambiguation({
+  candidates,
+  onChoose,
+  pending,
+}: {
+  candidates: DistrictCandidate[];
+  onChoose: (c: DistrictCandidate) => void;
+  pending: boolean;
+}) {
+  return (
+    <section className="flex flex-col gap-4">
+      <div>
+        <h2 className="text-xl font-semibold text-slate-900">Which district is yours?</h2>
+        <p className="text-sm text-slate-600">
+          That address could fall in {candidates.length} different congressional
+          districts. Pick the one that matches you so we show the right
+          representatives.
+        </p>
+      </div>
+      <ul className="flex flex-col gap-3">
+        {candidates.map((c) => (
+          <li key={c.ocdId}>
+            <button
+              type="button"
+              disabled={pending}
+              onClick={() => onChoose(c)}
+              className="w-full rounded-lg border border-slate-200 p-4 text-left hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500 disabled:opacity-50"
+            >
+              <span className="block font-semibold text-slate-900">
+                {districtLabel(c.state, c.district, c.nonVoting)}
+              </span>
+              <span className="block text-sm text-slate-600">
+                {c.formattedAddress}
+                {c.housePreviewSurname ? ` · Rep. ${c.housePreviewSurname}` : ""}
+                {c.proportion < 1 ? ` · ${Math.round(c.proportion * 100)}% of this area` : ""}
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+export default function AddressLookup() {
+  const [address, setAddress] = useState("");
+  const [result, setResult] = useState<LookupResult | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    startTransition(async () => setResult(await lookupAction(address)));
+  }
+
+  function onChoose(c: DistrictCandidate) {
+    startTransition(async () => setResult(await resolveCandidateAction(c)));
+  }
+
+  return (
+    <div className="flex flex-col gap-8">
+      <form onSubmit={onSubmit} className="flex flex-col gap-2">
+        <label htmlFor="address" className="font-medium text-slate-900">
+          Your address
+        </label>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <input
+            id="address"
+            name="address"
+            type="text"
+            autoComplete="street-address"
+            placeholder="1600 Pennsylvania Ave NW, Washington, DC"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-500"
+          />
+          <button
+            type="submit"
+            disabled={pending || !address.trim()}
+            className="rounded-md bg-slate-900 px-5 py-2 font-medium text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 disabled:opacity-50"
+          >
+            {pending ? "Looking up…" : "Find my reps"}
+          </button>
+        </div>
+        <p className="text-xs text-slate-500">
+          A full street address gives the most accurate result. A ZIP code works
+          too, but may ask you to pick your district.
+        </p>
+      </form>
+
+      {result?.status === "disambiguate" && (
+        <Disambiguation candidates={result.candidates} onChoose={onChoose} pending={pending} />
+      )}
+      {result?.status === "resolved" && <Results result={result} />}
+      {(result?.status === "not_found" || result?.status === "error") && (
+        <p role="alert" className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+          {result.message}
+        </p>
+      )}
+    </div>
+  );
+}

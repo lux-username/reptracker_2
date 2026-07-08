@@ -1,0 +1,104 @@
+{
+    "input": {
+        "address_components": {
+            "number": "1600",
+            "street": "Pennsylvania",
+            "suffix": "Ave",
+            "postdirectional": "NW",
+            "formatted_street": "Pennsylvania Ave NW",
+            "city": "Washington",
+            "state": "DC",
+            "zip": "20500",
+            "country": "US"
+        },
+        "formatted_address": "1600 Pennsylvania Ave NW, Washington, DC 20500"
+    },
+    "results": [
+        {
+            "stable_address_key": "gcod_usnqu2qtyk7ac38dlpzanec598p2c",
+            "address_components": {
+                "number": "1600",
+                "street": "Pennsylvania",
+                "suffix": "Ave",
+                "postdirectional": "NW",
+                "formatted_street": "Pennsylvania Ave NW",
+                "city": "Washington",
+                "county": "District of Columbia",
+                "state": "DC",
+                "zip": "20500",
+                "country": "US"
+            },
+            "address_lines": [
+                "1600 Pennsylvania Ave NW",
+                "",
+                "Washington, DC 20500"
+            ],
+            "formatted_address": "1600 Pennsylvania Ave NW, Washington, DC 20500",
+            "location": {
+                "lat": 38.897675,
+                "lng": -77.036547
+            },
+            "accuracy": 1,
+            "accuracy_type": "rooftop",
+            "match_type": null,
+            "source": "Statewide (City of Washington)",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Delegate District (at Large)",
+                        "district_number": 98,
+                        "ocd_id": "ocd-division/country:us/district:dc/cd:at-large",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 1,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Norton",
+                                    "first_name": "Eleanor",
+                                    "birthday": "1937-06-13",
+                                    "gender": "F",
+                                    "party": "Democrat",
+                                    "photo_url": "https://www.congress.gov/img/member/116_dg_dc_norton_eleanor_200.jpg",
+                                    "photo_attribution": "Congressional Pictorial Directory"
+                                },
+                                "contact": {
+                                    "url": "https://norton.house.gov",
+                                    "address": "2136 Rayburn House Office Building Washington DC 20515-5101",
+                                    "phone": "202-225-8050",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": "http://norton.house.gov/index.php?format=feed&amp;type=rss",
+                                    "twitter": "EleanorNorton",
+                                    "facebook": "CongresswomanNorton",
+                                    "youtube": "EleanorHNorton",
+                                    "youtube_id": "UChRrAXUGylfxJjbquC6aUjQ"
+                                },
+                                "references": {
+                                    "bioguide_id": "N000147",
+                                    "thomas_id": "00868",
+                                    "opensecrets_id": "N00001692",
+                                    "lis_id": null,
+                                    "cspan_id": "882",
+                                    "govtrack_id": "400295",
+                                    "votesmart_id": "775",
+                                    "ballotpedia_id": "Eleanor Holmes Norton",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eleanor Holmes Norton"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "_warnings": [
+        "There is a newer API version available, please consider upgrading to v2. See changelog here: https://www.geocod.io/docs/#changelog"
+    ]
+}

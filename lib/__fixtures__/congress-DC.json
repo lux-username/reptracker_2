@@ -1,0 +1,32 @@
+{
+    "members": [
+        {
+            "bioguideId": "N000147",
+            "depiction": {
+                "attribution": "Congressional Pictorial Directory",
+                "imageUrl": "https://www.congress.gov/img/member/116_dg_dc_norton_eleanor_200.jpg"
+            },
+            "district": 0,
+            "name": "Norton, Eleanor Holmes",
+            "partyName": "Democratic",
+            "state": "District of Columbia",
+            "terms": {
+                "item": [
+                    {
+                        "chamber": "House of Representatives",
+                        "startYear": 1991
+                    }
+                ]
+            },
+            "updateDate": "2026-07-08T07:40:21Z",
+            "url": "https://api.congress.gov/v3/member/N000147?format=json"
+        }
+    ],
+    "pagination": {
+        "count": 1
+    },
+    "request": {
+        "contentType": "application/json",
+        "format": "json"
+    }
+}

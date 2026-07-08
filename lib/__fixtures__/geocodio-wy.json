@@ -1,0 +1,964 @@
+{
+    "input": {
+        "address_components": {
+            "city": "Cheyenne",
+            "state": "WY",
+            "zip": "82001",
+            "country": "US"
+        },
+        "formatted_address": "Cheyenne, WY 82001"
+    },
+    "results": [
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Cheyenne",
+                "county": "Laramie County",
+                "state": "WY",
+                "zip": "82001",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Cheyenne, WY 82001"
+            ],
+            "formatted_address": "Cheyenne, WY 82001",
+            "location": {
+                "lat": 41.092356,
+                "lng": -104.936269
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District",
+                        "district_number": 0,
+                        "ocd_id": "ocd-division/country:us/state:wy/cd:at-large",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 1,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Hageman",
+                                    "first_name": "Harriet",
+                                    "birthday": "1962-10-18",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001096_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://hageman.house.gov",
+                                    "address": "1227 Longworth House Office Building Washington DC 20515-5000",
+                                    "phone": "202-225-2311",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepHageman",
+                                    "facebook": null,
+                                    "youtube": "@rephageman",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001096",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049197",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456951",
+                                    "votesmart_id": "182961",
+                                    "ballotpedia_id": "Harriet Hageman",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Harriet Hageman"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Barrasso",
+                                    "first_name": "John",
+                                    "birthday": "1952-07-21",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b001261_200.jpg",
+                                    "photo_attribution": "Courtesy U.S. Senate Historical Office (http://www.senate.gov/artandhistory/history/common/generic/Photo_Collection_of_the_Senate_Historical_Office.htm)"
+                                },
+                                "contact": {
+                                    "url": "https://www.barrasso.senate.gov",
+                                    "address": "307 Dirksen Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6441",
+                                    "contact_form": "https://www.barrasso.senate.gov/public/index.cfm/contact-form"
+                                },
+                                "social": {
+                                    "rss_url": "http://www.barrasso.senate.gov/public/index.cfm?FuseAction=Rss.Feed",
+                                    "twitter": "SenJohnBarrasso",
+                                    "facebook": "johnbarrasso",
+                                    "youtube": "barrassowyo",
+                                    "youtube_id": "UC80PfiCAB2Fe1MFayWlR6GQ"
+                                },
+                                "references": {
+                                    "bioguide_id": "B001261",
+                                    "thomas_id": "01881",
+                                    "opensecrets_id": "N00006236",
+                                    "lis_id": "S317",
+                                    "cspan_id": "1024777",
+                                    "govtrack_id": "412251",
+                                    "votesmart_id": "52662",
+                                    "ballotpedia_id": "John Barrasso",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "40707",
+                                    "wikipedia_id": "John Barrasso"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Lummis",
+                                    "first_name": "Cynthia",
+                                    "birthday": "1954-09-10",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/l000571_200.jpg",
+                                    "photo_attribution": "Collection of the U.S. House of Representatives"
+                                },
+                                "contact": {
+                                    "url": "https://www.lummis.senate.gov",
+                                    "address": "127A Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-3424",
+                                    "contact_form": "https://www.lummis.senate.gov/contact/contact-form/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenLummis",
+                                    "facebook": "sencynthialummis",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "L000571",
+                                    "thomas_id": "01960",
+                                    "opensecrets_id": "N00029788",
+                                    "lis_id": "S410",
+                                    "cspan_id": "1031365",
+                                    "govtrack_id": "412294",
+                                    "votesmart_id": "15546",
+                                    "ballotpedia_id": "Cynthia Lummis",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "20953",
+                                    "wikipedia_id": "Cynthia Lummis"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Frontier",
+                "county": "Laramie County",
+                "state": "WY",
+                "zip": "82001",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Frontier, WY 82001"
+            ],
+            "formatted_address": "Frontier, WY 82001",
+            "location": {
+                "lat": 41.092356,
+                "lng": -104.936269
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District",
+                        "district_number": 0,
+                        "ocd_id": "ocd-division/country:us/state:wy/cd:at-large",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 1,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Hageman",
+                                    "first_name": "Harriet",
+                                    "birthday": "1962-10-18",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001096_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://hageman.house.gov",
+                                    "address": "1227 Longworth House Office Building Washington DC 20515-5000",
+                                    "phone": "202-225-2311",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepHageman",
+                                    "facebook": null,
+                                    "youtube": "@rephageman",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001096",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049197",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456951",
+                                    "votesmart_id": "182961",
+                                    "ballotpedia_id": "Harriet Hageman",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Harriet Hageman"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Barrasso",
+                                    "first_name": "John",
+                                    "birthday": "1952-07-21",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b001261_200.jpg",
+                                    "photo_attribution": "Courtesy U.S. Senate Historical Office (http://www.senate.gov/artandhistory/history/common/generic/Photo_Collection_of_the_Senate_Historical_Office.htm)"
+                                },
+                                "contact": {
+                                    "url": "https://www.barrasso.senate.gov",
+                                    "address": "307 Dirksen Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6441",
+                                    "contact_form": "https://www.barrasso.senate.gov/public/index.cfm/contact-form"
+                                },
+                                "social": {
+                                    "rss_url": "http://www.barrasso.senate.gov/public/index.cfm?FuseAction=Rss.Feed",
+                                    "twitter": "SenJohnBarrasso",
+                                    "facebook": "johnbarrasso",
+                                    "youtube": "barrassowyo",
+                                    "youtube_id": "UC80PfiCAB2Fe1MFayWlR6GQ"
+                                },
+                                "references": {
+                                    "bioguide_id": "B001261",
+                                    "thomas_id": "01881",
+                                    "opensecrets_id": "N00006236",
+                                    "lis_id": "S317",
+                                    "cspan_id": "1024777",
+                                    "govtrack_id": "412251",
+                                    "votesmart_id": "52662",
+                                    "ballotpedia_id": "John Barrasso",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "40707",
+                                    "wikipedia_id": "John Barrasso"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Lummis",
+                                    "first_name": "Cynthia",
+                                    "birthday": "1954-09-10",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/l000571_200.jpg",
+                                    "photo_attribution": "Collection of the U.S. House of Representatives"
+                                },
+                                "contact": {
+                                    "url": "https://www.lummis.senate.gov",
+                                    "address": "127A Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-3424",
+                                    "contact_form": "https://www.lummis.senate.gov/contact/contact-form/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenLummis",
+                                    "facebook": "sencynthialummis",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "L000571",
+                                    "thomas_id": "01960",
+                                    "opensecrets_id": "N00029788",
+                                    "lis_id": "S410",
+                                    "cspan_id": "1031365",
+                                    "govtrack_id": "412294",
+                                    "votesmart_id": "15546",
+                                    "ballotpedia_id": "Cynthia Lummis",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "20953",
+                                    "wikipedia_id": "Cynthia Lummis"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Fox Farm-College",
+                "county": "Laramie County",
+                "state": "WY",
+                "zip": "82001",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Fox Farm-College, WY 82001"
+            ],
+            "formatted_address": "Fox Farm-College, WY 82001",
+            "location": {
+                "lat": 41.092356,
+                "lng": -104.936269
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District",
+                        "district_number": 0,
+                        "ocd_id": "ocd-division/country:us/state:wy/cd:at-large",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 1,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Hageman",
+                                    "first_name": "Harriet",
+                                    "birthday": "1962-10-18",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001096_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://hageman.house.gov",
+                                    "address": "1227 Longworth House Office Building Washington DC 20515-5000",
+                                    "phone": "202-225-2311",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepHageman",
+                                    "facebook": null,
+                                    "youtube": "@rephageman",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001096",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049197",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456951",
+                                    "votesmart_id": "182961",
+                                    "ballotpedia_id": "Harriet Hageman",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Harriet Hageman"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Barrasso",
+                                    "first_name": "John",
+                                    "birthday": "1952-07-21",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b001261_200.jpg",
+                                    "photo_attribution": "Courtesy U.S. Senate Historical Office (http://www.senate.gov/artandhistory/history/common/generic/Photo_Collection_of_the_Senate_Historical_Office.htm)"
+                                },
+                                "contact": {
+                                    "url": "https://www.barrasso.senate.gov",
+                                    "address": "307 Dirksen Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6441",
+                                    "contact_form": "https://www.barrasso.senate.gov/public/index.cfm/contact-form"
+                                },
+                                "social": {
+                                    "rss_url": "http://www.barrasso.senate.gov/public/index.cfm?FuseAction=Rss.Feed",
+                                    "twitter": "SenJohnBarrasso",
+                                    "facebook": "johnbarrasso",
+                                    "youtube": "barrassowyo",
+                                    "youtube_id": "UC80PfiCAB2Fe1MFayWlR6GQ"
+                                },
+                                "references": {
+                                    "bioguide_id": "B001261",
+                                    "thomas_id": "01881",
+                                    "opensecrets_id": "N00006236",
+                                    "lis_id": "S317",
+                                    "cspan_id": "1024777",
+                                    "govtrack_id": "412251",
+                                    "votesmart_id": "52662",
+                                    "ballotpedia_id": "John Barrasso",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "40707",
+                                    "wikipedia_id": "John Barrasso"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Lummis",
+                                    "first_name": "Cynthia",
+                                    "birthday": "1954-09-10",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/l000571_200.jpg",
+                                    "photo_attribution": "Collection of the U.S. House of Representatives"
+                                },
+                                "contact": {
+                                    "url": "https://www.lummis.senate.gov",
+                                    "address": "127A Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-3424",
+                                    "contact_form": "https://www.lummis.senate.gov/contact/contact-form/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenLummis",
+                                    "facebook": "sencynthialummis",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "L000571",
+                                    "thomas_id": "01960",
+                                    "opensecrets_id": "N00029788",
+                                    "lis_id": "S410",
+                                    "cspan_id": "1031365",
+                                    "govtrack_id": "412294",
+                                    "votesmart_id": "15546",
+                                    "ballotpedia_id": "Cynthia Lummis",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "20953",
+                                    "wikipedia_id": "Cynthia Lummis"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Warren AFB",
+                "county": "Laramie County",
+                "state": "WY",
+                "zip": "82001",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Warren AFB, WY 82001"
+            ],
+            "formatted_address": "Warren AFB, WY 82001",
+            "location": {
+                "lat": 41.149267,
+                "lng": -104.86216
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District",
+                        "district_number": 0,
+                        "ocd_id": "ocd-division/country:us/state:wy/cd:at-large",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 1,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Hageman",
+                                    "first_name": "Harriet",
+                                    "birthday": "1962-10-18",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001096_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://hageman.house.gov",
+                                    "address": "1227 Longworth House Office Building Washington DC 20515-5000",
+                                    "phone": "202-225-2311",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepHageman",
+                                    "facebook": null,
+                                    "youtube": "@rephageman",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001096",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049197",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456951",
+                                    "votesmart_id": "182961",
+                                    "ballotpedia_id": "Harriet Hageman",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Harriet Hageman"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Barrasso",
+                                    "first_name": "John",
+                                    "birthday": "1952-07-21",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b001261_200.jpg",
+                                    "photo_attribution": "Courtesy U.S. Senate Historical Office (http://www.senate.gov/artandhistory/history/common/generic/Photo_Collection_of_the_Senate_Historical_Office.htm)"
+                                },
+                                "contact": {
+                                    "url": "https://www.barrasso.senate.gov",
+                                    "address": "307 Dirksen Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6441",
+                                    "contact_form": "https://www.barrasso.senate.gov/public/index.cfm/contact-form"
+                                },
+                                "social": {
+                                    "rss_url": "http://www.barrasso.senate.gov/public/index.cfm?FuseAction=Rss.Feed",
+                                    "twitter": "SenJohnBarrasso",
+                                    "facebook": "johnbarrasso",
+                                    "youtube": "barrassowyo",
+                                    "youtube_id": "UC80PfiCAB2Fe1MFayWlR6GQ"
+                                },
+                                "references": {
+                                    "bioguide_id": "B001261",
+                                    "thomas_id": "01881",
+                                    "opensecrets_id": "N00006236",
+                                    "lis_id": "S317",
+                                    "cspan_id": "1024777",
+                                    "govtrack_id": "412251",
+                                    "votesmart_id": "52662",
+                                    "ballotpedia_id": "John Barrasso",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "40707",
+                                    "wikipedia_id": "John Barrasso"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Lummis",
+                                    "first_name": "Cynthia",
+                                    "birthday": "1954-09-10",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/l000571_200.jpg",
+                                    "photo_attribution": "Collection of the U.S. House of Representatives"
+                                },
+                                "contact": {
+                                    "url": "https://www.lummis.senate.gov",
+                                    "address": "127A Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-3424",
+                                    "contact_form": "https://www.lummis.senate.gov/contact/contact-form/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenLummis",
+                                    "facebook": "sencynthialummis",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "L000571",
+                                    "thomas_id": "01960",
+                                    "opensecrets_id": "N00029788",
+                                    "lis_id": "S410",
+                                    "cspan_id": "1031365",
+                                    "govtrack_id": "412294",
+                                    "votesmart_id": "15546",
+                                    "ballotpedia_id": "Cynthia Lummis",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "20953",
+                                    "wikipedia_id": "Cynthia Lummis"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Orchard Valley",
+                "county": "Laramie County",
+                "state": "WY",
+                "zip": "82001",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Orchard Valley, WY 82001"
+            ],
+            "formatted_address": "Orchard Valley, WY 82001",
+            "location": {
+                "lat": 41.092356,
+                "lng": -104.936269
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District",
+                        "district_number": 0,
+                        "ocd_id": "ocd-division/country:us/state:wy/cd:at-large",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 1,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Hageman",
+                                    "first_name": "Harriet",
+                                    "birthday": "1962-10-18",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001096_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://hageman.house.gov",
+                                    "address": "1227 Longworth House Office Building Washington DC 20515-5000",
+                                    "phone": "202-225-2311",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepHageman",
+                                    "facebook": null,
+                                    "youtube": "@rephageman",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001096",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049197",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456951",
+                                    "votesmart_id": "182961",
+                                    "ballotpedia_id": "Harriet Hageman",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Harriet Hageman"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Barrasso",
+                                    "first_name": "John",
+                                    "birthday": "1952-07-21",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b001261_200.jpg",
+                                    "photo_attribution": "Courtesy U.S. Senate Historical Office (http://www.senate.gov/artandhistory/history/common/generic/Photo_Collection_of_the_Senate_Historical_Office.htm)"
+                                },
+                                "contact": {
+                                    "url": "https://www.barrasso.senate.gov",
+                                    "address": "307 Dirksen Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6441",
+                                    "contact_form": "https://www.barrasso.senate.gov/public/index.cfm/contact-form"
+                                },
+                                "social": {
+                                    "rss_url": "http://www.barrasso.senate.gov/public/index.cfm?FuseAction=Rss.Feed",
+                                    "twitter": "SenJohnBarrasso",
+                                    "facebook": "johnbarrasso",
+                                    "youtube": "barrassowyo",
+                                    "youtube_id": "UC80PfiCAB2Fe1MFayWlR6GQ"
+                                },
+                                "references": {
+                                    "bioguide_id": "B001261",
+                                    "thomas_id": "01881",
+                                    "opensecrets_id": "N00006236",
+                                    "lis_id": "S317",
+                                    "cspan_id": "1024777",
+                                    "govtrack_id": "412251",
+                                    "votesmart_id": "52662",
+                                    "ballotpedia_id": "John Barrasso",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "40707",
+                                    "wikipedia_id": "John Barrasso"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Lummis",
+                                    "first_name": "Cynthia",
+                                    "birthday": "1954-09-10",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/l000571_200.jpg",
+                                    "photo_attribution": "Collection of the U.S. House of Representatives"
+                                },
+                                "contact": {
+                                    "url": "https://www.lummis.senate.gov",
+                                    "address": "127A Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-3424",
+                                    "contact_form": "https://www.lummis.senate.gov/contact/contact-form/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenLummis",
+                                    "facebook": "sencynthialummis",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "L000571",
+                                    "thomas_id": "01960",
+                                    "opensecrets_id": "N00029788",
+                                    "lis_id": "S410",
+                                    "cspan_id": "1031365",
+                                    "govtrack_id": "412294",
+                                    "votesmart_id": "15546",
+                                    "ballotpedia_id": "Cynthia Lummis",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "20953",
+                                    "wikipedia_id": "Cynthia Lummis"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Cheyenne",
+                "county": "Laramie County",
+                "state": "WY",
+                "zip": "82004",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Cheyenne, WY 82004"
+            ],
+            "formatted_address": "Cheyenne, WY 82004",
+            "location": {
+                "lat": 41.139981,
+                "lng": -104.820246
+            },
+            "accuracy": 0.99,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District",
+                        "district_number": 0,
+                        "ocd_id": "ocd-division/country:us/state:wy/cd:at-large",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 1,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Hageman",
+                                    "first_name": "Harriet",
+                                    "birthday": "1962-10-18",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001096_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://hageman.house.gov",
+                                    "address": "1227 Longworth House Office Building Washington DC 20515-5000",
+                                    "phone": "202-225-2311",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepHageman",
+                                    "facebook": null,
+                                    "youtube": "@rephageman",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001096",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049197",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456951",
+                                    "votesmart_id": "182961",
+                                    "ballotpedia_id": "Harriet Hageman",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Harriet Hageman"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Barrasso",
+                                    "first_name": "John",
+                                    "birthday": "1952-07-21",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b001261_200.jpg",
+                                    "photo_attribution": "Courtesy U.S. Senate Historical Office (http://www.senate.gov/artandhistory/history/common/generic/Photo_Collection_of_the_Senate_Historical_Office.htm)"
+                                },
+                                "contact": {
+                                    "url": "https://www.barrasso.senate.gov",
+                                    "address": "307 Dirksen Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6441",
+                                    "contact_form": "https://www.barrasso.senate.gov/public/index.cfm/contact-form"
+                                },
+                                "social": {
+                                    "rss_url": "http://www.barrasso.senate.gov/public/index.cfm?FuseAction=Rss.Feed",
+                                    "twitter": "SenJohnBarrasso",
+                                    "facebook": "johnbarrasso",
+                                    "youtube": "barrassowyo",
+                                    "youtube_id": "UC80PfiCAB2Fe1MFayWlR6GQ"
+                                },
+                                "references": {
+                                    "bioguide_id": "B001261",
+                                    "thomas_id": "01881",
+                                    "opensecrets_id": "N00006236",
+                                    "lis_id": "S317",
+                                    "cspan_id": "1024777",
+                                    "govtrack_id": "412251",
+                                    "votesmart_id": "52662",
+                                    "ballotpedia_id": "John Barrasso",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "40707",
+                                    "wikipedia_id": "John Barrasso"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Lummis",
+                                    "first_name": "Cynthia",
+                                    "birthday": "1954-09-10",
+                                    "gender": "F",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/l000571_200.jpg",
+                                    "photo_attribution": "Collection of the U.S. House of Representatives"
+                                },
+                                "contact": {
+                                    "url": "https://www.lummis.senate.gov",
+                                    "address": "127A Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-3424",
+                                    "contact_form": "https://www.lummis.senate.gov/contact/contact-form/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenLummis",
+                                    "facebook": "sencynthialummis",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "L000571",
+                                    "thomas_id": "01960",
+                                    "opensecrets_id": "N00029788",
+                                    "lis_id": "S410",
+                                    "cspan_id": "1031365",
+                                    "govtrack_id": "412294",
+                                    "votesmart_id": "15546",
+                                    "ballotpedia_id": "Cynthia Lummis",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "20953",
+                                    "wikipedia_id": "Cynthia Lummis"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "_warnings": [
+        "There is a newer API version available, please consider upgrading to v2. See changelog here: https://www.geocod.io/docs/#changelog"
+    ]
+}

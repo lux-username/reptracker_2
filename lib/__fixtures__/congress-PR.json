@@ -1,0 +1,32 @@
+{
+    "members": [
+        {
+            "bioguideId": "H001103",
+            "depiction": {
+                "attribution": "Image courtesy of the Member",
+                "imageUrl": "https://www.congress.gov/img/member/67742d980b34857ecc9090e3_200.jpg"
+            },
+            "district": 0,
+            "name": "Hern\u00e1ndez, Pablo Jose",
+            "partyName": "Democratic",
+            "state": "Puerto Rico",
+            "terms": {
+                "item": [
+                    {
+                        "chamber": "House of Representatives",
+                        "startYear": 2025
+                    }
+                ]
+            },
+            "updateDate": "2026-07-08T07:40:27Z",
+            "url": "https://api.congress.gov/v3/member/H001103?format=json"
+        }
+    ],
+    "pagination": {
+        "count": 1
+    },
+    "request": {
+        "contentType": "application/json",
+        "format": "json"
+    }
+}

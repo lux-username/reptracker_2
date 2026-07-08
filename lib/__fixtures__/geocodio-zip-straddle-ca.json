@@ -1,0 +1,302 @@
+{
+    "input": {
+        "address_components": {
+            "zip": "90210",
+            "country": "US"
+        },
+        "formatted_address": "90210"
+    },
+    "results": [
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Beverly Hills",
+                "county": "Los Angeles County",
+                "state": "CA",
+                "zip": "90210",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Beverly Hills, CA 90210"
+            ],
+            "formatted_address": "Beverly Hills, CA 90210",
+            "location": {
+                "lat": 34.10263,
+                "lng": -118.415972
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District 32",
+                        "district_number": 32,
+                        "ocd_id": "ocd-division/country:us/state:ca/cd:32",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.623,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Sherman",
+                                    "first_name": "Brad",
+                                    "birthday": "1954-10-24",
+                                    "gender": "M",
+                                    "party": "Democrat",
+                                    "photo_url": "https://www.congress.gov/img/member/s000344_200.jpg",
+                                    "photo_attribution": "Image, Congressional Pictorial Directory, 109th."
+                                },
+                                "contact": {
+                                    "url": "https://sherman.house.gov",
+                                    "address": "2365 Rayburn House Office Building Washington DC 20515-0532",
+                                    "phone": "202-225-5911",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": "http://bradsherman.house.gov/press-releases-and-columns/rss.shtml",
+                                    "twitter": "BradSherman",
+                                    "facebook": "63158229861",
+                                    "youtube": "shermanca27",
+                                    "youtube_id": "UCPisrz6-SLwVy2l9Mcy8kug"
+                                },
+                                "references": {
+                                    "bioguide_id": "S000344",
+                                    "thomas_id": "01526",
+                                    "opensecrets_id": "N00006897",
+                                    "lis_id": null,
+                                    "cspan_id": "45124",
+                                    "govtrack_id": "400371",
+                                    "votesmart_id": "142",
+                                    "ballotpedia_id": "Brad Sherman",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "29707",
+                                    "wikipedia_id": "Brad Sherman"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Padilla",
+                                    "first_name": "Alejandro",
+                                    "birthday": "1973-03-22",
+                                    "gender": "M",
+                                    "party": "Democrat",
+                                    "photo_url": "https://www.congress.gov/img/member/p000145_200.jpg",
+                                    "photo_attribution": "Courtesy U.S. Senate Historical Office (http://www.senate.gov/artandhistory/history/common/generic/Photo_Collection_of_the_Senate_Historical_Office.htm)"
+                                },
+                                "contact": {
+                                    "url": "https://www.padilla.senate.gov",
+                                    "address": "331 Hart Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-3553",
+                                    "contact_form": "https://www.padilla.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenAlexPadilla",
+                                    "facebook": "SenAlexPadilla",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "P000145",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00047888",
+                                    "lis_id": "S413",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456856",
+                                    "votesmart_id": "59742",
+                                    "ballotpedia_id": "Alex Padilla",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Alex Padilla"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schiff",
+                                    "first_name": "Adam",
+                                    "birthday": "1960-06-22",
+                                    "gender": "M",
+                                    "party": "Democrat",
+                                    "photo_url": "https://www.congress.gov/img/member/677d870dfdb6cf36bbb649b3_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schiff.senate.gov",
+                                    "address": "112 Hart Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-3841",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenAdamSchiff",
+                                    "facebook": "SenAdamSchiff",
+                                    "youtube": "adamschiff",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001150",
+                                    "thomas_id": "01635",
+                                    "opensecrets_id": "N00009585",
+                                    "lis_id": "S427",
+                                    "cspan_id": "90167",
+                                    "govtrack_id": "400361",
+                                    "votesmart_id": "9489",
+                                    "ballotpedia_id": "Adam Schiff",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "20104",
+                                    "wikipedia_id": "Adam Schiff"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Congressional District 36",
+                        "district_number": 36,
+                        "ocd_id": "ocd-division/country:us/state:ca/cd:36",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.376,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Lieu",
+                                    "first_name": "Ted",
+                                    "birthday": "1969-03-29",
+                                    "gender": "M",
+                                    "party": "Democrat",
+                                    "photo_url": "https://www.congress.gov/img/member/l000582_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://lieu.house.gov",
+                                    "address": "2454 Rayburn House Office Building Washington DC 20515-0536",
+                                    "phone": "202-225-3976",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepTedLieu",
+                                    "facebook": "RepTedLieu",
+                                    "youtube": null,
+                                    "youtube_id": "UC9qcJxTqfDNBnVul1IojlFg"
+                                },
+                                "references": {
+                                    "bioguide_id": "L000582",
+                                    "thomas_id": "02230",
+                                    "opensecrets_id": "N00035825",
+                                    "lis_id": null,
+                                    "cspan_id": "28076",
+                                    "govtrack_id": "412616",
+                                    "votesmart_id": "1516",
+                                    "ballotpedia_id": "Ted Lieu",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "21507",
+                                    "wikipedia_id": "Ted Lieu"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Padilla",
+                                    "first_name": "Alejandro",
+                                    "birthday": "1973-03-22",
+                                    "gender": "M",
+                                    "party": "Democrat",
+                                    "photo_url": "https://www.congress.gov/img/member/p000145_200.jpg",
+                                    "photo_attribution": "Courtesy U.S. Senate Historical Office (http://www.senate.gov/artandhistory/history/common/generic/Photo_Collection_of_the_Senate_Historical_Office.htm)"
+                                },
+                                "contact": {
+                                    "url": "https://www.padilla.senate.gov",
+                                    "address": "331 Hart Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-3553",
+                                    "contact_form": "https://www.padilla.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenAlexPadilla",
+                                    "facebook": "SenAlexPadilla",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "P000145",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00047888",
+                                    "lis_id": "S413",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456856",
+                                    "votesmart_id": "59742",
+                                    "ballotpedia_id": "Alex Padilla",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Alex Padilla"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schiff",
+                                    "first_name": "Adam",
+                                    "birthday": "1960-06-22",
+                                    "gender": "M",
+                                    "party": "Democrat",
+                                    "photo_url": "https://www.congress.gov/img/member/677d870dfdb6cf36bbb649b3_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schiff.senate.gov",
+                                    "address": "112 Hart Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-3841",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenAdamSchiff",
+                                    "facebook": "SenAdamSchiff",
+                                    "youtube": "adamschiff",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001150",
+                                    "thomas_id": "01635",
+                                    "opensecrets_id": "N00009585",
+                                    "lis_id": "S427",
+                                    "cspan_id": "90167",
+                                    "govtrack_id": "400361",
+                                    "votesmart_id": "9489",
+                                    "ballotpedia_id": "Adam Schiff",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "20104",
+                                    "wikipedia_id": "Adam Schiff"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "_warnings": [
+        "There is a newer API version available, please consider upgrading to v2. See changelog here: https://www.geocod.io/docs/#changelog"
+    ]
+}

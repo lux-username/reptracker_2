@@ -29,3 +29,11 @@ The spec's feedback channel includes a GitHub "Report an issue" link for develop
 ## 2026-07-08 — Scaffolded manually over `create-next-app`
 
 The repo already held the workflow structure (STATUS/journal/decisions/spec/skills). `create-next-app` wants an empty or new directory and would have fought that layout, so the Next.js app was assembled by hand — full control over versions and config, no risk of clobbering existing files. (Session 2, Issue #1.)
+
+## 2026-07-08 — Chose Congress.gov as the authoritative rep resolver over Geocodio's embedded legislators
+
+Geocodio's `cd` field returns `current_legislators` (with `bioguide_id`) inline, so the whole address→reps lookup *could* be done with one API. We use Geocodio only for geocoding + disambiguation and resolve the actual reps from Congress.gov by `(congress, state, district)` instead. Congress.gov is the spec's named source of truth for member data; its `current_legislators` is a convenience field that can lag reality (e.g. after a special election), and this feature is correctness-critical ("wrong district = product failure"). Resolving from Congress.gov decouples rep *identity* from Geocodio's data freshness and builds the member client that Issues #3+ need anyway. Geocodio's embedded legislator surname is still used, but only as a cheap disambiguation-screen preview, never as the resolved answer. (Session 4, Issue #2.)
+
+## 2026-07-08 — Mapped Geocodio at-large district `98` to Congress.gov `0`; keyed non-voting status off OCD id
+
+Geocodio encodes at-large delegate districts (DC + territories) as district `98` and voting at-large states (e.g. WY) as `0`; Congress.gov uses `0` for both. So the resolver normalizes `98→0` and everything else passes through. Non-voting status (delegate/resident commissioner, no senators) is detected from the OCD division id (`district:` / `territory:` vs `state:`) backed by a hardcoded set {DC, PR, GU, VI, AS, MP} — a stable constitutional fact, not drifting data. WY (`state:wy`, district `0`) is correctly classified as a *voting* at-large member with senators, distinct from DC/PR at-large delegates. Verified against live API responses for KS, WY, DC, PR, and a straddling ZIP. (Session 4, Issue #2.)

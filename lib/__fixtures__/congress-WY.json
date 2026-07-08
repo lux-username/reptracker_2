@@ -1,0 +1,79 @@
+{
+    "members": [
+        {
+            "bioguideId": "H001096",
+            "depiction": {
+                "attribution": "Image courtesy of the Member",
+                "imageUrl": "https://www.congress.gov/img/member/h001096_200.jpg"
+            },
+            "district": 0,
+            "name": "Hageman, Harriet M.",
+            "partyName": "Republican",
+            "state": "Wyoming",
+            "terms": {
+                "item": [
+                    {
+                        "chamber": "House of Representatives",
+                        "startYear": 2023
+                    }
+                ]
+            },
+            "updateDate": "2026-07-08T07:40:26Z",
+            "url": "https://api.congress.gov/v3/member/H001096?format=json"
+        },
+        {
+            "bioguideId": "L000571",
+            "depiction": {
+                "attribution": "Collection of the U.S. House of Representatives",
+                "imageUrl": "https://www.congress.gov/img/member/l000571_200.jpg"
+            },
+            "district": null,
+            "name": "Lummis, Cynthia M.",
+            "partyName": "Republican",
+            "state": "Wyoming",
+            "terms": {
+                "item": [
+                    {
+                        "chamber": "House of Representatives",
+                        "endYear": 2017,
+                        "startYear": 2009
+                    },
+                    {
+                        "chamber": "Senate",
+                        "startYear": 2021
+                    }
+                ]
+            },
+            "updateDate": "2026-03-08T10:31:52Z",
+            "url": "https://api.congress.gov/v3/member/L000571?format=json"
+        },
+        {
+            "bioguideId": "B001261",
+            "depiction": {
+                "attribution": "<a href=\"http://www.senate.gov/artandhistory/history/common/generic/Photo_Collection_of_the_Senate_Historical_Office.htm\">Courtesy U.S. Senate Historical Office</a>",
+                "imageUrl": "https://www.congress.gov/img/member/b001261_200.jpg"
+            },
+            "district": null,
+            "name": "Barrasso, John",
+            "partyName": "Republican",
+            "state": "Wyoming",
+            "terms": {
+                "item": [
+                    {
+                        "chamber": "Senate",
+                        "startYear": 2007
+                    }
+                ]
+            },
+            "updateDate": "2026-03-08T10:30:29Z",
+            "url": "https://api.congress.gov/v3/member/B001261?format=json"
+        }
+    ],
+    "pagination": {
+        "count": 3
+    },
+    "request": {
+        "contentType": "application/json",
+        "format": "json"
+    }
+}

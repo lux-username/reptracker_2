@@ -1,0 +1,181 @@
+{
+    "input": {
+        "address_components": {
+            "number": "1263",
+            "street": "Pacific",
+            "suffix": "Ave",
+            "formatted_street": "Pacific Ave",
+            "city": "Kansas City",
+            "state": "KS",
+            "country": "US"
+        },
+        "formatted_address": "1263 Pacific Ave, Kansas City, KS"
+    },
+    "results": [
+        {
+            "stable_address_key": "gcod_usnax96hvkdvu8bgeh6r8ysbsz9xc",
+            "address_components": {
+                "number": "1263",
+                "street": "Pacific",
+                "suffix": "Ave",
+                "formatted_street": "Pacific Ave",
+                "city": "Kansas City",
+                "county": "Wyandotte County",
+                "state": "KS",
+                "zip": "66102",
+                "country": "US"
+            },
+            "address_lines": [
+                "1263 Pacific Ave",
+                "",
+                "Kansas City, KS 66102"
+            ],
+            "formatted_address": "1263 Pacific Ave, Kansas City, KS 66102",
+            "location": {
+                "lat": 39.098488,
+                "lng": -94.642931
+            },
+            "accuracy": 1,
+            "accuracy_type": "rooftop",
+            "match_type": "building_centroid",
+            "source": "Statewide KS",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District 2",
+                        "district_number": 2,
+                        "ocd_id": "ocd-division/country:us/state:ks/cd:2",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 1,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Schmidt",
+                                    "first_name": "Derek",
+                                    "birthday": "1968-01-23",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/67745ec50b34857ecc909185_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://schmidt.house.gov",
+                                    "address": "1223 Longworth House Office Building Washington DC 20515-1602",
+                                    "phone": "202-225-6601",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "repderekschmidt",
+                                    "facebook": "repderekschmidt",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001228",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00055179",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456990",
+                                    "votesmart_id": "34451",
+                                    "ballotpedia_id": "Derek Schmidt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Derek Schmidt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Moran",
+                                    "first_name": "Jerry",
+                                    "birthday": "1954-05-29",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/m000934_200.jpg",
+                                    "photo_attribution": "Courtesy U.S. Senate Historical Office (http://www.senate.gov/artandhistory/history/common/generic/Photo_Collection_of_the_Senate_Historical_Office.htm)"
+                                },
+                                "contact": {
+                                    "url": "https://www.moran.senate.gov",
+                                    "address": "521 Dirksen Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6521",
+                                    "contact_form": "https://www.moran.senate.gov/public/index.cfm/e-mail-jerry"
+                                },
+                                "social": {
+                                    "rss_url": "http://www.moran.senate.gov/public/index.cfm/rss/feed/",
+                                    "twitter": "JerryMoran",
+                                    "facebook": "jerrymoran",
+                                    "youtube": "senatorjerrymoran",
+                                    "youtube_id": "UC1oRxeUPam6-53wPBZ3N02A"
+                                },
+                                "references": {
+                                    "bioguide_id": "M000934",
+                                    "thomas_id": "01507",
+                                    "opensecrets_id": "N00005282",
+                                    "lis_id": "S347",
+                                    "cspan_id": "45469",
+                                    "govtrack_id": "400284",
+                                    "votesmart_id": "542",
+                                    "ballotpedia_id": "Jerry Moran",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "29722",
+                                    "wikipedia_id": "Jerry Moran"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Marshall",
+                                    "first_name": "Roger",
+                                    "birthday": "1960-08-09",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/m001198_200.jpg",
+                                    "photo_attribution": "Congressional Pictorial Directory"
+                                },
+                                "contact": {
+                                    "url": "https://www.marshall.senate.gov",
+                                    "address": "479A Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-4774",
+                                    "contact_form": "https://www.marshall.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenatorMarshall",
+                                    "facebook": "RogerMarshallMD",
+                                    "youtube": "UCR3nOFMqBB-kRpKFwgapMaQ",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "M001198",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00037034",
+                                    "lis_id": "S411",
+                                    "cspan_id": "103425",
+                                    "govtrack_id": "412704",
+                                    "votesmart_id": "172080",
+                                    "ballotpedia_id": "Roger Marshall",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "21734",
+                                    "wikipedia_id": "Roger Marshall"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "_warnings": [
+        "There is a newer API version available, please consider upgrading to v2. See changelog here: https://www.geocod.io/docs/#changelog"
+    ]
+}

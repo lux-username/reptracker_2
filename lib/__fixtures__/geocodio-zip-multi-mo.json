@@ -1,0 +1,1742 @@
+{
+    "input": {
+        "address_components": {
+            "zip": "65201",
+            "country": "US"
+        },
+        "formatted_address": "65201"
+    },
+    "results": [
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Columbia",
+                "county": "Boone County",
+                "state": "MO",
+                "zip": "65201",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Columbia, MO 65201"
+            ],
+            "formatted_address": "Columbia, MO 65201",
+            "location": {
+                "lat": 38.894165,
+                "lng": -92.274145
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District 3",
+                        "district_number": 3,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:3",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.963,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Onder",
+                                    "first_name": "Robert",
+                                    "birthday": "1962-01-06",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/67744f970b34857ecc909161_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://onder.house.gov",
+                                    "address": "1113 Longworth House Office Building Washington DC 20515-2503",
+                                    "phone": "202-225-2956",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepBobOnder",
+                                    "facebook": "RepBobOnder",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "O000177",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00030025",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456998",
+                                    "votesmart_id": "66719",
+                                    "ballotpedia_id": "Bob Onder",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Bob Onder"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Congressional District 4",
+                        "district_number": 4,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:4",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.037,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Alford",
+                                    "first_name": "Mark",
+                                    "birthday": "1963-10-04",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/a000379_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://alford.house.gov",
+                                    "address": "328 Cannon House Office Building Washington DC 20515-2504",
+                                    "phone": "202-225-2876",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepMarkAlford",
+                                    "facebook": "100089595940547",
+                                    "youtube": "@RepAlford",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "A000379",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049617",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456909",
+                                    "votesmart_id": "205858",
+                                    "ballotpedia_id": "Mark Alford",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Mark Alford"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Huntsdale",
+                "county": "Boone County",
+                "state": "MO",
+                "zip": "65201",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Huntsdale, MO 65201"
+            ],
+            "formatted_address": "Huntsdale, MO 65201",
+            "location": {
+                "lat": 38.900944,
+                "lng": -92.238425
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District 3",
+                        "district_number": 3,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:3",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.963,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Onder",
+                                    "first_name": "Robert",
+                                    "birthday": "1962-01-06",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/67744f970b34857ecc909161_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://onder.house.gov",
+                                    "address": "1113 Longworth House Office Building Washington DC 20515-2503",
+                                    "phone": "202-225-2956",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepBobOnder",
+                                    "facebook": "RepBobOnder",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "O000177",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00030025",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456998",
+                                    "votesmart_id": "66719",
+                                    "ballotpedia_id": "Bob Onder",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Bob Onder"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Congressional District 4",
+                        "district_number": 4,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:4",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.037,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Alford",
+                                    "first_name": "Mark",
+                                    "birthday": "1963-10-04",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/a000379_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://alford.house.gov",
+                                    "address": "328 Cannon House Office Building Washington DC 20515-2504",
+                                    "phone": "202-225-2876",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepMarkAlford",
+                                    "facebook": "100089595940547",
+                                    "youtube": "@RepAlford",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "A000379",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049617",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456909",
+                                    "votesmart_id": "205858",
+                                    "ballotpedia_id": "Mark Alford",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Mark Alford"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "McBaine",
+                "county": "Boone County",
+                "state": "MO",
+                "zip": "65201",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "McBaine, MO 65201"
+            ],
+            "formatted_address": "McBaine, MO 65201",
+            "location": {
+                "lat": 38.900944,
+                "lng": -92.238425
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District 3",
+                        "district_number": 3,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:3",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.963,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Onder",
+                                    "first_name": "Robert",
+                                    "birthday": "1962-01-06",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/67744f970b34857ecc909161_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://onder.house.gov",
+                                    "address": "1113 Longworth House Office Building Washington DC 20515-2503",
+                                    "phone": "202-225-2956",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepBobOnder",
+                                    "facebook": "RepBobOnder",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "O000177",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00030025",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456998",
+                                    "votesmart_id": "66719",
+                                    "ballotpedia_id": "Bob Onder",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Bob Onder"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Congressional District 4",
+                        "district_number": 4,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:4",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.037,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Alford",
+                                    "first_name": "Mark",
+                                    "birthday": "1963-10-04",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/a000379_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://alford.house.gov",
+                                    "address": "328 Cannon House Office Building Washington DC 20515-2504",
+                                    "phone": "202-225-2876",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepMarkAlford",
+                                    "facebook": "100089595940547",
+                                    "youtube": "@RepAlford",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "A000379",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049617",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456909",
+                                    "votesmart_id": "205858",
+                                    "ballotpedia_id": "Mark Alford",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Mark Alford"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Deer Park",
+                "county": "Boone County",
+                "state": "MO",
+                "zip": "65201",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Deer Park, MO 65201"
+            ],
+            "formatted_address": "Deer Park, MO 65201",
+            "location": {
+                "lat": 38.861427,
+                "lng": -92.250185
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District 3",
+                        "district_number": 3,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:3",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.963,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Onder",
+                                    "first_name": "Robert",
+                                    "birthday": "1962-01-06",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/67744f970b34857ecc909161_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://onder.house.gov",
+                                    "address": "1113 Longworth House Office Building Washington DC 20515-2503",
+                                    "phone": "202-225-2956",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepBobOnder",
+                                    "facebook": "RepBobOnder",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "O000177",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00030025",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456998",
+                                    "votesmart_id": "66719",
+                                    "ballotpedia_id": "Bob Onder",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Bob Onder"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Congressional District 4",
+                        "district_number": 4,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:4",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.037,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Alford",
+                                    "first_name": "Mark",
+                                    "birthday": "1963-10-04",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/a000379_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://alford.house.gov",
+                                    "address": "328 Cannon House Office Building Washington DC 20515-2504",
+                                    "phone": "202-225-2876",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepMarkAlford",
+                                    "facebook": "100089595940547",
+                                    "youtube": "@RepAlford",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "A000379",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049617",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456909",
+                                    "votesmart_id": "205858",
+                                    "ballotpedia_id": "Mark Alford",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Mark Alford"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Easley",
+                "county": "Boone County",
+                "state": "MO",
+                "zip": "65201",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Easley, MO 65201"
+            ],
+            "formatted_address": "Easley, MO 65201",
+            "location": {
+                "lat": 38.900944,
+                "lng": -92.238425
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District 3",
+                        "district_number": 3,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:3",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.963,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Onder",
+                                    "first_name": "Robert",
+                                    "birthday": "1962-01-06",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/67744f970b34857ecc909161_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://onder.house.gov",
+                                    "address": "1113 Longworth House Office Building Washington DC 20515-2503",
+                                    "phone": "202-225-2956",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepBobOnder",
+                                    "facebook": "RepBobOnder",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "O000177",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00030025",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456998",
+                                    "votesmart_id": "66719",
+                                    "ballotpedia_id": "Bob Onder",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Bob Onder"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Congressional District 4",
+                        "district_number": 4,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:4",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.037,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Alford",
+                                    "first_name": "Mark",
+                                    "birthday": "1963-10-04",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/a000379_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://alford.house.gov",
+                                    "address": "328 Cannon House Office Building Washington DC 20515-2504",
+                                    "phone": "202-225-2876",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepMarkAlford",
+                                    "facebook": "100089595940547",
+                                    "youtube": "@RepAlford",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "A000379",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049617",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456909",
+                                    "votesmart_id": "205858",
+                                    "ballotpedia_id": "Mark Alford",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Mark Alford"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "stable_address_key": null,
+            "address_components": {
+                "city": "Elkhurst",
+                "county": "Boone County",
+                "state": "MO",
+                "zip": "65201",
+                "country": "US"
+            },
+            "address_lines": [
+                "",
+                "",
+                "Elkhurst, MO 65201"
+            ],
+            "formatted_address": "Elkhurst, MO 65201",
+            "location": {
+                "lat": 38.832537,
+                "lng": -92.252129
+            },
+            "accuracy": 1,
+            "accuracy_type": "place",
+            "match_type": null,
+            "source": "TIGER/Line\u00ae from the US Census Bureau",
+            "fields": {
+                "congressional_districts": [
+                    {
+                        "name": "Congressional District 3",
+                        "district_number": 3,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:3",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.963,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Onder",
+                                    "first_name": "Robert",
+                                    "birthday": "1962-01-06",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/67744f970b34857ecc909161_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://onder.house.gov",
+                                    "address": "1113 Longworth House Office Building Washington DC 20515-2503",
+                                    "phone": "202-225-2956",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepBobOnder",
+                                    "facebook": "RepBobOnder",
+                                    "youtube": null,
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "O000177",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00030025",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456998",
+                                    "votesmart_id": "66719",
+                                    "ballotpedia_id": "Bob Onder",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Bob Onder"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Congressional District 4",
+                        "district_number": 4,
+                        "ocd_id": "ocd-division/country:us/state:mo/cd:4",
+                        "congress_number": "119th",
+                        "congress_years": "2025-2027",
+                        "proportion": 0.037,
+                        "current_legislators": [
+                            {
+                                "type": "representative",
+                                "seniority": null,
+                                "bio": {
+                                    "last_name": "Alford",
+                                    "first_name": "Mark",
+                                    "birthday": "1963-10-04",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/a000379_200.jpg",
+                                    "photo_attribution": "Image courtesy of the Member"
+                                },
+                                "contact": {
+                                    "url": "https://alford.house.gov",
+                                    "address": "328 Cannon House Office Building Washington DC 20515-2504",
+                                    "phone": "202-225-2876",
+                                    "contact_form": null
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "RepMarkAlford",
+                                    "facebook": "100089595940547",
+                                    "youtube": "@RepAlford",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "A000379",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00049617",
+                                    "lis_id": null,
+                                    "cspan_id": null,
+                                    "govtrack_id": "456909",
+                                    "votesmart_id": "205858",
+                                    "ballotpedia_id": "Mark Alford",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Mark Alford"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "senior",
+                                "bio": {
+                                    "last_name": "Hawley",
+                                    "first_name": "Joshua",
+                                    "birthday": "1979-12-31",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/h001089_200.jpg",
+                                    "photo_attribution": null
+                                },
+                                "contact": {
+                                    "url": "https://www.hawley.senate.gov",
+                                    "address": "381 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-6154",
+                                    "contact_form": "https://www.hawley.senate.gov/contact-senator-hawley"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenHawleyPress",
+                                    "facebook": "SenatorHawley",
+                                    "youtube": "UCMzt8xq6qQ3XQ_DlNfJx0-w",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "H001089",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00041620",
+                                    "lis_id": "S399",
+                                    "cspan_id": null,
+                                    "govtrack_id": "412840",
+                                    "votesmart_id": "169716",
+                                    "ballotpedia_id": "Josh Hawley",
+                                    "washington_post_id": null,
+                                    "icpsr_id": "41901",
+                                    "wikipedia_id": "Josh Hawley"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            },
+                            {
+                                "type": "senator",
+                                "seniority": "junior",
+                                "bio": {
+                                    "last_name": "Schmitt",
+                                    "first_name": "Eric",
+                                    "birthday": "1975-06-20",
+                                    "gender": "M",
+                                    "party": "Republican",
+                                    "photo_url": "https://www.congress.gov/img/member/b66a0806e77f63e862391b15a0b1f753_200.jpg",
+                                    "photo_attribution": "Official U.S. Senate Photo"
+                                },
+                                "contact": {
+                                    "url": "https://www.schmitt.senate.gov",
+                                    "address": "404 Russell Senate Office Building Washington DC 20510",
+                                    "phone": "202-224-5721",
+                                    "contact_form": "https://www.schmitt.senate.gov/contact/"
+                                },
+                                "social": {
+                                    "rss_url": null,
+                                    "twitter": "SenEricSchmitt",
+                                    "facebook": "116059838031776",
+                                    "youtube": "@senericschmitt",
+                                    "youtube_id": null
+                                },
+                                "references": {
+                                    "bioguide_id": "S001227",
+                                    "thomas_id": null,
+                                    "opensecrets_id": "N00048414",
+                                    "lis_id": "S420",
+                                    "cspan_id": null,
+                                    "govtrack_id": "456875",
+                                    "votesmart_id": "104474",
+                                    "ballotpedia_id": "Eric Schmitt",
+                                    "washington_post_id": null,
+                                    "icpsr_id": null,
+                                    "wikipedia_id": "Eric Schmitt"
+                                },
+                                "source": "Legislator data collected by the @unitedstates project (https://github.com/unitedstates/)"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "_warnings": [
+        "There is a newer API version available, please consider upgrading to v2. See changelog here: https://www.geocod.io/docs/#changelog"
+    ]
+}
