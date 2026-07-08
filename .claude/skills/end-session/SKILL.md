@@ -1,6 +1,6 @@
 ---
 name: end-session
-description: Close out a work session — derive current facts, rewrite STATUS.md, file GitHub Issues for everything unresolved, append journal and decisions entries, render the session transcript from the on-disk log, and commit. Run at the end of every work session.
+description: Close out a work session — derive current facts, rewrite STATUS.md, file GitHub Issues for everything unresolved, append journal and decisions entries, render the session transcript from the on-disk log, and commit and push. Run at the end of every work session.
 ---
 
 # end-session
@@ -59,6 +59,12 @@ b. **Render:**
    The output name must match step 4's journal entry.
 c. Verify `sessions/` is still gitignored: `git check-ignore sessions/` — if not, fix `.gitignore` before committing.
 
-## 7. Commit
+## 7. Commit and push
 
-One commit: session work + all doc updates. Reference closed issues (`fixes #N`). Finish by showing the user `git log --oneline -1` and a one-line summary of what was filed, journaled, and rewritten.
+One commit: session work + all doc updates. Reference closed issues (`fixes #N`) — the reference only closes the Issue once the commit reaches the default branch on the remote, which is why push is part of this step, not left for later.
+
+Then push: `git push`. If the current branch has no upstream, set one: `git push -u origin HEAD`.
+
+**If push fails** (no remote, auth failure, non-fast-forward, offline): do not silently continue. The commit still stands locally; tell the user out loud that the push failed, show the error, and state that the session's work and any `fixes #N` closures are **not** on the remote until they push. Do not attempt a force-push.
+
+Finish by showing the user `git log --oneline -1`, whether the push succeeded, and a one-line summary of what was filed, journaled, and rewritten.
