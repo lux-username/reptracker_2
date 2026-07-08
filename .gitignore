@@ -1,0 +1,25 @@
+# raw session transcripts — bulky, meaningless in diffs, still greppable on local disk
+sessions/
+
+# secrets — never in the tree, never in history
+.env
+.env.*
+*Secrets.swift
+*.key
+*.pem
+
+# tool residue
+.playwright-mcp/
+.DS_Store
+
+# dependencies / caches
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+
+# Next.js / Vercel
+.next/
+out/
+.vercel/
+next-env.d.ts
