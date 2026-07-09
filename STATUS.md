@@ -1,41 +1,47 @@
-> Generated 2026-07-09 by /end-session at commit 5c51214.
+> Generated 2026-07-09 by /end-session at commit 7c395d2.
 
 # STATUS
 
 ## Where things stand
 
-Build session: **#22 implemented and closed** — the silent-empty summary branch.
+Strategy session: **#24 (utility gap vs. Congress.gov) resolved and closed.** No code
+changed — this was a "why does this product exist" meeting whose output is a recorded
+editorial position plus two follow-up Issues.
 
-Bills with no CRS summary rendered structured-only (title + link) with *nothing* in
-the summary slot, so an honest absence read as a gap/bug. `app/RepSection.tsx:245`'s
-`: null` branch now renders one muted caption in the same register as the CRS
-attribution: *No plain-English summary yet — Congress.gov notes "A summary is in
-progress."*
+The resolution's sharp core: **every atom we render already exists on Congress.gov** (we
+show CRS text verbatim and link back for every item), so we can't and don't out-content
+it. Our entire moat is the **selection + ordering layer** — given your address, the
+specific ~25-person committee decisions your specific reps are about to make, soonest
+first, with the number to call. That's a *routing/timing* claim, never a "better data"
+claim, which also keeps it compatible with the footer disclaimer that credits
+Congress.gov as authoritative (differentiate on function, credit on authority).
+One-liner of record: *"Congress.gov has every fact; it can't tell you which of them is
+about to matter to you. We turn its archive into your personal, time-ordered call sheet."*
+Full rationale in `decisions.md` (2026-07-09).
 
-Two deliberate choices: (1) the wording was **verified live, not recalled** — loaded
-a genuine no-summary bill (H.R.9425, "Increasing Tribal Input on Nutrition Act of
-2026"; API confirms 0 CRS summaries) in a real browser past Congress.gov's Cloudflare
-challenge and read the verbatim string "A summary is in progress." under `Summary (0)`.
-(2) We **quote and attribute** that line rather than showing it bare — bare, it reads
-as *us* promising a summary, which would contradict the session-6 no-LLM decision; the
-attribution makes clear it's the source's status, not ours. Title + link untouched.
-Confirmed `RepSection.tsx:245` is the only silent-empty bill-render surface.
+Two owner decisions: (1) **UI framing kept implicit** — the design embodies the bet;
+over-framing reads salesy for a civic tool and risks stepping on the "not affiliated"
+disclaimer. (2) The one real "worse Congress.gov" risk — the **empty upcoming-decisions
+state**, where the secondary bill list becomes the de-facto headline — is filed as **#27**
+(overlaps #8 recess) rather than built here.
 
-Coverage: exported `Bills` and added `app/RepSection.test.tsx` (2 tests) rendering the
-real component — note present for `summary: null`, absent when a summary exists, link
-integrity held.
+Also this session: a committee-pipeline feature idea ("see the bills parked in a rep's
+committee") was raised; it's a strong thesis fit but already existed as **#21**. The new
+framing (no editorial "stuck" label; reuse §2.3's procedural-activity filter; doubles as
+the #27 empty-state filler) was folded into **#21**; the duplicate I filed (#28) was
+closed as a dup.
 
-Underlying build unchanged since #16: **nightly pre-warm cron + full events index**
-shipped and live. Production verified this session (HTTP 200, ~0.36s).
+Underlying build unchanged since #16/#22: **nightly pre-warm cron + full events index**
+live; structured-only bills carry the honest no-summary note. Production verified this
+session (HTTP 200, ~0.32s).
 
-Priorities next: the session-13 strategy Issues (**#24** utility gap — the highest
-leverage, likely reshapes the build backlog — then **#25** design pass, **#26**
-compliance) before more feature work; on the build side, **#23** (short-notice
-freshness, the #16 fast-follow), then **#4**/**#8**. **#12** geocode edge is
-low-priority.
+Priorities next: remaining session-13 strategy Issues (**#25** design pass, **#26**
+compliance); on the build side **#23** (short-notice freshness, the #16 fast-follow),
+then **#4**/**#8**. **#27** (empty-state pivot) and **#21** (committee pipeline) are
+strong post-MVP adds surfaced by the #24 work. **#12** geocode edge is low-priority.
 
-Open Issues (12): #4, #8, #9, #12, #13, #17, #18, #21, #23, #24, #25, #26.
-(#22 closed this session; none filed.)
+Open Issues (13): #4, #8, #9, #12, #13, #17, #18, #21, #23, #25, #26, #27.
+(#24 closed this session; #27 filed; #28 filed then closed as a dup of #21.)
 
 ## Derived facts (from CLAUDE.md commands)
 
@@ -44,19 +50,19 @@ Open Issues (12): #4, #8, #9, #12, #13, #17, #18, #21, #23, #24, #25, #26.
 | Test status | `npm test` | ✓ 85 tests passing, 13 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `curl` | ✓ **LIVE** https://reptracker2.vercel.app · HTTP 200 (~0.36s) |
-| Git | `git rev-parse --short HEAD` | `5c51214 Close session 8-of-day: fix #20 …` (pre end-session commit) |
+| Deploy | `curl` | ✓ **LIVE** https://reptracker2.vercel.app · HTTP 200 (~0.32s) |
+| Git | `git log --oneline -1` | `7c395d2 Close session 9-of-day: implement #22 …` (pre end-session commit) |
 
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (open MVP Issues:
 #4, #8, #9, #12, #13, #17, #18). Roadmap lives there; not restated here.
-#21, #23, #24, #25, #26 are backlog (no milestone) — #23 is the #16 fast-follow;
-#24/#25/#26 are strategy/direction items.
+#21, #23, #25, #26, #27 are backlog (no milestone) — #23 is the #16 fast-follow;
+#25/#26 are strategy/direction items; #21/#27 are post-MVP feature adds.
 
 ## Blockers / open questions
 
-None blocking. The three strategy Issues (#24/#25/#26) are open *questions* by nature
-but nothing blocks continued build. Standing note (unchanged): the feedback Gmail
+None blocking. The strategy Issues (#25/#26) are open *questions* by nature but nothing
+blocks continued build. Standing note (unchanged): the feedback Gmail
 (`reptrackerfeedback@gmail.com`) exists but is unmonitored. Env var `CRON_SECRET` is
 set in Vercel Production (Sensitive) + a copy in the macOS Keychain.
