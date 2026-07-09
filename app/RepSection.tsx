@@ -246,13 +246,12 @@ function Bills({ bills }: { bills: SecondaryBill[] }) {
               <>
                 <p className="mt-1 text-sm text-slate-700">{b.summary}</p>
                 <p className="mt-1 text-xs text-slate-400">
-                  {b.summaryBasedOn
-                    ? `Plain-English summary of the nonpartisan CRS summary; bill as introduced, ${formatDate(b.summaryBasedOn)}.`
-                    : "Plain-English summary of the official nonpartisan (CRS) summary."}
+                  Nonpartisan summary from the Congressional Research Service
+                  {b.summaryBasedOn ? `; bill as introduced, ${formatDate(b.summaryBasedOn)}` : ""}.
                 </p>
                 {b.summaryAmended && (
                   <p className="mt-1 rounded bg-amber-50 px-2 py-1 text-xs text-amber-900">
-                    ⚠ This bill has been amended since this summary was generated. See
+                    ⚠ This bill has been amended since this summary was written. See
                     Congress.gov for current text.
                   </p>
                 )}
@@ -329,18 +328,6 @@ export default function RepSection({
         <Committees committees={profile.committees} />
         <Contact contact={profile.contact} />
       </header>
-
-      {profile.tldr && (
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-            TL;DR
-          </h4>
-          <p className="mt-1 text-sm text-slate-700">{profile.tldr}</p>
-          <p className="mt-1 text-xs text-slate-400">
-            AI-generated from official records; factual, not advice.
-          </p>
-        </div>
-      )}
 
       <Decisions decisions={profile.upcomingDecisions} />
       <Bills bills={profile.secondaryBills} />

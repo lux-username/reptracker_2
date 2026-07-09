@@ -158,22 +158,21 @@ export interface SecondaryBill {
   badge: SponsorBadge;
   /** Congress.gov public bill URL. */
   url: string;
-  // --- Plain-English summary (Issue #5). Optional: filled by the summary
-  //     pipeline during profile assembly; absent until then. ---
-  /** Neutral 1–2 sentence summary, or null for structured-only display. */
+  // --- Plain-English description (Issue #5): the nonpartisan CRS summary shown
+  //     verbatim (no LLM). Filled during profile assembly; absent until then. ---
+  /** Verbatim CRS summary text, or null for structured-only display. */
   summary?: string | null;
-  /** How the summary was sourced: CRS summary, bill title, or none. */
-  summaryBasis?: "crs" | "bill-text" | "none";
-  /** Date for the "Based on bill as introduced, [date]" stamp. */
+  /** Date for the "bill as introduced, [date]" stamp. */
   summaryBasedOn?: string | null;
-  /** True when Congress.gov has a newer bill text version than the summary. */
+  /** True when Congress.gov has a newer bill text version than the CRS summary. */
   summaryAmended?: boolean;
 }
 
 /**
  * Fully enriched per-rep section (spec §2). Assembled on top of a resolved
- * `Rep` identity. `tldr` is the neutral LLM digest — populated by Issue #5,
- * null until then.
+ * `Rep` identity. (The per-rep LLM TL;DR was cut — session 6 decision: it
+ * restated the structured lists and the useful version required forbidden
+ * leverage synthesis. See decisions.md.)
  */
 export interface RepProfile {
   rep: Rep;
@@ -181,7 +180,6 @@ export interface RepProfile {
   contact: ContactBlock;
   upcomingDecisions: UpcomingDecision[];
   secondaryBills: SecondaryBill[];
-  tldr: string | null;
 }
 
 /** Result of a lookup. Either resolved, needs disambiguation, or nothing found. */

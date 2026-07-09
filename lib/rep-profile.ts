@@ -20,15 +20,9 @@ import type {
 import { fetchAssignmentIndex } from "./committees";
 import { fetchSecondaryBills } from "./legislation";
 import { fetchUpcomingDecisions } from "./decisions";
-import { fetchBillSources, summarizeBill, summarizeRepDigest } from "./summaries";
+import { fetchBillSources, extractBillSummary } from "./summaries";
 
-/** "Last, First Middle" → "First Middle Last" for display / digest grounding. */
-function readableName(name: string): string {
-  const [last, rest] = name.split(",", 2);
-  return rest ? `${rest.trim()} ${last.trim()}` : name;
-}
-
-/** Attach a plain-English summary (Issue #5) to a secondary bill. */
+/** Attach the verbatim CRS summary (Issue #5, no LLM) to a secondary bill. */
 async function enrichBillSummary(bill: SecondaryBill): Promise<SecondaryBill> {
   try {
     const { crsSummaries, textVersions } = await fetchBillSources(
@@ -36,21 +30,10 @@ async function enrichBillSummary(bill: SecondaryBill): Promise<SecondaryBill> {
       bill.type,
       bill.number,
     );
-    const s = await summarizeBill({
-      billId: bill.billId,
-      title: bill.title,
-      crsSummaries,
-      textVersions,
-    });
-    return {
-      ...bill,
-      summary: s.text,
-      summaryBasis: s.basis,
-      summaryBasedOn: s.basedOnDate,
-      summaryAmended: s.amendedSince,
-    };
+    const s = extractBillSummary({ billId: bill.billId, crsSummaries, textVersions });
+    return { ...bill, summary: s.text, summaryBasedOn: s.basedOnDate, summaryAmended: s.amendedSince };
   } catch {
-    return { ...bill, summary: null, summaryBasis: "none", summaryBasedOn: null, summaryAmended: false };
+    return { ...bill, summary: null, summaryBasedOn: null, summaryAmended: false };
   }
 }
 
@@ -127,25 +110,10 @@ export async function buildRepProfile(
     fetchUpcomingDecisions(congress, rep.chamber, assignments, now),
   ]);
 
-  // Issue #5: plain-English summaries per bill (parallel; each cached by source
-  // hash) + a neutral per-rep TL;DR grounded in the structured facts above.
+  // Issue #5: attach each bill's verbatim CRS summary (parallel). No LLM.
   const secondaryBills = await Promise.all(rawBills.map(enrichBillSummary));
-  const tldr = await summarizeRepDigest(rep.bioguideId, {
-    repName: readableName(rep.name),
-    upcoming: upcomingDecisions.map((d) => ({
-      kind: d.kind,
-      title: d.title,
-      date: d.date,
-      role: d.roleLabel,
-    })),
-    bills: secondaryBills.map((b) => ({
-      displayId: b.displayId,
-      title: b.title,
-      badge: b.badge,
-    })),
-  });
 
-  return { rep, committees: assignments, contact, upcomingDecisions, secondaryBills, tldr };
+  return { rep, committees: assignments, contact, upcomingDecisions, secondaryBills };
 }
 
 /**
