@@ -22,6 +22,12 @@ export const TTL = {
   reference: 5 * 60 * 60,
   /** Committee-meeting list + details — the schedule can change <24h out. Spec: 30-60min. */
   events: 45 * 60,
+  /**
+   * Cron-managed artifacts (the upcoming-events index, convergent cursors). The
+   * nightly pre-warm rewrites these; the TTL only has to outlive a single missed
+   * cron so a skipped run degrades to yesterday's index, not a blank page.
+   */
+  prewarm: 40 * 60 * 60,
 } as const;
 
 /** Version prefix so a value-shape change can be invalidated by a bump. */
@@ -38,7 +44,7 @@ export function cacheKey(kind: string, ...parts: (string | number)[]): string {
  * Upstash client is a stateless REST wrapper (no connection pool), so this is
  * cheap and keeps env changes (and test mocks) picked up immediately.
  */
-function redis(): Redis | null {
+export function redisClient(): Redis | null {
   const url = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) return null;
@@ -55,7 +61,7 @@ export async function cached<T>(
   ttlSeconds: number,
   loader: () => Promise<T>,
 ): Promise<T> {
-  const client = redis();
+  const client = redisClient();
 
   if (client) {
     try {

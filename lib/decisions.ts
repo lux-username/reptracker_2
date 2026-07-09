@@ -2,16 +2,21 @@
 // and markups a rep has a structural role in (spec §2.2).
 //
 // Congress.gov's committee-meeting LIST returns only event ids; the committee,
-// date, and status live on each meeting's DETAIL. There is no member filter, so
-// we sweep the recent detail window and keep those held by a committee the rep
-// sits on. The sweep is heavy uncached — Issue #7 (nightly cron + KV) makes it
-// fast; here it works, bounded and logged.
+// date, and status live on each meeting's DETAIL. There is no member filter.
+//
+// Warm path (the common case): the nightly cron builds a complete index of all
+// upcoming/live meetings in Upstash (Issue #16, `events-index.ts`); we read it
+// and filter to the rep's committees with zero network. Cold path (no cron yet,
+// KV disabled, or a Redis miss): fall back to a bounded live sweep of the recent
+// detail window — usable but capped, and it logs when it truncates (spec: no
+// silent caps, degrade don't stall).
 //
 // The match/order/label logic is pure and fixture-tested. Plain-English topic
 // summaries are Issue #5 — here the "what" is the official meeting title + a
 // Congress.gov committee link.
 import type { CommitteeAssignment, UpcomingDecision } from "./types";
 import { cached, cacheKey, TTL } from "./cache";
+import { readEventsIndex } from "./events-index";
 
 /** Raw committee reference inside a meeting detail. */
 export interface RawMeetingCommittee {
@@ -122,7 +127,7 @@ function roleRank(role: CommitteeAssignment["role"]): number {
 }
 
 // ---------------------------------------------------------------------------
-// I/O: the bounded live sweep (Issue #7 replaces this with a cron-warmed cache).
+// I/O: the read path (index-first, live-sweep fallback).
 // ---------------------------------------------------------------------------
 
 export class MeetingError extends Error {
@@ -147,9 +152,11 @@ async function apiJson<T>(url: string): Promise<T> {
 }
 
 /**
- * Sweep the recent committee-meeting window for a chamber and return the
- * decisions the rep (via `assignments`) has a role in. Bounded to SWEEP_LIMIT
- * detail fetches; if the window is truncated we log it (spec: no silent caps).
+ * Return the upcoming decisions the rep (via `assignments`) has a role in.
+ *
+ * Warm path: read the cron-built events index and filter it — no network. Cold
+ * path (index absent / KV disabled / Redis miss): fall back to the bounded live
+ * sweep below.
  */
 export async function fetchUpcomingDecisions(
   congress: number,
@@ -157,9 +164,27 @@ export async function fetchUpcomingDecisions(
   assignments: CommitteeAssignment[],
   now: Date,
 ): Promise<UpcomingDecision[]> {
+  if (assignments.length === 0) return [];
+
+  const index = await readEventsIndex();
+  if (index) return buildUpcomingDecisions(index.meetings, assignments, now);
+
+  return fetchUpcomingDecisionsLive(congress, chamber, assignments, now);
+}
+
+/**
+ * Cold-path fallback: sweep the recent committee-meeting window for a chamber.
+ * Bounded to SWEEP_LIMIT detail fetches; if the window is truncated we log it
+ * (spec: no silent caps).
+ */
+async function fetchUpcomingDecisionsLive(
+  congress: number,
+  chamber: "house" | "senate",
+  assignments: CommitteeAssignment[],
+  now: Date,
+): Promise<UpcomingDecision[]> {
   const apiKey = process.env.CONGRESS_GOV_API_KEY;
   if (!apiKey) throw new MeetingError("CONGRESS_GOV_API_KEY is not set");
-  if (assignments.length === 0) return [];
 
   const listUrl = new URL(
     `https://api.congress.gov/v3/committee-meeting/${congress}/${chamber}`,
@@ -181,7 +206,7 @@ export async function fetchUpcomingDecisions(
   const total = list.pagination?.count ?? items.length;
   if (total > SWEEP_LIMIT) {
     console.warn(
-      `[decisions] ${chamber} meeting sweep capped at ${SWEEP_LIMIT} of ${total} — pre-warm cache (Issue #7) will cover the rest`,
+      `[decisions] cold-path ${chamber} meeting sweep capped at ${SWEEP_LIMIT} of ${total} — the warm events index (Issue #16) covers the rest`,
     );
   }
 
