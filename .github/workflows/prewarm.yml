@@ -12,7 +12,10 @@ name: Pre-warm cache (hourly)
 
 on:
   schedule:
-    - cron: "0 * * * *" # top of every hour (UTC)
+    # :20 past every hour (UTC) — offset from the Vercel daily cron (08:00 UTC in
+    # vercel.json) so the two schedulers never hit the same instance at once (a
+    # collision throttles the second run under the per-instance limiter, #17).
+    - cron: "20 * * * *"
   workflow_dispatch: {} # allow manual runs from the Actions tab / `gh workflow run`
 
 # Never stack runs if one is slow; let the in-flight one finish.
@@ -42,10 +45,20 @@ jobs:
             --max-time 120 \
             https://reptracker2.vercel.app/api/cron/prewarm)
           echo "HTTP ${code}"
-          if [ "${code}" != "200" ]; then
-            echo "::error::prewarm returned HTTP ${code}"
-            cat response.json 2>/dev/null || true
-            exit 1
-          fi
-          # Non-sensitive run stats (no secrets in the response).
-          python3 -c "import json;d=json.load(open('response.json'));print('ok=%s elapsedMs=%s floorBills=%s districtMembers=%s eventsIdx=%s'%(d.get('ok'),d.get('elapsedMs'),(d.get('floor') or {}).get('houseBills'),(d.get('districtOffices') or {}).get('members'),(d.get('events') or {}).get('indexSize')))"
+          case "${code}" in
+            200)
+              # Non-sensitive run stats (no secrets in the response).
+              python3 -c "import json;d=json.load(open('response.json'));print('ok=%s elapsedMs=%s floorBills=%s districtMembers=%s eventsIdx=%s'%(d.get('ok'),d.get('elapsedMs'),(d.get('floor') or {}).get('houseBills'),(d.get('districtOffices') or {}).get('members'),(d.get('events') or {}).get('indexSize')))"
+              ;;
+            502|503|504)
+              # Transient: the incremental warm brushed the 60s function ceiling
+              # (Congress.gov latency / a rare scheduler collision). It resumes on
+              # the next run — warn, don't fail the scheduler over it.
+              echo "::warning::prewarm returned HTTP ${code} (transient timeout); warming resumes next run"
+              ;;
+            *)
+              echo "::error::prewarm returned HTTP ${code}"
+              cat response.json 2>/dev/null || true
+              exit 1
+              ;;
+          esac
