@@ -233,8 +233,11 @@ explicitly v1.1+ scope.
 - **Cache / KV:** Upstash Redis (free tier, Vercel-native). Used for geocoding results,
   Congress.gov responses, and LLM digests (see below).
 - **Scraping:** plain `fetch` + a small HTML parser (e.g. `cheerio`) inside a route
-  handler, run on a schedule via Vercel Cron hourly, results stashed in Upstash. Avoids
-  inline scraping latency per request.
+  handler, run on a schedule via Vercel Cron, results stashed in Upstash. Avoids
+  inline scraping latency per request. **Cadence is plan-limited:** the free (Hobby)
+  tier only permits *daily* crons and a ~60s function duration, so sub-daily refresh
+  and any long bulk sweep need chunking or an external scheduler / Pro — see the
+  2026-07-09 free-tier decision in `decisions.md` and Issue #16.
 - **Frontend:** plain Tailwind. No design system overhead for MVP.
 
 ## Caching strategy
@@ -252,7 +255,8 @@ load-bearing:
      CRS summaries, sponsored/cosponsored lists) — slow-moving; 4–6h TTL is fine.
 3. **Per-rep digest cache** — key by `(bioguide_id, hash(meaningful_fields))`, 4–6h
    TTL. Reuse the LLM output if the hash is unchanged.
-4. **Floor-schedule scrape cache** — refreshed by Vercel Cron hourly, served from KV.
+4. **Floor-schedule scrape cache** — refreshed by Vercel Cron (daily on Hobby; hourly
+   needs Pro or an external scheduler — see the free-tier decision), served from KV.
 
 Note the distinction: the *event's existence and timing* refresh fast; the *LLM summary
 text* attached to a bill/hearing stays cached indefinitely (invalidated only on
@@ -372,8 +376,10 @@ neutral and descriptive. This is checked in code review.
 
 ## Known risks
 
-- **Floor-schedule scrape will break.** Mitigation: hourly cron, graceful degradation
-  (the section hides if the scrape failed for >N hours), admin-visible health check.
+- **Floor-schedule scrape will break.** Mitigation: scheduled cron refresh (cadence
+  plan-limited — daily on Hobby free tier, hourly only on Pro / via an external
+  scheduler; see the 2026-07-09 free-tier decision), graceful degradation (the section
+  hides if the scrape failed for >N hours), admin-visible health check.
 - **District-office contact scrape will break — and it's contact data.** District-office
   phone/address is scraped from house.gov / senate.gov member pages, which change layout
   without notice. This is worse than a stale schedule: a wrong phone number defeats the
