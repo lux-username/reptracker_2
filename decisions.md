@@ -233,3 +233,33 @@ when two runs fired ~3 min apart). The Vercel daily cron is **kept** as a reliab
 hourly isn't over-polling and to tune from data (the acceptance criterion), investigate a
 fresher upstream source (docs.house.gov feeds), and the optional read-path head-check. Hourly
 is a safe conservative default until then; #23 stays open for that measurement/tuning.
+
+## 2026-07-09 — Congress.gov upstream latency measured (~15 min); tighten scheduler to 30 min (#23)
+
+Measured the missing #23 number: how long after the House posts a committee meeting does
+Congress.gov's API reflect it? Sampled the 40 most-recently-updated House committee meetings
+and compared Congress.gov's `updateDate` to the House's own docs.house.gov posting time
+("First Published" / "Last Updated"), joined by the shared `eventId`.
+
+**Result: min 4 min, median 9 min, p90 14 min, max 15 min; 40/40 within 15 min, zero
+negatives.** Congress.gov clearly runs a ~10-15-min ingestion job against the House source —
+it is *fresh*, not a daily-batch source.
+
+Two conclusions:
+- **Task 1 (latency):** upstream floor ≈ 15 min. Our poll cadence, not the source, is the
+  binding constraint on freshness.
+- **Task 2 (fresher source):** docs.house.gov is only ~15 min ahead of the API, so switching
+  the events feed to scrape it directly would shave ≤15 min for real added complexity — not
+  worth it. Declined.
+- **Task 4 (read-path head-check):** also declined — at a 30-min cadence with a 15-min
+  upstream floor it would save at best ~15 min on a live visit, at a per-request latency +
+  shared-quota cost. Marginal.
+
+**Cadence decision: 30 min (`15,45 * * * *`), up from the initial hourly.** The product exists
+for short-notice committee decisions, and the source supports ~15-min freshness, so hourly
+left ~45 min of *avoidable* staleness on exactly the case that matters. 30 min halves
+worst-case staleness (~1h → ~30m) while staying well within the Congress.gov 5,000/hr quota
+(~500 calls/run, 48 runs/day) and the Upstash free-tier command budget (~180K/mo vs 500K cap).
+Below ~20 min hits the upstream floor (diminishing returns) so we stop here. The :15/:45
+offset keeps both runs clear of the 08:00 UTC Vercel cron (no instance collision, #17). This
+supersedes the earlier "hourly" cadence in this file. #23 fully resolved.

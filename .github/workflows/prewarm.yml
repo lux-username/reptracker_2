@@ -12,10 +12,14 @@ name: Pre-warm cache (hourly)
 
 on:
   schedule:
-    # :20 past every hour (UTC) — offset from the Vercel daily cron (08:00 UTC in
-    # vercel.json) so the two schedulers never hit the same instance at once (a
-    # collision throttles the second run under the per-instance limiter, #17).
-    - cron: "20 * * * *"
+    # Every 30 min at :15 and :45 (UTC). Cadence set from measurement (2026-07-09):
+    # Congress.gov reflects a House committee meeting ~4-15 min after the House
+    # posts it on docs.house.gov, so the upstream floor is ~15 min and our poll
+    # gap is the binding constraint; 30 min ⇒ ~30-min worst-case staleness for the
+    # short-notice decisions the product exists for. The :15/:45 offset keeps both
+    # runs well clear of the Vercel daily cron (08:00 UTC in vercel.json) so the
+    # two schedulers never collide on one instance and throttle each other (#17).
+    - cron: "15,45 * * * *"
   workflow_dispatch: {} # allow manual runs from the Actions tab / `gh workflow run`
 
 # Never stack runs if one is slow; let the in-flight one finish.
