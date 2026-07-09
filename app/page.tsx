@@ -1,6 +1,13 @@
 import AddressLookup from "./AddressLookup";
+import FloorThisWeek from "./FloorThisWeek";
+import { getFloorSchedule } from "@/lib/floor-schedule";
 
-export default function Home() {
+// The floor schedule is scraped/served per request (warm = one KV read); never
+// prerendered at build time, where env + upstream may be absent.
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const floor = await getFloorSchedule(new Date());
   return (
     <main className="mx-auto flex max-w-2xl flex-col gap-8 px-6 py-16">
       <header className="flex flex-col gap-3">
@@ -13,6 +20,7 @@ export default function Home() {
         </p>
       </header>
       <AddressLookup />
+      <FloorThisWeek data={floor} />
     </main>
   );
 }

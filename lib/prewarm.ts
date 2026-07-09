@@ -20,6 +20,7 @@ import { fetchAssignmentIndex } from "./committees";
 import { fetchStateMembers } from "./congress";
 import { fetchContact } from "./rep-profile";
 import { mapLimit, refreshEventsIndex, type RefreshStats } from "./events-index";
+import { refreshFloorSchedule } from "./floor-schedule";
 import { cacheKey, redisClient } from "./cache";
 
 /**
@@ -48,6 +49,8 @@ export interface PrewarmStats {
   members: { warmed: number; failed: number; roster: number };
   contacts: { warmed: number; failed: number; from: number; to: number; roster: number };
   events: RefreshStats | null;
+  /** Floor-schedule scrape (Issue #4): house bill count + whether Senate posted. */
+  floor: { houseBills: number; senate: boolean };
 }
 
 export interface PrewarmOptions {
@@ -113,7 +116,20 @@ export async function prewarm(opts: PrewarmOptions): Promise<PrewarmStats> {
     console.warn(`[prewarm] events index refresh failed: ${String(e)}`);
   }
 
-  return { congress, committeeData, members: { warmed: membersWarmed, failed: membersFailed, roster: roster.length }, contacts, events };
+  // 5. Floor schedule (Issue #4) — a cheap best-effort scrape (~3 fetches) of the
+  //    House weekly XML + Senate convene note, cached for the warm read path.
+  let floor: PrewarmStats["floor"] = { houseBills: 0, senate: false };
+  try {
+    const fs = await refreshFloorSchedule(now);
+    if (fs) {
+      const houseBills = (fs.house?.categories ?? []).reduce((n, c) => n + c.bills.length, 0);
+      floor = { houseBills, senate: fs.senate !== null };
+    }
+  } catch (e) {
+    console.warn(`[prewarm] floor schedule refresh failed: ${String(e)}`);
+  }
+
+  return { congress, committeeData, members: { warmed: membersWarmed, failed: membersFailed, roster: roster.length }, contacts, events, floor };
 }
 
 /** Warm `budget` contacts starting at the persisted cursor; advance and wrap. */

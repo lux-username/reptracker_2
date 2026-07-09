@@ -1,68 +1,63 @@
-> Generated 2026-07-09 by /end-session at commit 7c395d2.
+> Generated 2026-07-09 by /end-session at commit 67e8739.
 
 # STATUS
 
 ## Where things stand
 
-Strategy session: **#24 (utility gap vs. Congress.gov) resolved and closed.** No code
-changed — this was a "why does this product exist" meeting whose output is a recorded
-editorial position plus two follow-up Issues.
+Build session: **#4 ('Floor this week' section) implemented, verified, and closed.**
+The app's first scrape feature and its one *global*, address-independent section — the
+upcoming House + Senate floor schedule, shown to every visitor because every member
+votes on floor items (unlike the ~25-person committee decisions that are the product's
+spine).
 
-The resolution's sharp core: **every atom we render already exists on Congress.gov** (we
-show CRS text verbatim and link back for every item), so we can't and don't out-content
-it. Our entire moat is the **selection + ordering layer** — given your address, the
-specific ~25-person committee decisions your specific reps are about to make, soonest
-first, with the number to call. That's a *routing/timing* claim, never a "better data"
-claim, which also keeps it compatible with the footer disclaimer that credits
-Congress.gov as authoritative (differentiate on function, credit on authority).
-One-liner of record: *"Congress.gov has every fact; it can't tell you which of them is
-about to matter to you. We turn its archive into your personal, time-ordered call sheet."*
-Full rationale in `decisions.md` (2026-07-09).
+Design that made it robust: the House publishes a **structured weekly XML feed**
+(`docs.house.gov/billsthisweek/YYYYMMDD/YYYYMMDD.xml`), so instead of scraping rendered
+HTML we scrape the `/floor` index *only* to discover the current week's XML path (no
+guessing which Monday it is around week/recess boundaries), then parse the XML. Bills are
+grouped by the source's own procedural categories (suspension / pursuant to a rule) and
+each links to its Congress.gov page — keeping the "credit Congress.gov as authority"
+stance. The **Senate** side is best-effort per spec ("more brittle; often absent"):
+senate.gov's floor page carries only the next convene date/time, which we surface; Senate
+bill-level plans live in Calendar PDFs and stay out of scope.
 
-Two owner decisions: (1) **UI framing kept implicit** — the design embodies the bet;
-over-framing reads salesy for a civic tool and risks stepping on the "not affiliated"
-disclaimer. (2) The one real "worse Congress.gov" risk — the **empty upcoming-decisions
-state**, where the secondary bill list becomes the de-facto headline — is filed as **#27**
-(overlaps #8 recess) rather than built here.
+Serving mirrors the events-index pattern: the nightly cron scrapes both and stashes the
+result in Upstash (`refreshFloorSchedule`, wired into `prewarm` as step 5, ~3 cheap
+fetches); the page reads it with `getFloorSchedule` — one warm KV read. Cold/expired
+cache scrapes live and writes through. **Graceful hide is structural:** both chambers
+empty ⇒ section renders nothing; the KV entry's ~40h TTL is the "scrape failed for >N
+hours" hide. A visible freshness stamp + "schedules change frequently" note keep
+best-effort data honest. Added `cheerio` (first scrape dep, per stack). Verified live
+end-to-end on `npm run dev`: real House bills rendered with Congress.gov links, the
+Senate convene note, the freshness stamp, warm reload in 0.14s, no scrape errors.
 
-Also this session: a committee-pipeline feature idea ("see the bills parked in a rep's
-committee") was raised; it's a strong thesis fit but already existed as **#21**. The new
-framing (no editorial "stuck" label; reuse §2.3's procedural-activity filter; doubles as
-the #27 empty-state filler) was folded into **#21**; the duplicate I filed (#28) was
-closed as a dup.
-
-Underlying build unchanged since #16/#22: **nightly pre-warm cron + full events index**
-live; structured-only bills carry the honest no-summary note. Production verified this
-session (HTTP 200, ~0.32s).
-
-Priorities next: remaining session-13 strategy Issues (**#25** design pass, **#26**
-compliance); on the build side **#23** (short-notice freshness, the #16 fast-follow),
-then **#4**/**#8**. **#27** (empty-state pivot) and **#21** (committee pipeline) are
-strong post-MVP adds surfaced by the #24 work. **#12** geocode edge is low-priority.
-
-Open Issues (13): #4, #8, #9, #12, #13, #17, #18, #21, #23, #25, #26, #27.
-(#24 closed this session; #27 filed; #28 filed then closed as a dup of #21.)
+Priorities next: **#8 (recess pivot)** is the natural follow-on — it refines exactly the
+floor section's behavior (show "Congress not in session" instead of a stale past week)
+and needs the in-session detection helper. Then **#23** (short-notice freshness, the #16
+fast-follow — note its external-scheduler step needs a GitHub repo secret, a human gate),
+and the strategy Issues **#25** (design pass) / **#26** (compliance). **#9** (a11y) is
+DoD-blocking. **#12** geocode edge and **#17** rate-limiter are low-priority self-contained
+cleanups. **#21**/**#27** are post-MVP feature adds.
 
 ## Derived facts (from CLAUDE.md commands)
 
 | Fact | Command | Result |
 |---|---|---|
-| Test status | `npm test` | ✓ 85 tests passing, 13 files (Vitest 4.1.10) |
+| Test status | `npm test` | ✓ 98 tests passing, 15 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `curl` | ✓ **LIVE** https://reptracker2.vercel.app · HTTP 200 (~0.32s) |
-| Git | `git log --oneline -1` | `7c395d2 Close session 9-of-day: implement #22 …` (pre end-session commit) |
+| Deploy | `curl` | ✓ **LIVE** https://reptracker2.vercel.app · HTTP 200 (~0.19s) |
+| Git | `git log --oneline -1` | `67e8739 Close session 10-of-day: resolve #24 …` (pre end-session commit) |
 
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (open MVP Issues:
-#4, #8, #9, #12, #13, #17, #18). Roadmap lives there; not restated here.
-#21, #23, #25, #26, #27 are backlog (no milestone) — #23 is the #16 fast-follow;
-#25/#26 are strategy/direction items; #21/#27 are post-MVP feature adds.
+#8, #9, #12, #13, #17, #18). Roadmap lives there; not restated here. #4 was an MVP Issue,
+now closed. #21, #23, #25, #26, #27 are backlog (no milestone).
 
 ## Blockers / open questions
 
-None blocking. The strategy Issues (#25/#26) are open *questions* by nature but nothing
-blocks continued build. Standing note (unchanged): the feedback Gmail
-(`reptrackerfeedback@gmail.com`) exists but is unmonitored. Env var `CRON_SECRET` is
-set in Vercel Production (Sensitive) + a copy in the macOS Keychain.
+None blocking. Standing note (unchanged): the feedback Gmail
+(`reptrackerfeedback@gmail.com`) exists but is unmonitored. Env var `CRON_SECRET` is set
+in Vercel Production (Sensitive) + a copy in the macOS Keychain. New for #23: its
+external-scheduler option needs the `CRON_SECRET` added as a GitHub Actions repo secret —
+a human gate when that Issue is picked up.

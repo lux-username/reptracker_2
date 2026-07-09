@@ -121,3 +121,28 @@ This also dissolves a latent tension: spec §footer disclaimer *points users to 
 Two decisions (both the product owner's call):
 1. **UI framing kept implicit** — no landing "what this is" block, no results-heading rewrite, no anti-Congress.gov copy. The design already embodies the bet; over-framing reads as salesy for a civic tool and risks stepping on the "not affiliated with Congress" disclaimer. The differentiator lives in *what we choose to render and how we order it*, recorded here as the editorial position rather than surfaced as marketing. Revisit if user feedback shows first-time visitors don't grasp the point.
 2. **The one real "worse Congress.gov" risk is the empty upcoming-decisions state** — when a rep has nothing scheduled (recess or otherwise), `Decisions` renders one muted line (`RepSection.tsx:175`) and the secondary sponsored/cosponsored bill list (`Bills`, capped 7) becomes the de-facto headline: an undifferentiated bill dump the source presents better. The spec's §"Recess behavior" pivot already prescribes the fix (elevate contact block + recent activity, demote/action-frame bills) but the code doesn't implement it. Filed as **#27** (overlaps #8 recess detection) rather than built in this strategy session, to keep #24 a crisp resolution. Closing #24. (Strategy session, Issue #24 → #27.)
+
+## 2026-07-09 — House floor via the structured weekly XML feed, not HTML scraping (#4)
+
+Building the "Floor this week" section (#4), the obvious read of "scrape docs.house.gov/floor"
+is to parse the rendered HTML. Rejected in favor of the House's **structured weekly XML feed**
+(`docs.house.gov/billsthisweek/YYYYMMDD/YYYYMMDD.xml`): it's a stable, machine-readable schema
+(`floorschedule` → `category[@type]` → `floor-item` → `legis-num` / `floor-text`) that won't
+break on a CSS/layout change the way HTML scraping would — the #1 "Known risk" in the spec.
+
+We still touch the HTML `/floor` index, but only to **discover the current week's XML path**
+(regex for the `billsthisweek/DATE/DATE.xml` Download link). That sidesteps having to compute
+"which Monday is this week's schedule filed under," which is genuinely ambiguous around
+week/recess boundaries and when the House posts next week's schedule early. If no XML link is
+present (deep recess, nothing posted) we return null and the House block hides — correct.
+
+Senate stays HTML-scraped and best-effort (spec: "more brittle; often absent"): senate.gov's
+floor page exposes only the next convene date/time in clean semantic HTML (`#proceedings_schedule`
+→ `h3` + `.floor-schedule`). We surface that; Senate bill-level plans (Executive/Senate Calendar
+PDFs) are out of scope.
+
+Graceful hide is the **KV TTL expiry** (reusing the events-index `TTL.prewarm` ~40h tier), not a
+bespoke staleness check: if the cron's scrape fails for longer than the TTL the entry drops, the
+cold path's live scrape also fails, `getFloorSchedule` returns null, and the section renders
+nothing — the spec's "hides if the scrape failed for >N hours," achieved structurally. A visible
+"as of" freshness stamp keeps a merely-stale-but-present schedule honest. Closing #4.

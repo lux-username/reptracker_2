@@ -1,0 +1,281 @@
+<floorschedule congress-num="119" week-date="2026-06-29" create-date="2026-06-23T16:59:53.890" orig-publish-date="2026-06-23T20:01:16.720" update-date="2026-06-30T14:43:32.530">
+  <current-status>R</current-status>
+  <language>en-us</language>
+  <copyright>Pursuant to Title 17 Section 105 of the United States Code, this file is not subject to copyright protection and is in the public domain.</copyright>
+  <publish-dates>
+    <publish-date date="2026-06-23T20:01:16.720" />
+    <publish-date date="2026-06-25T14:02:25.877" />
+    <publish-date date="2026-06-26T09:29:29.880" />
+    <publish-date date="2026-06-26T10:01:20.877" />
+    <publish-date date="2026-06-26T14:42:16.997" />
+    <publish-date date="2026-06-26T15:09:20.860" />
+    <publish-date date="2026-06-27T17:02:36.197" />
+    <publish-date date="2026-06-28T16:56:21.940" />
+    <publish-date date="2026-06-29T11:59:48.737" />
+    <publish-date date="2026-06-29T23:08:28.127" />
+    <publish-date date="2026-06-30T09:34:00.017" />
+    <publish-date date="2026-06-30T14:43:32.530" />
+  </publish-dates>
+  <category type="Items that may be considered under suspension of the rules" sort-order="1">
+    <floor-items>
+      <floor-item id="409630" add-date="2026-06-23T17:00:45.077" remove-date="" sort-order="1" publish-date="2026-06-23T20:01:16.720">
+        <legis-num>H.R. 8873</legis-num>
+        <floor-text>Recover COVID Unemployment Fraud in Banks Act, as amended </floor-text>
+        <files>
+          <file doc-url="http://docs.house.gov/billsthisweek/20260629/H.R.-8873-AINS.pdf" doc-type="PDF" add-date="2026-06-23T17:00:45.080" sort-order="1" publish-date="2026-06-23T20:01:16.720" />
+        </files>
+      </floor-item>
+      <floor-item id="409631" add-date="2026-06-23T17:00:57.523" remove-date="" sort-order="2" publish-date="2026-06-23T20:01:16.720">
+        <legis-num>H.R. 5347 </legis-num>
+        <floor-text>Health Care Efficiency Through Flexibility Act, as amended </floor-text>
+        <updates>
+          <update-date date="2026-06-23T17:05:51.970" publish-date="2026-06-23T20:01:16.720">
+            <explanatory-notes doc-modified="False" />
+          </update-date>
+          <update-date date="2026-06-26T15:09:14.930" publish-date="2026-06-26T15:09:20.860">
+            <explanatory-notes doc-modified="False" />
+          </update-date>
+        </updates>
+        <files>
+          <file doc-url="http://docs.house.gov/billsthisweek/20260629/H5347_SUS_xml.pdf" doc-type="PDF" add-date="2026-06-26T15:09:14.937" sort-order="3" publish-date="2026-06-23T20:01:16.720" />
+        </files>
+      </floor-item>
+      <floor-item id="409632" add-date="2026-06-23T17:01:19.960" remove-date="" sort-order="3" publish-date="2026-06-23T20:01:16.720">
+        <legis-num>H.R. 7257 </legis-num>
+        <floor-text>Securing Community Upgrades for a Resilient Grid (SECURE Grid) Act, as amended </floor-text>
+        <files>
+          <file doc-url="http://docs.house.gov/billsthisweek/20260629/h7257_rh_xml.pdf" doc-type="PDF" add-date="2026-06-23T17:01:19.960" sort-order="1" publish-date="2026-06-23T20:01:16.720" />
+        </files>
+      </floor-item>
+      <floor-item id="409633" add-date="2026-06-23T17:01:35.440" remove-date="" sort-order="4" publish-date="2026-06-23T20:01:16.720">
+        <legis-num>H.R. 7258 </legis-num>
+        <floor-text>Energy Emergency Leadership Act </floor-text>
+        <files>
+          <file doc-url="http://docs.house.gov/billsthisweek/20260629/h7258_rh_xml.pdf" doc-type="PDF" add-date="2026-06-23T17:01:35.440" sort-order="1" publish-date="2026-06-23T20:01:16.720" />
+        </files>
+      </floor-item>
+      <floor-item id="409634" add-date="2026-06-23T17:01:56.030" remove-date="" sort-order="5" publish-date="2026-06-23T20:01:16.720">
+        <legis-num>H.R. 7266 </legis-num>
+        <floor-text>Rural and Municipal 
+Utility Cybersecurity Act, as amended </floor-text>
+        <updates>
+          <update-date date="2026-06-26T14:07:25.410" publish-date="2026-06-26T14:42:16.997">
+            <explanatory-notes doc-modified="True" />
+          </update-date>
+          <update-date date="2026-06-28T16:56:04.930" publish-date="2026-06-28T16:56:21.940">
+            <explanatory-notes doc-modified="False" />
+          </update-date>
+        </updates>
+        <files>
+          <file doc-url="http://docs.house.gov/billsthisweek/20260629/H7266_SUS_xml.pdf" doc-type="PDF" add-date="2026-06-26T14:07:25.417" sort-order="2" publish-date="2026-06-23T20:01:16.720" />
+        </files>
+      </floor-item>
+      <floor-item id="409635" add-date="2026-06-23T17:02:16.393" remove-date="" sort-order="6" publish-date="2026-06-23T20:01:16.720">
+        <legis-num>H.R. 7305 </legis-num>
+        <floor-text>Energy Threat Analysis Center Act of 2026 </floor-text>
+        <files>
+          <file doc-url="http://docs.house.gov/billsthisweek/20260629/h7305_rh_xml.pdf" doc-type="PDF" add-date="2026-06-23T17:02:16.390" sort-order="1" publish-date="2026-06-23T20:01:16.720" />
+        </files>
+      </floor-item>
+      <floor-item id="409638" add-date="2026-06-23T17:04:24.313" remove-date="" sort-order="7" publish-date="2026-06-23T20:01:16.720">
+        <legis-num>H.R. 7757 </legis-num>
+        <floor-text>KIDS Act, as amended</floor-text>
+        <updates>
+          <update-date date="2026-06-23T17:06:07.480" publish-date="2026-06-23T20:01:16.720">
+            <explanatory-notes doc-modified="False">Sort order changed.</explanatory-notes>
+          </update-date>
+          <update-date date="2026-06-26T14:07:51.117" publish-date="2026-06-26T14:42:16.997">
+            <explanatory-notes doc-modified="True" />
+          </update-date>
+          <update-date date="2026-06-27T17:02:20.440" publish-date="2026-06-27T17:02:36.197">
+            <explanatory-notes doc-modified="False" />
+          </update-date>
+        </updates>
+        <files>
+          <file doc-url="http://docs.house.gov/billsthisweek/20260629/H7757_SUS_xml.pdf" doc-type="PDF" add-date="2026-06-27T17:02:20.453" sort-order="3" publish-date="2026-06-23T20:01:16.720" />
+        </files>
+      </floor-item>
+      <floor-item id="409636" add-date="2026-06-23T17:03:29.470" remove-date="" sort-order="8" publish-date="2026-06-23T20:01:16.720">
+        <legis-num>H.R. 3350</legis-num>
+        <floor-text>To designate the facility of the United States Postal Service located at 340 East 1st Street in Tustin, California, as the "Ursula Ellen Kennedy Post Office Building". </floor-text>
+        <files>
+          <file doc-url="https://www.congress.gov/119/bills/hr3350/BILLS-119hr3350ih.pdf" doc-type="PDF" add-date="2026-06-23T17:03:29.473" sort-order="1" publish-date="2026-06-23T20:01:16.720" />
+        </files>
+      </floor-item>
+      <floor-item id="409637" add-date="2026-06-23T17:03:59.197" remove-date="" sort-order="9" publish-date="2026-06-23T20:01:16.720">
+        <legis-num>H.R. 4662</legis-num>
+        <floor-text>To designate the facility of the United States Postal Service located at 6444 San Fernando Road in Glendale, California, as the "Paul Ignatius Post Office". </floor-text>
+        <files>
+          <file doc-url="https://www.congress.gov/119/bills/hr4662/BILLS-119hr4662ih.pdf" doc-type="PDF" add-date="2026-06-23T17:03:59.193" sort-order="1" publish-date="2026-06-23T20:01:16.720" />
+        </files>
+      </floor-item>
+      <floor-item id="409639" add-date="2026-06-23T17:05:39.627" remove-date="" sort-order="10" publish-date="2026-06-23T20:01:16.720">
+        <legis-num>H.R. 7128 </legis-num>
+        <floor-text>TRIA Program Reauthorization Act of 2026, as amended </floor-text>
+        <files>
+          <file doc-url="http://docs.house.gov/billsthisweek/20260629/H7128_SUS_v3_xml.pdf" doc-type="PDF" add-date="2026-06-23T17:05:39.627" sort-order="1" publish-date="2026-06-23T20:01:16.720" />
+        </files>
+      </floor-item>
+    </floor-items>
+  </category>
+  <category type="Items that may be considered pursuant to a rule" sort-order="4">
+    <floor-items>
+      <floor-item id="409642" add-date="2026-06-24T16:49:50.653" remove-date="" sort-order="1" publish-date="2026-06-25T14:02:25.877">
+        <legis-num>H.R. 8800</legis-num>
+        <floor-text>National Defense Authorization Act for Fiscal Year 2027</floor-text>
+        <updates>
+          <update-date date="2026-06-24T16:49:52.810" publish-date="2026-06-25T14:02:25.877">
+            <explanatory-notes doc-modified="False">Sort order changed.</explanatory-notes>
+          </update-date>
+        </updates>
+        <files>
+          <file doc-url="https://www.govinfo.gov/content/pkg/BILLS-119hr8800rh/pdf/BILLS-119hr8800rh.pdf" doc-type="PDF" add-date="2026-06-24T16:49:50.670" sort-order="1" publish-date="2026-06-25T14:02:25.877" />
+          <file doc-url="https://www.govinfo.gov/content/pkg/BILLS-119hr8800rh/xml/BILLS-119hr8800rh.xml" doc-type="XML" add-date="2026-06-24T16:49:50.670" sort-order="2" publish-date="2026-06-25T14:02:25.877" />
+        </files>
+        <floor-subitems>
+          <floor-subitem id="503870" add-date="2026-06-24T16:50:28.457" remove-date="" sort-order="1" publish-date="2026-06-25T14:02:25.877">
+            <legis-num />
+            <floor-text>Rules Committee Print 119-33 – Showing the text of H.R. 8800, as ordered reported by the Committee on Armed Services</floor-text>
+            <files>
+              <file doc-url="https://rules.house.gov/sites/evo-subsites/republicans-rules.house.gov/files/documents/rcp_h8800_xml.pdf" doc-type="PDF" add-date="2026-06-24T16:50:28.447" sort-order="1" publish-date="" />
+            </files>
+          </floor-subitem>
+          <floor-subitem id="503871" add-date="2026-06-24T16:50:51.357" remove-date="" sort-order="2" publish-date="2026-06-25T14:02:25.877">
+            <legis-num />
+            <floor-text>H. Rept. 119-698 – Report from the Committee on Armed Services to accompany H.R. 8800</floor-text>
+            <files>
+              <file doc-url="https://www.govinfo.gov/content/pkg/CRPT-119hrpt698/pdf/CRPT-119hrpt698.pdf" doc-type="PDF" add-date="2026-06-24T16:50:51.347" sort-order="1" publish-date="" />
+            </files>
+          </floor-subitem>
+        </floor-subitems>
+      </floor-item>
+      <floor-item id="409641" add-date="2026-06-24T16:21:35.310" remove-date="" sort-order="13" publish-date="2026-06-25T14:02:25.877">
+        <legis-num>H.R. 8884</legis-num>
+        <floor-text>Removing Barriers to Work for Disabled Americans Act</floor-text>
+        <updates>
+          <update-date date="2026-06-24T16:21:42.490" publish-date="2026-06-25T14:02:25.877">
+            <explanatory-notes doc-modified="False" />
+          </update-date>
+          <update-date date="2026-06-26T09:28:57.760" publish-date="2026-06-26T09:29:29.880">
+            <explanatory-notes doc-modified="True">as reported</explanatory-notes>
+          </update-date>
+        </updates>
+        <files>
+          <file doc-url="https://www.govinfo.gov/content/pkg/BILLS-119hr8884rh/pdf/BILLS-119hr8884rh.pdf" doc-type="PDF" add-date="2026-06-26T09:28:57.763" sort-order="3" publish-date="2026-06-25T14:02:25.877" />
+          <file doc-url="https://www.govinfo.gov/content/pkg/BILLS-119hr8884rh/xml/BILLS-119hr8884rh.xml" doc-type="XML" add-date="2026-06-26T09:28:57.767" sort-order="4" publish-date="2026-06-25T14:02:25.877" />
+        </files>
+        <floor-subitems>
+          <floor-subitem id="503868" add-date="2026-06-24T16:22:33.533" remove-date="" sort-order="1" publish-date="2026-06-25T14:02:25.877">
+            <legis-num />
+            <floor-text>Rules Committee Print 119-34 – Showing the text of H.R. 8884, as reported by the Committee on Ways and Means</floor-text>
+            <updates>
+              <update-date date="2026-06-25T11:14:13.483" publish-date="2026-06-25T14:02:25.877">
+                <explanatory-notes doc-modified="False" />
+              </update-date>
+            </updates>
+            <files>
+              <file doc-url="http://docs.house.gov/billsthisweek/20260629/RCP_H8884_xml.pdf" doc-type="PDF" add-date="2026-06-25T11:14:13.487" sort-order="1" publish-date="" />
+            </files>
+          </floor-subitem>
+          <floor-subitem id="503869" add-date="2026-06-24T16:23:32.907" remove-date="" sort-order="2" publish-date="2026-06-25T14:02:25.877">
+            <legis-num />
+            <floor-text>H. Rept. 119-714 – Report from the Committee on Ways and Means to accompany H.R. 8884</floor-text>
+            <updates>
+              <update-date date="2026-06-25T11:14:53.310" publish-date="2026-06-25T14:02:25.877">
+                <explanatory-notes doc-modified="False" />
+              </update-date>
+              <update-date date="2026-06-25T11:18:30.593" publish-date="2026-06-25T14:02:25.877">
+                <explanatory-notes doc-modified="False" />
+              </update-date>
+              <update-date date="2026-06-26T10:00:34.090" publish-date="2026-06-26T10:01:20.877">
+                <explanatory-notes doc-modified="True">GPO Version</explanatory-notes>
+              </update-date>
+            </updates>
+            <files>
+              <file doc-url="https://www.govinfo.gov/content/pkg/CRPT-119hrpt714/pdf/CRPT-119hrpt714.pdf" doc-type="PDF" add-date="2026-06-26T10:00:34.113" sort-order="2" publish-date="" />
+            </files>
+          </floor-subitem>
+        </floor-subitems>
+      </floor-item>
+      <floor-item id="409643" add-date="2026-06-24T16:51:14.143" remove-date="" sort-order="14" publish-date="2026-06-25T14:02:25.877">
+        <legis-num>H. Res. 1383</legis-num>
+        <floor-text>Commemorating the one-year anniversary of the enactment of the Working Families Tax Cuts.</floor-text>
+        <updates>
+          <update-date date="2026-06-24T17:13:02.320" publish-date="2026-06-25T14:02:25.877">
+            <explanatory-notes doc-modified="False" />
+          </update-date>
+          <update-date date="2026-06-25T10:00:37.217" publish-date="2026-06-25T14:02:25.877">
+            <explanatory-notes doc-modified="False" />
+          </update-date>
+        </updates>
+        <files>
+          <file doc-url="https://www.govinfo.gov/content/pkg/BILLS-119hres1383ih/pdf/BILLS-119hres1383ih.pdf" doc-type="PDF" add-date="2026-06-25T10:00:37.223" sort-order="1" publish-date="2026-06-25T14:02:25.877" />
+          <file doc-url="https://www.govinfo.gov/content/pkg/BILLS-119hres1383ih/xml/BILLS-119hres1383ih.xml" doc-type="XML" add-date="2026-06-25T10:00:37.223" sort-order="2" publish-date="2026-06-25T14:02:25.877" />
+        </files>
+      </floor-item>
+      <floor-item id="409644" add-date="2026-06-29T10:42:07.257" remove-date="" sort-order="15" publish-date="2026-06-29T11:59:48.737">
+        <legis-num>H.R. 8595</legis-num>
+        <floor-text>National Security, Department of State, and Related Programs Appropriations Act, 2027</floor-text>
+        <files>
+          <file doc-url="https://www.govinfo.gov/content/pkg/BILLS-119hr8595rh/pdf/BILLS-119hr8595rh.pdf" doc-type="PDF" add-date="2026-06-29T10:42:07.260" sort-order="1" publish-date="2026-06-29T11:59:48.737" />
+          <file doc-url="https://www.govinfo.gov/content/pkg/BILLS-119hr8595rh/xml/BILLS-119hr8595rh.xml" doc-type="XML" add-date="2026-06-29T10:42:07.263" sort-order="2" publish-date="2026-06-29T11:59:48.737" />
+        </files>
+        <floor-subitems>
+          <floor-subitem id="503872" add-date="2026-06-29T10:42:38.280" remove-date="" sort-order="1" publish-date="2026-06-29T11:59:48.737">
+            <legis-num />
+            <floor-text>H. Rept. 119-631 – Report from the Committee on Appropriations to accompany H.R. 8595</floor-text>
+            <files>
+              <file doc-url="https://www.govinfo.gov/content/pkg/CRPT-119hrpt631/pdf/CRPT-119hrpt631.pdf" doc-type="PDF" add-date="2026-06-29T10:42:38.270" sort-order="1" publish-date="" />
+            </files>
+          </floor-subitem>
+        </floor-subitems>
+      </floor-item>
+    </floor-items>
+  </category>
+  <category type="Items that may be considered" sort-order="5">
+    <floor-items>
+      <floor-item id="409645" add-date="2026-06-29T14:46:42.167" remove-date="" sort-order="1" publish-date="2026-06-29T23:08:28.127">
+        <legis-num>H. Res. 1398</legis-num>
+        <floor-text>Providing for consideration of the bill (H.R. 8800) to authorize appropriations for fiscal year 2027 for military activities of the Department of Defense, for military construction, and for defense activities of the Department of Energy, to prescribe military personnel strengths for such fiscal year, and for other purposes; providing for consideration of the bill (H.R. 8595) making appropriations for national security, Department of State, and related programs for the fiscal year ending September 30, 2027, and for other purposes; providing for consideration of the bill (H.R. 8884) to amend title II of the Social Security Act to reauthorize demonstration authority for the disability insurance program; providing for consideration of the resolution (H. Res. 1383) commemorating the one-year anniversary of the enactment of the Working Families Tax Cuts; and for other purposes.</floor-text>
+        <updates>
+          <update-date date="2026-06-29T22:28:44.210" publish-date="2026-06-29T23:08:28.127">
+            <explanatory-notes doc-modified="False" />
+          </update-date>
+          <update-date date="2026-06-29T23:07:56.517" publish-date="2026-06-29T23:08:28.127">
+            <explanatory-notes doc-modified="False" />
+          </update-date>
+          <update-date date="2026-06-30T09:32:43.947" publish-date="2026-06-30T09:34:00.017">
+            <explanatory-notes doc-modified="True">Res. Number Added</explanatory-notes>
+          </update-date>
+        </updates>
+        <files>
+          <file doc-url="http://docs.house.gov/billsthisweek/20260629/BILLS-119hres_HR8800HR8595HR8884HRES1383_xml.pdf" doc-type="PDF" add-date="2026-06-29T23:07:56.523" sort-order="1" publish-date="2026-06-29T23:08:28.127" />
+        </files>
+        <floor-subitems>
+          <floor-subitem id="503873" add-date="2026-06-29T14:47:13.607" remove-date="" sort-order="1" publish-date="2026-06-29T23:08:28.127">
+            <legis-num />
+            <floor-text>H. Rept. 119-718 – Report from the Committee on Rules to accompany H. Res. 1398</floor-text>
+            <updates>
+              <update-date date="2026-06-29T23:08:21.753" publish-date="2026-06-29T23:08:28.127">
+                <explanatory-notes doc-modified="False" />
+              </update-date>
+              <update-date date="2026-06-30T09:33:09.163" publish-date="2026-06-30T09:34:00.017">
+                <explanatory-notes doc-modified="True">Rept. Number Added</explanatory-notes>
+              </update-date>
+            </updates>
+            <files>
+              <file doc-url="http://docs.house.gov/billsthisweek/20260629/RulesReport06292026.pdf" doc-type="PDF" add-date="2026-06-29T23:08:21.750" sort-order="1" publish-date="" />
+            </files>
+          </floor-subitem>
+        </floor-subitems>
+      </floor-item>
+      <floor-item id="409646" add-date="2026-06-30T14:38:41.280" remove-date="" sort-order="2" publish-date="2026-06-30T14:43:32.530">
+        <legis-num>H. Res. ___</legis-num>
+        <floor-text>Directing the Committee on Ethics to preserve and publicly release records relating to monetary settlements involving acts of sexual harassment.</floor-text>
+        <files>
+          <file doc-url="http://docs.house.gov/billsthisweek/20260629/Massie Res.pdf" doc-type="PDF" add-date="2026-06-30T14:38:41.297" sort-order="1" publish-date="2026-06-30T14:43:32.530" />
+        </files>
+      </floor-item>
+    </floor-items>
+  </category>
+</floorschedule>

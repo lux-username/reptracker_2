@@ -71,7 +71,7 @@ function formatLocation(loc: RawMeetingDetail["location"]): string | null {
 }
 
 /** English ordinal suffix for a positive integer (119 → "th", 121 → "st"). */
-function ordinalSuffix(n: number): string {
+export function ordinalSuffix(n: number): string {
   const mod100 = n % 100;
   if (mod100 >= 11 && mod100 <= 13) return "th";
   switch (n % 10) {
