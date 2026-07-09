@@ -7,6 +7,8 @@
 // them verbatim. A bill with no CRS summary yet shows structured-only (official
 // title + Congress.gov link) — we never infer what a bill does from its title
 // or from raw legislative text. See decisions.md.
+import { cached, cacheKey, TTL } from "./cache";
+
 /** Raw Congress.gov bill-summary + text-version shapes (fields we consume). */
 export interface RawCrsSummary {
   actionDate?: string;
@@ -114,7 +116,24 @@ export class BillSourceError extends Error {
   }
 }
 
-export async function fetchBillSources(
+/**
+ * Fetch a bill's CRS summaries + text-version list, cached in the reference tier
+ * (4-6h). CRS summaries are slow-moving; the "amended since" warning
+ * (extractBillSummary) covers the window between a new text version and the TTL.
+ */
+export function fetchBillSources(
+  congress: number,
+  type: string,
+  number: string,
+): Promise<{ crsSummaries: RawCrsSummary[]; textVersions: RawTextVersion[] }> {
+  return cached(
+    cacheKey("bill", congress, type.toLowerCase(), number),
+    TTL.reference,
+    () => fetchBillSourcesLive(congress, type, number),
+  );
+}
+
+async function fetchBillSourcesLive(
   congress: number,
   type: string,
   number: string,

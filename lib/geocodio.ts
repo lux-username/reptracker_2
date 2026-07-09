@@ -2,6 +2,7 @@
 // browser) and is imported exclusively by server actions / components.
 import type { DistrictCandidate } from "./types";
 import { isNonVoting, normalizeDistrict, parseCongressNumber } from "./jurisdictions";
+import { cached, cacheKey, TTL } from "./cache";
 
 // Minimal shapes for the Geocodio v1.7 `cd` (congressional district) field.
 // Only the fields we consume are typed; the payload has much more.
@@ -97,12 +98,30 @@ export class GeocodioError extends Error {
   }
 }
 
+/** Normalize an address into a stable cache key: lower, trim, collapse ws, strip punctuation. */
+function normalizeForKey(address: string): string {
+  return address
+    .toLowerCase()
+    .replace(/[^\w\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 /**
  * Geocode a free-form US address (or ZIP) to its distinct district candidates.
  * Throws GeocodioError with kind "not_found" for an unprocessable address and
  * kind "error" for auth/quota/network failures.
+ *
+ * Cached 24h keyed by the normalized address (spec §Caching item 1). A throw
+ * (not_found / auth / network) propagates uncached.
  */
 export async function geocode(address: string): Promise<DistrictCandidate[]> {
+  return cached(cacheKey("geo", normalizeForKey(address)), TTL.geocode, () =>
+    geocodeLive(address),
+  );
+}
+
+async function geocodeLive(address: string): Promise<DistrictCandidate[]> {
   const apiKey = process.env.GEOCODIO_API_KEY;
   if (!apiKey) throw new GeocodioError("GEOCODIO_API_KEY is not set", "error");
 

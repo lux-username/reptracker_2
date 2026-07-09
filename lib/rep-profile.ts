@@ -21,6 +21,7 @@ import { fetchAssignmentIndex } from "./committees";
 import { fetchSecondaryBills } from "./legislation";
 import { fetchUpcomingDecisions } from "./decisions";
 import { fetchBillSources, extractBillSummary } from "./summaries";
+import { cached, cacheKey, TTL } from "./cache";
 
 /** Attach the verbatim CRS summary (Issue #5, no LLM) to a secondary bill. */
 async function enrichBillSummary(bill: SecondaryBill): Promise<SecondaryBill> {
@@ -78,8 +79,17 @@ export function formatOfficeAddress(a: RawAddress): string | null {
   return [office, line2].filter(Boolean).join(", ");
 }
 
-/** Fetch a member's DC-office contact block from Congress.gov member detail. */
+/**
+ * Fetch a member's DC-office contact block from Congress.gov member detail.
+ * Cached in the reference tier (4-6h).
+ */
 export async function fetchContact(bioguideId: string): Promise<ContactBlock> {
+  return cached(cacheKey("contact", bioguideId), TTL.reference, () =>
+    fetchContactLive(bioguideId),
+  );
+}
+
+async function fetchContactLive(bioguideId: string): Promise<ContactBlock> {
   const apiKey = process.env.CONGRESS_GOV_API_KEY;
   if (!apiKey) throw new ProfileError("CONGRESS_GOV_API_KEY is not set");
   const url = new URL(`https://api.congress.gov/v3/member/${bioguideId}`);

@@ -12,6 +12,7 @@
 //
 // The index build is pure so it can be fixture-tested without network access.
 import type { CommitteeAssignment, CommitteeRole } from "./types";
+import { cached, cacheKey, TTL } from "./cache";
 
 const MEMBERSHIP_URL =
   "https://unitedstates.github.io/congress-legislators/committee-membership-current.json";
@@ -170,9 +171,15 @@ async function fetchJson<T>(url: string): Promise<T> {
  * (e.g. senators-only committees or a member the dataset lags on).
  */
 export async function fetchAssignmentIndex(): Promise<Map<string, CommitteeAssignment[]>> {
+  // Cache the raw payloads (reference tier) rather than the built index: the
+  // Map isn't JSON-serializable, and the datasets refresh ~daily.
   const [membership, committees] = await Promise.all([
-    fetchJson<RawMembership>(MEMBERSHIP_URL),
-    fetchJson<RawCommittee[]>(COMMITTEES_URL),
+    cached(cacheKey("cl", "membership"), TTL.reference, () =>
+      fetchJson<RawMembership>(MEMBERSHIP_URL),
+    ),
+    cached(cacheKey("cl", "committees"), TTL.reference, () =>
+      fetchJson<RawCommittee[]>(COMMITTEES_URL),
+    ),
   ]);
   return buildAssignmentIndex(membership, committees);
 }

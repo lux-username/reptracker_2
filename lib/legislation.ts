@@ -5,6 +5,7 @@
 // summaries are Issue #5 — here we carry the official title + a Congress.gov
 // link, which is the spec's structured fallback.
 import type { SecondaryBill, SponsorBadge } from "./types";
+import { cached, cacheKey, TTL } from "./cache";
 
 /** Raw Congress.gov sponsored/cosponsored-legislation list item. */
 export interface RawLegislationItem {
@@ -203,7 +204,18 @@ export class LegislationError extends Error {
   }
 }
 
-async function fetchList(
+/** Fetch one legislation list, cached in the reference tier (4-6h). */
+function fetchList(
+  bioguideId: string,
+  kind: "sponsored-legislation" | "cosponsored-legislation",
+  field: "sponsoredLegislation" | "cosponsoredLegislation",
+): Promise<RawLegislationItem[]> {
+  return cached(cacheKey("leg", kind, bioguideId), TTL.reference, () =>
+    fetchListLive(bioguideId, kind, field),
+  );
+}
+
+async function fetchListLive(
   bioguideId: string,
   kind: "sponsored-legislation" | "cosponsored-legislation",
   field: "sponsoredLegislation" | "cosponsoredLegislation",

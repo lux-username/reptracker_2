@@ -6,6 +6,7 @@
 // and split them into the one House seat for the district + the senators.
 import type { Chamber, Rep } from "./types";
 import { houseRole } from "./jurisdictions";
+import { cached, cacheKey, TTL } from "./cache";
 
 interface CongressTermItem {
   chamber?: string; // "House of Representatives" | "Senate"
@@ -88,8 +89,20 @@ export class CongressError extends Error {
   }
 }
 
-/** Fetch every current member of a state/jurisdiction for a given congress. */
+/**
+ * Fetch every current member of a state/jurisdiction for a given congress.
+ * Cached in the reference tier (4-6h) — membership is slow-moving.
+ */
 export async function fetchStateMembers(
+  congress: number,
+  stateCode: string,
+): Promise<CongressMember[]> {
+  return cached(cacheKey("members", congress, stateCode), TTL.reference, () =>
+    fetchStateMembersLive(congress, stateCode),
+  );
+}
+
+async function fetchStateMembersLive(
   congress: number,
   stateCode: string,
 ): Promise<CongressMember[]> {

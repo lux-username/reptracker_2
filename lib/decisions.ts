@@ -11,6 +11,7 @@
 // summaries are Issue #5 — here the "what" is the official meeting title + a
 // Congress.gov committee link.
 import type { CommitteeAssignment, UpcomingDecision } from "./types";
+import { cached, cacheKey, TTL } from "./cache";
 
 /** Raw committee reference inside a meeting detail. */
 export interface RawMeetingCommittee {
@@ -166,8 +167,15 @@ export async function fetchUpcomingDecisions(
   listUrl.searchParams.set("limit", String(SWEEP_LIMIT));
   listUrl.searchParams.set("api_key", apiKey);
 
-  const list = await apiJson<{ committeeMeetings?: MeetingListItem[]; pagination?: { count?: number } }>(
-    listUrl.toString(),
+  // Events tier (30-60min): the schedule can change on short notice, but a
+  // per-request cache still absorbs repeat lookups within the window.
+  const list = await cached(
+    cacheKey("mtg-list", congress, chamber),
+    TTL.events,
+    () =>
+      apiJson<{ committeeMeetings?: MeetingListItem[]; pagination?: { count?: number } }>(
+        listUrl.toString(),
+      ),
   );
   const items = list.committeeMeetings ?? [];
   const total = list.pagination?.count ?? items.length;
@@ -182,7 +190,12 @@ export async function fetchUpcomingDecisions(
       if (!it.url) return null;
       try {
         const u = it.url.replace(/\?.*$/, "") + `?api_key=${apiKey}`;
-        const d = await apiJson<{ committeeMeeting?: RawMeetingDetail }>(u);
+        // Key detail fetches by eventId (stable, apiKey-free); fall back to a
+        // live fetch when the list item omits one.
+        const load = () => apiJson<{ committeeMeeting?: RawMeetingDetail }>(u);
+        const d = it.eventId
+          ? await cached(cacheKey("mtg", it.eventId), TTL.events, load)
+          : await load();
         return d.committeeMeeting ?? null;
       } catch {
         return null; // one bad meeting shouldn't sink the section
