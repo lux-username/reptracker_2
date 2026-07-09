@@ -1,67 +1,71 @@
-> Generated 2026-07-09 by /end-session at commit 09d1039.
+> Generated 2026-07-09 by /end-session at commit 598328b.
 
 # STATUS
 
 ## Where things stand
 
-**Issue #7's caching layer is done and live.** The per-lookup fan-out (Geocodio +
-a swarm of Congress.gov calls) is now cached in Upstash Redis through a single
-primitive, `lib/cache.ts` → `cached(key, ttl, loader)`:
+**The app is deployed and public.** Issue #11 landed this session:
+https://reptracker2.vercel.app is live on Vercel (Production, Ready), serving
+the full lookup end-to-end against live APIs. Verified in-browser with a real
+address (350 Fifth Ave, NY → NY-12: Nadler + Gillibrand + Schumer, with
+committees, contacts, upcoming hearings, and sponsored/cosponsored bills).
 
-- **Three TTL tiers** matching the spec's cadence split: `geocode` 24h,
-  `reference` 5h (members, contact, legislation lists, bill CRS sources, committee
-  data), `events` 45min (committee-meeting list + per-event details).
-- **Graceful degradation is load-bearing.** With no Upstash creds the client is
-  `null` and every call is a transparent pass-through to the live fetch — dev,
-  tests, and a cold cache behave exactly as an uncached request. A Redis error or
-  miss falls through; a `loader` throw propagates **uncached** (so a Geocodio 422
-  or an HTTP error is never stored).
-- **Versioned keys** (`rt:v1:<kind>:...`) so a value-shape change invalidates by a
-  bump. Wired into all 7 network call sites by extracting each fetch body into a
-  `*Live` inner and wrapping the export; the pure selectors are untouched.
-- **Upstash is provisioned and connected.** Both `UPSTASH_REDIS_REST_URL` +
-  `UPSTASH_REDIS_REST_TOKEN` are in `.env.local` (gitignored, alongside the other
-  API keys). Verified with a live PING/SET/GET/DEL round-trip against the REST API
-  — token has read/write, HTTP 200 throughout.
+- **Deploy setup:** Vercel project `reptracker_2` under scope
+  `lukitux-4243s-projects`. Four env vars encrypted in Production —
+  `CONGRESS_GOV_API_KEY`, `GEOCODIO_API_KEY`, `UPSTASH_REDIS_REST_URL`,
+  `UPSTASH_REDIS_REST_TOKEN`. `ANTHROPIC_API_KEY` deliberately **not** set (the
+  LLM was retired in session 6; nothing reads it).
+- **Push-to-deploy is wired.** GitHub repo `lux-username/reptracker_2` is
+  connected — a push to `main` auto-deploys to Production, and branches/PRs get
+  preview URLs. (Both #10 and the contact-label fix shipped this way and were
+  verified live.)
+- **Warm-cache loose end closed.** The session-7 caching layer was confirmed
+  working *through the deployed UI*: the first lookup populated 180 `rt:v1:*`
+  keys in Upstash; a repeat lookup returned in **188 ms** (spec target ~3 s).
 
-**#7 was rescoped mid-issue** (the session-6 no-LLM pivot removed its cost-guardrail
-half). The two remaining pieces are split into focused follow-ups: **#16** (nightly
-pre-warm cron + full upcoming-events index — the fix for the `SWEEP_LIMIT=60`
-coverage miss in `lib/decisions.ts`) and **#17** (Congress.gov client-side rate
-limiter). This commit closes **#7**.
+**#10 (footer/privacy/feedback) is done and live.** Site-wide footer carries the
+plain-language disclaimer (independent tool, not affiliated with Congress,
+best-effort public-records data, → Congress.gov), a privacy line, and two
+action-labeled links: "Send feedback" (`reptrackerfeedback@gmail.com`, a
+dedicated free Gmail per spec §5) and "Report an issue" (GitHub). The favicon
+404 was fixed with `app/icon.svg` — but that icon is a **placeholder** (see #18).
 
-Not yet verified: a live warm-cache *hit through the app UI* — the Chrome extension
-wasn't connected this session. The caching logic is proven by unit tests + the
-direct Upstash round-trip; the app-path warm hit is a next-session confirmation.
+Also fixed this session: the contact block's ambiguous labels ("DC office" for a
+phone, "Office" for the DC mailing address) now read "DC office phone",
+"District office phone", "DC office address".
 
-Next session: **#16** (cron + events index) is the natural continuation but is
-blocked on deploy (**#11**). **#4** ("Floor this week") and **#8** (recess pivot)
-are the other unblocked MVP pieces.
+Next session: **#16** (nightly pre-warm cron + full upcoming-events index) is now
+**unblocked** — deploy landed, so Vercel Cron is available; it's the natural
+continuation and fixes the `SWEEP_LIMIT=60` coverage miss in `lib/decisions.ts`.
+**#4** ("Floor this week", hourly scrape) also becomes buildable now that Cron
+exists. **#8** (recess pivot) is the other unblocked MVP piece.
 
 ## Derived facts (from CLAUDE.md commands)
 
 | Fact | Command | Result |
 |---|---|---|
-| Test status | `npm test` | ✓ 68 tests passing (61 prior + 7 new cache tests; Vitest 4.1.10) |
+| Test status | `npm test` | ✓ 68 tests passing (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 (TypeScript 5.9.3) |
-| Build | `npm run build` | ✓ Next.js 16.2.10; routes `/`, `/_not-found`, `/api/health` |
+| Build | `npm run build` | ✓ Next.js 16.2.10; routes `/`, `/_not-found`, `/api/health`, `/icon.svg` |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `vercel ls` | Vercel CLI unavailable; no deploy yet (Issue #11) |
-| Git | `git log --oneline -1` | `635f82c Close session 6: finalize CRS-pivot docs + transcript stamp` (pre-commit) |
-| Stack versions | `package.json` | next ^16.2.10 · react ^19.2.7 · tailwindcss ^4.3.2 · typescript ^5.9.3 · vitest ^4.1.10 · **@upstash/redis ^1.38.0** · node v24.15.0 |
+| Deploy | `vercel ls` | ✓ **LIVE** — https://reptracker2.vercel.app · Production · Ready; `/api/health` → 200 |
+| Git | `git rev-parse --short HEAD` | `598328b Disambiguate contact labels: phone vs. address` (pre end-session commit) |
+| Stack versions | `package.json` | next ^16.2.10 · react ^19.2.7 · tailwindcss ^4.3.2 · typescript ^5.9.3 · vitest ^4.1.10 · @upstash/redis ^1.38.0 · node v24.15.0 |
 
-Note: the caching primitive is `lib/cache.ts` (+ `lib/cache.test.ts`); it wraps the
-exported I/O function in each of the 6 fetch-owning lib files. The `find` fact only
-lists `route.ts`/`page.tsx`, so those lib files don't appear there by design.
+Note: the footer is site-wide via `app/layout.tsx` (`app/Footer.tsx`); the favicon
+is `app/icon.svg` (App Router auto-injects the `<link rel="icon">`). Contact
+labels live in `app/RepSection.tsx`. The caching primitive remains `lib/cache.ts`.
+The `find` fact only lists `route.ts`/`page.tsx`, so component/lib files don't
+appear there by design.
 
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (open Issues:
-#4, #8–#13, #16, #17). Roadmap lives there; not restated here.
+#4, #8, #9, #12, #13, #16, #17, #18). Roadmap lives there; not restated here.
 
 ## Blockers / open questions
 
-None blocking. #16 (the cron) is gated on deploy (#11). Recommended entry point next
-session: **#16** if #11 lands, otherwise **#4** / **#8**. One loose end worth an
-early check next session: confirm a warm-cache hit through the app UI once the Chrome
-extension is available.
+None blocking. Deploy (#11) is done, which unblocks the Cron-dependent work
+(#16, #4). Recommended entry point next session: **#16** (cron + events index),
+then **#4** / **#8**. The feedback Gmail (`reptrackerfeedback@gmail.com`) exists
+but is unmonitored — optionally set it to forward to a real inbox later.
