@@ -1,0 +1,51 @@
+{
+    "pagination": {
+        "count": 2
+    },
+    "request": {
+        "billNumber": "5160",
+        "billType": "hr",
+        "billUrl": "https://api.congress.gov/v3/bill/119/hr/5160?format=json",
+        "congress": "119",
+        "contentType": "application/json",
+        "format": "json"
+    },
+    "textVersions": [
+        {
+            "date": "2026-07-02T04:00:00Z",
+            "formats": [
+                {
+                    "type": "Formatted Text",
+                    "url": "https://www.congress.gov/119/bills/hr5160/BILLS-119hr5160rh.htm"
+                },
+                {
+                    "type": "PDF",
+                    "url": "https://www.congress.gov/119/bills/hr5160/BILLS-119hr5160rh.pdf"
+                },
+                {
+                    "type": "Formatted XML",
+                    "url": "https://www.congress.gov/119/bills/hr5160/BILLS-119hr5160rh.xml"
+                }
+            ],
+            "type": "Reported in House"
+        },
+        {
+            "date": "2025-09-04T04:00:00Z",
+            "formats": [
+                {
+                    "type": "Formatted Text",
+                    "url": "https://www.congress.gov/119/bills/hr5160/BILLS-119hr5160ih.htm"
+                },
+                {
+                    "type": "PDF",
+                    "url": "https://www.congress.gov/119/bills/hr5160/BILLS-119hr5160ih.pdf"
+                },
+                {
+                    "type": "Formatted XML",
+                    "url": "https://www.congress.gov/119/bills/hr5160/BILLS-119hr5160ih.xml"
+                }
+            ],
+            "type": "Introduced in House"
+        }
+    ]
+}

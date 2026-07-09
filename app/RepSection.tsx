@@ -45,6 +45,12 @@ function formatDateTime(iso: string): string {
   });
 }
 
+function formatDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
 function RoleBadge({ role }: { role: CommitteeAssignment["role"] }) {
   if (role === "Member") return null;
   const tone =
@@ -235,7 +241,25 @@ function Bills({ bills }: { bills: SecondaryBill[] }) {
                 {b.badge}
               </span>
             </div>
-            <p className="mt-1 text-sm text-slate-800">{b.title}</p>
+            <p className="mt-1 text-sm font-medium text-slate-800">{b.title}</p>
+            {b.summary ? (
+              <>
+                <p className="mt-1 text-sm text-slate-700">{b.summary}</p>
+                <p className="mt-1 text-xs text-slate-400">
+                  {b.summaryBasis === "bill-text"
+                    ? "Summary based on the bill's title (no nonpartisan summary available yet)."
+                    : b.summaryBasedOn
+                      ? `Based on bill as introduced, ${formatDate(b.summaryBasedOn)}.`
+                      : "Plain-English summary."}
+                </p>
+                {b.summaryAmended && (
+                  <p className="mt-1 rounded bg-amber-50 px-2 py-1 text-xs text-amber-900">
+                    ⚠ This bill has been amended since this summary was generated. See
+                    Congress.gov for current text.
+                  </p>
+                )}
+              </>
+            ) : null}
             {b.latestActionText && (
               <p className="mt-1 text-xs text-slate-500">
                 Latest: {b.latestActionText}
@@ -307,6 +331,18 @@ export default function RepSection({
         <Committees committees={profile.committees} />
         <Contact contact={profile.contact} />
       </header>
+
+      {profile.tldr && (
+        <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            TL;DR
+          </h4>
+          <p className="mt-1 text-sm text-slate-700">{profile.tldr}</p>
+          <p className="mt-1 text-xs text-slate-400">
+            AI-generated from official records; factual, not advice.
+          </p>
+        </div>
+      )}
 
       <Decisions decisions={profile.upcomingDecisions} />
       <Bills bills={profile.secondaryBills} />

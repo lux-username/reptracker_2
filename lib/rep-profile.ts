@@ -15,10 +15,44 @@ import type {
   Rep,
   RepProfile,
   ResolvedReps,
+  SecondaryBill,
 } from "./types";
 import { fetchAssignmentIndex } from "./committees";
 import { fetchSecondaryBills } from "./legislation";
 import { fetchUpcomingDecisions } from "./decisions";
+import { fetchBillSources, summarizeBill, summarizeRepDigest } from "./summaries";
+
+/** "Last, First Middle" → "First Middle Last" for display / digest grounding. */
+function readableName(name: string): string {
+  const [last, rest] = name.split(",", 2);
+  return rest ? `${rest.trim()} ${last.trim()}` : name;
+}
+
+/** Attach a plain-English summary (Issue #5) to a secondary bill. */
+async function enrichBillSummary(bill: SecondaryBill): Promise<SecondaryBill> {
+  try {
+    const { crsSummaries, textVersions } = await fetchBillSources(
+      bill.congress,
+      bill.type,
+      bill.number,
+    );
+    const s = await summarizeBill({
+      billId: bill.billId,
+      title: bill.title,
+      crsSummaries,
+      textVersions,
+    });
+    return {
+      ...bill,
+      summary: s.text,
+      summaryBasis: s.basis,
+      summaryBasedOn: s.basedOnDate,
+      summaryAmended: s.amendedSince,
+    };
+  } catch {
+    return { ...bill, summary: null, summaryBasis: "none", summaryBasedOn: null, summaryAmended: false };
+  }
+}
 
 interface RawMemberDetail {
   member?: {
@@ -87,19 +121,31 @@ export async function buildRepProfile(
   now: Date,
 ): Promise<RepProfile> {
   const committeeNames = assignments.map((c) => c.name);
-  const [contact, secondaryBills, upcomingDecisions] = await Promise.all([
+  const [contact, rawBills, upcomingDecisions] = await Promise.all([
     fetchContact(rep.bioguideId),
     fetchSecondaryBills(rep.bioguideId, committeeNames, now),
     fetchUpcomingDecisions(congress, rep.chamber, assignments, now),
   ]);
-  return {
-    rep,
-    committees: assignments,
-    contact,
-    upcomingDecisions,
-    secondaryBills,
-    tldr: null, // neutral LLM digest — Issue #5
-  };
+
+  // Issue #5: plain-English summaries per bill (parallel; each cached by source
+  // hash) + a neutral per-rep TL;DR grounded in the structured facts above.
+  const secondaryBills = await Promise.all(rawBills.map(enrichBillSummary));
+  const tldr = await summarizeRepDigest(rep.bioguideId, {
+    repName: readableName(rep.name),
+    upcoming: upcomingDecisions.map((d) => ({
+      kind: d.kind,
+      title: d.title,
+      date: d.date,
+      role: d.roleLabel,
+    })),
+    bills: secondaryBills.map((b) => ({
+      displayId: b.displayId,
+      title: b.title,
+      badge: b.badge,
+    })),
+  });
+
+  return { rep, committees: assignments, contact, upcomingDecisions, secondaryBills, tldr };
 }
 
 /**

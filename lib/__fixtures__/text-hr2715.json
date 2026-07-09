@@ -1,0 +1,51 @@
+{
+    "pagination": {
+        "count": 2
+    },
+    "request": {
+        "billNumber": "2715",
+        "billType": "hr",
+        "billUrl": "https://api.congress.gov/v3/bill/119/hr/2715?format=json",
+        "congress": "119",
+        "contentType": "application/json",
+        "format": "json"
+    },
+    "textVersions": [
+        {
+            "date": "2026-06-18T04:00:00Z",
+            "formats": [
+                {
+                    "type": "Formatted Text",
+                    "url": "https://www.congress.gov/119/bills/hr2715/BILLS-119hr2715rh.htm"
+                },
+                {
+                    "type": "PDF",
+                    "url": "https://www.congress.gov/119/bills/hr2715/BILLS-119hr2715rh.pdf"
+                },
+                {
+                    "type": "Formatted XML",
+                    "url": "https://www.congress.gov/119/bills/hr2715/BILLS-119hr2715rh.xml"
+                }
+            ],
+            "type": "Reported in House"
+        },
+        {
+            "date": "2025-04-08T04:00:00Z",
+            "formats": [
+                {
+                    "type": "Formatted Text",
+                    "url": "https://www.congress.gov/119/bills/hr2715/BILLS-119hr2715ih.htm"
+                },
+                {
+                    "type": "PDF",
+                    "url": "https://www.congress.gov/119/bills/hr2715/BILLS-119hr2715ih.pdf"
+                },
+                {
+                    "type": "Formatted XML",
+                    "url": "https://www.congress.gov/119/bills/hr2715/BILLS-119hr2715ih.xml"
+                }
+            ],
+            "type": "Introduced in House"
+        }
+    ]
+}

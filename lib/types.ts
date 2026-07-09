@@ -158,6 +158,16 @@ export interface SecondaryBill {
   badge: SponsorBadge;
   /** Congress.gov public bill URL. */
   url: string;
+  // --- Plain-English summary (Issue #5). Optional: filled by the summary
+  //     pipeline during profile assembly; absent until then. ---
+  /** Neutral 1–2 sentence summary, or null for structured-only display. */
+  summary?: string | null;
+  /** How the summary was sourced: CRS summary, bill title, or none. */
+  summaryBasis?: "crs" | "bill-text" | "none";
+  /** Date for the "Based on bill as introduced, [date]" stamp. */
+  summaryBasedOn?: string | null;
+  /** True when Congress.gov has a newer bill text version than the summary. */
+  summaryAmended?: boolean;
 }
 
 /**
