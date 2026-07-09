@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Footer from "./Footer";
 
 export const metadata: Metadata = {
   title: "Representative Tracker",
@@ -12,8 +13,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-white text-slate-900 antialiased">
-        {children}
+      <body className="flex min-h-screen flex-col bg-white text-slate-900 antialiased">
+        <div className="flex-1">{children}</div>
+        <Footer />
       </body>
     </html>
   );

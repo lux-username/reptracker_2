@@ -2,7 +2,7 @@ import AddressLookup from "./AddressLookup";
 
 export default function Home() {
   return (
-    <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 px-6 py-16">
+    <main className="mx-auto flex max-w-2xl flex-col gap-8 px-6 py-16">
       <header className="flex flex-col gap-3">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">
           Representative Tracker
