@@ -119,7 +119,7 @@ function Contact({ contact }: { contact: ContactBlock }) {
       <dl className="flex flex-col gap-1 text-sm">
         {contact.dcOfficePhone && (
           <div className="flex gap-2">
-            <dt className="w-32 shrink-0 text-slate-500">DC office</dt>
+            <dt className="w-32 shrink-0 text-slate-500">DC office phone</dt>
             <dd>
               <a className="font-medium text-sky-800 underline" href={telHref(contact.dcOfficePhone)}>
                 {contact.dcOfficePhone}
@@ -129,7 +129,7 @@ function Contact({ contact }: { contact: ContactBlock }) {
         )}
         {contact.districtOfficePhone && (
           <div className="flex gap-2">
-            <dt className="w-32 shrink-0 text-slate-500">District office</dt>
+            <dt className="w-32 shrink-0 text-slate-500">District office phone</dt>
             <dd>
               <a
                 className="font-medium text-sky-800 underline"
@@ -142,7 +142,7 @@ function Contact({ contact }: { contact: ContactBlock }) {
         )}
         {contact.dcOfficeAddress && (
           <div className="flex gap-2">
-            <dt className="w-32 shrink-0 text-slate-500">Office</dt>
+            <dt className="w-32 shrink-0 text-slate-500">DC office address</dt>
             <dd className="text-slate-700">{contact.dcOfficeAddress}</dd>
           </div>
         )}
