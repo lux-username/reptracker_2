@@ -13,6 +13,7 @@
 // The index build is pure so it can be fixture-tested without network access.
 import type { CommitteeAssignment, CommitteeRole } from "./types";
 import { cached, cacheKey, TTL } from "./cache";
+import { congressFetch } from "./rate-limit";
 
 const MEMBERSHIP_URL =
   "https://unitedstates.github.io/congress-legislators/committee-membership-current.json";
@@ -155,7 +156,7 @@ export class CommitteeError extends Error {
 async function fetchJson<T>(url: string): Promise<T> {
   let resp: Response;
   try {
-    resp = await fetch(url, { headers: { Accept: "application/json" } });
+    resp = await congressFetch(url, { headers: { Accept: "application/json" } });
   } catch (e) {
     throw new CommitteeError(`committee data request failed: ${String(e)}`);
   }

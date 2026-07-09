@@ -16,6 +16,7 @@
 // Congress.gov committee link.
 import type { CommitteeAssignment, UpcomingDecision } from "./types";
 import { cached, cacheKey, TTL } from "./cache";
+import { congressFetch } from "./rate-limit";
 import { readEventsIndex } from "./events-index";
 
 /** Raw committee reference inside a meeting detail. */
@@ -187,7 +188,7 @@ interface MeetingListItem {
 }
 
 async function apiJson<T>(url: string): Promise<T> {
-  const resp = await fetch(url, { headers: { Accept: "application/json" } });
+  const resp = await congressFetch(url, { headers: { Accept: "application/json" } });
   if (!resp.ok) throw new MeetingError(`Congress.gov returned HTTP ${resp.status}`);
   return (await resp.json()) as T;
 }

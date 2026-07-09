@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { parseGeocodioResponse, stateFromOcdId, type GeocodioResponse } from "./geocodio";
+import {
+  hasStreetLevelMatch,
+  looksLikeStreetAddress,
+  parseGeocodioResponse,
+  stateFromOcdId,
+  type GeocodioResponse,
+} from "./geocodio";
 
 // Real Geocodio v1.7 `cd`-field payloads captured from the live API.
 import fullKs from "./__fixtures__/geocodio-full-ks.json";
@@ -8,6 +14,7 @@ import zipMultiMo from "./__fixtures__/geocodio-zip-multi-mo.json";
 import dc from "./__fixtures__/geocodio-dc.json";
 import pr from "./__fixtures__/geocodio-pr.json";
 import wy from "./__fixtures__/geocodio-wy.json";
+import streetNomatch from "./__fixtures__/geocodio-street-nomatch.json";
 
 const p = (fixture: unknown) => parseGeocodioResponse(fixture as GeocodioResponse);
 
@@ -67,5 +74,33 @@ describe("parseGeocodioResponse", () => {
   it("returns an empty list when there are no results", () => {
     expect(p({ error: "Could not geocode address. No matches found." })).toEqual([]);
     expect(p({})).toEqual([]);
+  });
+});
+
+describe("low-confidence-match guard (#12)", () => {
+  it("recognizes a street address by a house number + street word", () => {
+    expect(looksLikeStreetAddress("999 fake nowhere street lanett")).toBe(true);
+    expect(looksLikeStreetAddress("1600 Pennsylvania Ave NW, Washington, DC")).toBe(true);
+  });
+
+  it("does NOT treat ZIP-only or city/state input as a street address", () => {
+    // These are supported and legitimately resolve to place-level matches.
+    expect(looksLikeStreetAddress("66044")).toBe(false);
+    expect(looksLikeStreetAddress("Lawrence, KS")).toBe(false);
+    expect(looksLikeStreetAddress("Lawrence, KS 66044")).toBe(false);
+  });
+
+  it("detects when nothing matched at street granularity", () => {
+    // Garbage street input → all `place` (city centroids) across two districts.
+    expect(hasStreetLevelMatch(streetNomatch as GeocodioResponse)).toBe(false);
+    // A real rooftop address matched at street level.
+    expect(hasStreetLevelMatch(fullKs as GeocodioResponse)).toBe(true);
+  });
+
+  it("the fixture would otherwise produce a misleading multi-district disambiguation", () => {
+    // Confirms the case is real: without the guard these place matches span
+    // different districts and reach the disambiguation screen.
+    const districts = new Set(p(streetNomatch).map((c) => `${c.state}-${c.district}`));
+    expect(districts.size).toBeGreaterThan(1);
   });
 });

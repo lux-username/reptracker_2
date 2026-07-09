@@ -1,63 +1,64 @@
-> Generated 2026-07-09 by /end-session at commit 30de2ce.
+> Generated 2026-07-09 by /end-session at commit 3c2aea8.
 
 # STATUS
 
 ## Where things stand
 
-Two build issues this session. **#4 ('Floor this week') implemented, verified, and
-closed** (commit 30de2ce). **#9 (accessibility bar) implemented and verified in output;
-kept open** for the one part that needs a human: the manual Lighthouse/axe/VoiceOver pass.
+Cleanup session on two gate-free MVP Issues, both **closed**: **#17** (Congress.gov
+client-side rate limiter) and **#12** (low-confidence geocode → misleading disambiguation).
+(Chosen with the owner over #8/#23, which each carry a human gate.)
 
-**#4 — Floor this week (closed).** The app's first scrape feature and its one *global*,
-address-independent section: the upcoming House + Senate floor schedule, shown to every
-visitor (every member votes on floor items). House comes from the structured **weekly XML
-feed** (discovered from the docs.house.gov/floor index, not HTML-scraped), grouped by
-procedural category, each bill linked to Congress.gov; Senate is the best-effort convene
-note from senate.gov. Serving mirrors the events-index pattern (cron write-through +
-warm KV read + live cold fallback); graceful hide via the ~40h KV TTL; visible freshness
-stamp. Added `cheerio`. See `lib/floor-schedule.ts`, `app/FloorThisWeek.tsx`,
-decisions.md (2026-07-09).
+**#17 — rate limiter (closed).** New `lib/rate-limit.ts`: a shared refilling **token
+bucket** (`TokenBucket`) with a `congressFetch()` wrapper now in front of every Congress.gov
+`fetch` (the 7 sites in committees / congress / decisions / events-index / legislation /
+rep-profile / summaries). Big burst capacity so a legitimate cron run or user lookup never
+waits; sustained refill keeps the worst-case hour under the 5,000/hr key quota (defaults
+BURST=1000, 60/min → ≤4600/hr; both env-tunable via `CONGRESS_RATE_BURST` /
+`CONGRESS_RATE_PER_MIN`). Drains under a cold-cache flood → callers queue at the refill rate
+= the back-pressure we want. Documented caveat: per-process (per Vercel instance), a
+best-effort self-pacing guardrail, not a distributed hard cap — matches the issue's intent
+(the cron, the real bulk consumer, runs on one instance). Deterministically unit-tested with
+an injected clock/sleep.
 
-**#9 — Accessibility (open, remaining = manual AT verification).** Fixed the concrete
-WCAG-AA failures and structural gaps by audit: text `slate-400`→`slate-500` on white
-(2.6:1 → 4.76:1, now AA-compliant); added the missing **skip-to-content link** (sr-only,
-revealed on focus, targets `<main id="main-content" tabindex="-1">` — verified in the
-compiled CSS + rendered HTML); associated the address hint via `aria-describedby`;
-placeholder contrast bumped. The existing baseline was already sound (semantic HTML,
-native keyboard operability, `<label htmlFor>`, alt text on headshots, `role="alert"` /
-`aria-live`, `<html lang>`). **Deliberately not closed:** the spec's DoD also requires a
-manual Lighthouse + axe + VoiceOver pass in a real browser/screen-reader — a
-human-in-the-loop gate that can't be done in this headless session. That verification is
-the only remaining work on #9.
+**#12 — geocode low-confidence guard (closed).** Geocodio lenient-matches a street-shaped
+garbage string ("999 fake nowhere street lanett") to several real *towns* in different
+districts (all `accuracy_type: place`), which our flow turned into a bogus "which district is
+yours?" screen. Fix in `lib/geocodio.ts`: when the input **looks like a street address**
+(house number + street word) yet **nothing matched at street granularity**, return
+`not_found` with a helpful message instead of a misleading disambiguation. Safe by
+construction — ZIP-only ("66044") and city/state ("Lawrence, KS") inputs aren't street-like,
+so their legitimate place-level matches are untouched. Verified live: garbage → not_found;
+real address → 1 district; ZIP-only → still resolves. (The pure place-name-garbage case —
+"nowhere land" with no house number — is left as accepted behavior per the issue: the
+disambiguation shows the matched place text, so it's never a *silent* wrong pick.)
 
-Priorities next: **#8 (recess pivot)** — needs an in-session detection source (the annual
-House/Senate session calendars are HTML/PDF and parse-heavy; recess detection is genuinely
-brittle) and reshapes the page framing the #24 session chose to keep implicit, so it wants
-either investigation time or an owner steer. Then **#23** (short-notice freshness; its
-external-scheduler step needs a GitHub repo secret — a human gate), and strategy Issues
-**#25** (design) / **#26** (compliance). **#12** geocode edge and **#17** rate-limiter are
-low-priority self-contained cleanups; **#18** favicon needs a design decision. **#21**/**#27**
-are post-MVP feature adds.
+Priorities next: **#8 (recess pivot)** — still wants an in-session detection source (annual
+session calendars are parse-heavy) and likely an owner steer on framing; **#23** (sub-daily
+freshness) needs a GitHub repo secret (human gate); **#9** remains open only for the manual
+Lighthouse/axe/VoiceOver pass (human gate). **#25**/**#26** are strategy/direction items;
+**#13** (district-office scrape), **#18** (favicon) remaining MVP; **#21**/**#27** post-MVP.
 
 ## Derived facts (from CLAUDE.md commands)
 
 | Fact | Command | Result |
 |---|---|---|
-| Test status | `npm test` | ✓ 99 tests passing, 15 files (Vitest 4.1.10) |
+| Test status | `npm test` | ✓ 106 tests passing, 16 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `curl` | ✓ **LIVE** https://reptracker2.vercel.app · HTTP 200 (~0.49s) |
-| Git | `git log --oneline -1` | `30de2ce Close session 11-of-day: implement #4 …` (pre end-session commit) |
+| Deploy | `curl` | ✓ **LIVE** https://reptracker2.vercel.app · HTTP 200 |
+| Git | `git log --oneline -1` | `3c2aea8 Advance #9: accessibility bar …` (pre end-session commit) |
 
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (open MVP Issues:
-#8, #9, #12, #13, #17, #18). #4 closed this session; #9 advanced but still open (manual AT
-verification remaining). #21, #23, #25, #26, #27 are backlog (no milestone).
+#8, #9, #13, #18). #4, #17, #12 closed today; #9 advanced (manual AT verification remaining).
+#21, #23, #25, #26, #27 are backlog (no milestone).
 
 ## Blockers / open questions
 
-None blocking. **#9's remaining step is a human gate** (manual Lighthouse/axe/VoiceOver in
-a browser). Standing notes (unchanged): the feedback Gmail (`reptrackerfeedback@gmail.com`)
-is unmonitored; `CRON_SECRET` is in Vercel Production (Sensitive) + the macOS Keychain, and
-#23's external-scheduler option will need it added as a GitHub Actions repo secret.
+None blocking. Human gates remaining on the priority items: **#9** (manual
+Lighthouse/axe/VoiceOver), **#23** (add `CRON_SECRET` as a GitHub Actions repo secret),
+**#8** (recess-detection source + framing steer). Standing notes (unchanged): feedback Gmail
+(`reptrackerfeedback@gmail.com`) is unmonitored; `CRON_SECRET` is in Vercel Production
+(Sensitive) + the macOS Keychain. New env knobs (optional): `CONGRESS_RATE_BURST`,
+`CONGRESS_RATE_PER_MIN` tune the #17 limiter; defaults are safe.

@@ -23,6 +23,9 @@ interface GeocodioDistrict {
 
 interface GeocodioResult {
   formatted_address: string;
+  /** Geocodio match confidence (0–1) and granularity ("rooftop", "place", …). */
+  accuracy?: number;
+  accuracy_type?: string;
   fields?: { congressional_districts?: GeocodioDistrict[] };
 }
 
@@ -88,6 +91,46 @@ export function parseGeocodioResponse(resp: GeocodioResponse): DistrictCandidate
   return [...byDistrict.values()].sort((a, b) => b.proportion - a.proportion);
 }
 
+// ---------------------------------------------------------------------------
+// Low-confidence-match guard (Issue #12).
+//
+// Geocodio lenient-matches garbage input to a real *place*: "999 fake nowhere
+// street lanett" resolves to several AL towns in different districts (all
+// `accuracy_type: place`), which our flow then presents as a bogus "which
+// district is yours?" screen. We can't reject place-level matches outright —
+// a legitimate ZIP-only or city lookup is *also* `place` and is supported. The
+// safe discriminator: only when the input clearly names a *street address* (a
+// house number + street word) yet nothing matched at street granularity did the
+// geocoder fall back to a city centroid — treat that as a miss, not a district.
+// ---------------------------------------------------------------------------
+
+/** accuracy_types that mean Geocodio pinned an actual street location. */
+const STREET_LEVEL_ACCURACY = new Set([
+  "rooftop",
+  "point",
+  "range_interpolation",
+  "nearest_rooftop_match",
+  "street_center",
+  "intersection",
+]);
+
+/** True if any result matched at street granularity (not a place/county/state centroid). */
+export function hasStreetLevelMatch(resp: GeocodioResponse): boolean {
+  return (resp.results ?? []).some(
+    (r) => r.accuracy_type != null && STREET_LEVEL_ACCURACY.has(r.accuracy_type),
+  );
+}
+
+/**
+ * True if the input reads like a specific street address — a house number
+ * followed by a street-name word. ZIP-only ("66044") and city/state
+ * ("Lawrence, KS") inputs are deliberately NOT street-like, so the street-match
+ * guard never rejects those legitimately place-level lookups.
+ */
+export function looksLikeStreetAddress(address: string): boolean {
+  return /\b\d{1,6}\s+[a-z]/i.test(address);
+}
+
 export class GeocodioError extends Error {
   constructor(
     message: string,
@@ -146,6 +189,16 @@ async function geocodeLive(address: string): Promise<DistrictCandidate[]> {
   }
 
   const data = (await resp.json()) as GeocodioResponse;
+
+  // Street-address input that only matched a city centroid isn't a district we
+  // can trust — surface a miss instead of a misleading disambiguation (Issue #12).
+  if (looksLikeStreetAddress(address) && !hasStreetLevelMatch(data)) {
+    throw new GeocodioError(
+      "We couldn't find that exact street address. Double-check the house number and street name, or enter your ZIP code.",
+      "not_found",
+    );
+  }
+
   const candidates = parseGeocodioResponse(data);
   if (candidates.length === 0) {
     throw new GeocodioError("No congressional district found for that address.", "not_found");

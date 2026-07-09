@@ -6,6 +6,7 @@
 // link, which is the spec's structured fallback.
 import type { SecondaryBill, SponsorBadge } from "./types";
 import { cached, cacheKey, TTL } from "./cache";
+import { congressFetch } from "./rate-limit";
 
 /** Raw Congress.gov sponsored/cosponsored-legislation list item. */
 export interface RawLegislationItem {
@@ -225,7 +226,7 @@ async function fetchListLive(
   const url = new URL(`https://api.congress.gov/v3/member/${bioguideId}/${kind}`);
   url.searchParams.set("limit", "50");
   url.searchParams.set("api_key", apiKey);
-  const resp = await fetch(url, { headers: { Accept: "application/json" } });
+  const resp = await congressFetch(url, { headers: { Accept: "application/json" } });
   if (!resp.ok) throw new LegislationError(`Congress.gov returned HTTP ${resp.status}`);
   const data = (await resp.json()) as Record<string, RawLegislationItem[] | undefined>;
   return data[field] ?? [];

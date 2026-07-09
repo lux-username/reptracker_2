@@ -22,6 +22,7 @@
 // and surface on the very next run. See the 2026-07-09 free-tier decision.
 import { type RawMeetingDetail, MeetingError } from "./decisions";
 import { cached, cacheKey, redisClient, TTL } from "./cache";
+import { congressFetch } from "./rate-limit";
 
 /** The persisted index: the upcoming/live meeting set + convergence cursors. */
 export interface EventsIndex {
@@ -107,7 +108,7 @@ interface MeetingListItem {
 }
 
 async function apiJson<T>(url: string): Promise<T> {
-  const resp = await fetch(url, { headers: { Accept: "application/json" } });
+  const resp = await congressFetch(url, { headers: { Accept: "application/json" } });
   if (!resp.ok) throw new MeetingError(`Congress.gov returned HTTP ${resp.status}`);
   return (await resp.json()) as T;
 }

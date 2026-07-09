@@ -22,6 +22,7 @@ import { fetchSecondaryBills } from "./legislation";
 import { fetchUpcomingDecisions } from "./decisions";
 import { fetchBillSources, extractBillSummary } from "./summaries";
 import { cached, cacheKey, TTL } from "./cache";
+import { congressFetch } from "./rate-limit";
 
 /** Attach the verbatim CRS summary (Issue #5, no LLM) to a secondary bill. */
 async function enrichBillSummary(bill: SecondaryBill): Promise<SecondaryBill> {
@@ -94,7 +95,7 @@ async function fetchContactLive(bioguideId: string): Promise<ContactBlock> {
   if (!apiKey) throw new ProfileError("CONGRESS_GOV_API_KEY is not set");
   const url = new URL(`https://api.congress.gov/v3/member/${bioguideId}`);
   url.searchParams.set("api_key", apiKey);
-  const resp = await fetch(url, { headers: { Accept: "application/json" } });
+  const resp = await congressFetch(url, { headers: { Accept: "application/json" } });
   if (!resp.ok) throw new ProfileError(`Congress.gov returned HTTP ${resp.status}`);
   const data = (await resp.json()) as RawMemberDetail;
   const a = data.member?.addressInformation;

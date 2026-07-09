@@ -146,3 +146,40 @@ bespoke staleness check: if the cron's scrape fails for longer than the TTL the 
 cold path's live scrape also fails, `getFloorSchedule` returns null, and the section renders
 nothing — the spec's "hides if the scrape failed for >N hours," achieved structurally. A visible
 "as of" freshness stamp keeps a merely-stale-but-present schedule honest. Closing #4.
+
+## 2026-07-09 — Geocode low-confidence guard scoped to street-address-without-street-match (#12)
+
+Geocodio lenient-matches garbage to real places: "999 fake nowhere street lanett" →
+several AL towns (all `accuracy_type: place`) in different districts, which our flow turned
+into a bogus "which district is yours?" screen. Considered filtering on `accuracy`/
+`accuracy_type` generally — rejected: a valid **ZIP-only** or **city** lookup is *also*
+place-level and is explicitly supported, so a blanket place-level filter would break
+legitimate input.
+
+Chosen discriminator: only when the input **looks like a specific street address** (a house
+number followed by a street word) yet **nothing matched at street granularity** did the
+geocoder fall back to a city centroid we can't trust → return `not_found` with a helpful
+"check the number/street or use your ZIP" message. ZIP-only ("66044") and city/state
+("Lawrence, KS") are deliberately *not* street-like, so their place-level matches are never
+touched — verified live (garbage → not_found; real address → 1 district; ZIP → resolves).
+
+Explicitly **out of scope**: the pure place-name-garbage case ("nowhere land", no house
+number) still reaches disambiguation. That's accepted per the issue — Geocodio returns a
+real town (accuracy 1.0), there's no reliable signal it's "wrong," and the screen shows the
+matched address text, so it is never a *silent* wrong pick (which the spec forbids). Closing #12.
+
+## 2026-07-09 — Congress.gov rate limit as a per-instance token bucket, not a distributed cap (#17)
+
+Added a shared token bucket (`lib/rate-limit.ts`) in front of every Congress.gov `fetch`
+via `congressFetch()`. Burst capacity (default 1000) lets a legitimate cron run or user
+lookup pass without ever waiting; the sustained refill (default 60/min) keeps the worst-case
+hour (BURST + 60*60 = 4600) under the 5,000/hr key quota. A cold-cache flood drains the
+bucket then queues at the refill rate — the back-pressure the guardrail exists for.
+
+Deliberately **per-process**: on Vercel each function instance keeps its own bucket, so this
+is a best-effort self-pacing guardrail, not a global distributed cap. Rejected a
+Redis-backed distributed limiter as over-engineering for a low-traffic civic MVP — it would
+add a hot-path KV round-trip to every Congress.gov call for a quota that caching already
+keeps us comfortably under. The real bulk consumer (the nightly cron, #16) runs on a single
+instance where the in-memory bucket does its job. Env-tunable if traffic ever warrants
+raising/lowering it. Closing #17.

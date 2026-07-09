@@ -8,6 +8,7 @@
 // title + Congress.gov link) — we never infer what a bill does from its title
 // or from raw legislative text. See decisions.md.
 import { cached, cacheKey, TTL } from "./cache";
+import { congressFetch } from "./rate-limit";
 
 /** Raw Congress.gov bill-summary + text-version shapes (fields we consume). */
 export interface RawCrsSummary {
@@ -144,7 +145,7 @@ async function fetchBillSourcesLive(
   const base = `https://api.congress.gov/v3/bill/${congress}/${t}/${number}`;
   const get = async (path: string) => {
     const url = `${base}${path}?api_key=${apiKey}`;
-    const resp = await fetch(url, { headers: { Accept: "application/json" } });
+    const resp = await congressFetch(url, { headers: { Accept: "application/json" } });
     if (!resp.ok) throw new BillSourceError(`Congress.gov returned HTTP ${resp.status}`);
     return resp.json() as Promise<Record<string, unknown>>;
   };

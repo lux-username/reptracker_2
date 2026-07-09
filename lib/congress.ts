@@ -7,6 +7,7 @@
 import type { Chamber, Rep } from "./types";
 import { houseRole } from "./jurisdictions";
 import { cached, cacheKey, TTL } from "./cache";
+import { congressFetch } from "./rate-limit";
 
 interface CongressTermItem {
   chamber?: string; // "House of Representatives" | "Senate"
@@ -118,7 +119,7 @@ async function fetchStateMembersLive(
 
   let resp: Response;
   try {
-    resp = await fetch(url, { headers: { Accept: "application/json" } });
+    resp = await congressFetch(url, { headers: { Accept: "application/json" } });
   } catch (e) {
     throw new CongressError(`Congress.gov request failed: ${String(e)}`);
   }
