@@ -1,64 +1,64 @@
-> Generated 2026-07-09 by /end-session at commit 3c2aea8.
+> Generated 2026-07-09 by /end-session at commit 96b5efc.
 
 # STATUS
 
 ## Where things stand
 
-Cleanup session on two gate-free MVP Issues, both **closed**: **#17** (Congress.gov
-client-side rate limiter) and **#12** (low-confidence geocode → misleading disambiguation).
-(Chosen with the owner over #8/#23, which each carry a human gate.)
+**#13 (district-office phone/address enrichment) implemented, verified, and closed.**
+This was the last gate-free MVP build item, and the key move was **avoiding** the spec's
+riskiest path: rather than scrape each member's own house.gov/senate.gov site (every layout
+differs; a wrong phone number defeats the product), it consumes a **structured, maintained
+dataset** — `unitedstates/congress-legislators` `legislators-district-offices` (JSON mirror),
+keyed by the same bioguide id we already resolve. That removes the layout-fragility entirely.
 
-**#17 — rate limiter (closed).** New `lib/rate-limit.ts`: a shared refilling **token
-bucket** (`TokenBucket`) with a `congressFetch()` wrapper now in front of every Congress.gov
-`fetch` (the 7 sites in committees / congress / decisions / events-index / legislation /
-rep-profile / summaries). Big burst capacity so a legitimate cron run or user lookup never
-waits; sustained refill keeps the worst-case hour under the 5,000/hr key quota (defaults
-BURST=1000, 60/min → ≤4600/hr; both env-tunable via `CONGRESS_RATE_BURST` /
-`CONGRESS_RATE_PER_MIN`). Drains under a cold-cache flood → callers queue at the refill rate
-= the back-pressure we want. Documented caveat: per-process (per Vercel instance), a
-best-effort self-pacing guardrail, not a distributed hard cap — matches the issue's intent
-(the cron, the real bulk consumer, runs on one instance). Deterministically unit-tested with
-an injected clock/sleep.
+`lib/district-offices.ts` reduces the dataset to a `bioguide → { phone, address }` index
+(picking the first office with a **validated** phone — spec's "validate before rendering"),
+cached in Upstash, refreshed by the cron (new step 2b), served on the read path with a short
+in-process memo so a burst of contact lookups shares one load. `fetchContactLive` now fills
+`districtOfficePhone` + the new `ContactBlock.districtOfficeAddress` **on top of** the
+guaranteed Congress.gov DC office (a lookup failure just leaves the district slot null —
+never the DC fallback). `RepSection` renders the district address row. Verified live: a
+senator's district office (phone + address) flows end-to-end through
+`lookupAddress → resolveCandidate → buildProfiles → contact`.
 
-**#12 — geocode low-confidence guard (closed).** Geocodio lenient-matches a street-shaped
-garbage string ("999 fake nowhere street lanett") to several real *towns* in different
-districts (all `accuracy_type: place`), which our flow turned into a bogus "which district is
-yours?" screen. Fix in `lib/geocodio.ts`: when the input **looks like a street address**
-(house number + street word) yet **nothing matched at street granularity**, return
-`not_found` with a helpful message instead of a misleading disambiguation. Safe by
-construction — ZIP-only ("66044") and city/state ("Lawrence, KS") inputs aren't street-like,
-so their legitimate place-level matches are untouched. Verified live: garbage → not_found;
-real address → 1 district; ZIP-only → still resolves. (The pure place-name-garbage case —
-"nowhere land" with no house number — is left as accepted behavior per the issue: the
-disambiguation shows the matched place text, so it's never a *silent* wrong pick.)
+**Cache note (deliberate):** the `ContactBlock` shape change was *not* accompanied by a
+cache-namespace bump. A bump (`rt:v1`→`v2`) would cold-invalidate the *entire* cache —
+including the cron-built events index and floor schedule, which only rebuild daily — blanking
+them for up to a day. The added field reads back falsy on pre-#13 entries, so the UI degrades
+gracefully; district data appears as contact entries refresh (≤5h reference TTL) or on the
+next cron. See decisions.md (2026-07-09).
 
-Priorities next: **#8 (recess pivot)** — still wants an in-session detection source (annual
-session calendars are parse-heavy) and likely an owner steer on framing; **#23** (sub-daily
-freshness) needs a GitHub repo secret (human gate); **#9** remains open only for the manual
-Lighthouse/axe/VoiceOver pass (human gate). **#25**/**#26** are strategy/direction items;
-**#13** (district-office scrape), **#18** (favicon) remaining MVP; **#21**/**#27** post-MVP.
+Session-of-day tally: **#4** (floor schedule), **#17** (rate limiter), **#12** (geocode
+guard), **#13** (district offices) all shipped + closed; **#9** (accessibility) implemented,
+left open only for a manual browser AT pass.
+
+Priorities next — all now behind a human gate or an owner decision: **#8** (recess pivot —
+needs an in-session detection source + a framing steer), **#23** (sub-daily freshness — needs
+`CRON_SECRET` as a GitHub Actions repo secret), **#9** (manual Lighthouse/axe/VoiceOver),
+**#18** (favicon — design taste), **#25**/**#26** (design/compliance strategy). **#21**/**#27**
+are post-MVP. The gate-free build queue is now empty.
 
 ## Derived facts (from CLAUDE.md commands)
 
 | Fact | Command | Result |
 |---|---|---|
-| Test status | `npm test` | ✓ 106 tests passing, 16 files (Vitest 4.1.10) |
+| Test status | `npm test` | ✓ 115 tests passing, 17 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
 | Deploy | `curl` | ✓ **LIVE** https://reptracker2.vercel.app · HTTP 200 |
-| Git | `git log --oneline -1` | `3c2aea8 Advance #9: accessibility bar …` (pre end-session commit) |
+| Git | `git log --oneline -1` | `96b5efc Close session 13-of-day: resolve #17 … #12` (pre end-session commit) |
 
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (open MVP Issues:
-#8, #9, #13, #18). #4, #17, #12 closed today; #9 advanced (manual AT verification remaining).
+#8, #9, #18). #4, #12, #13, #17 closed today; #9 advanced (manual AT verification remaining).
 #21, #23, #25, #26, #27 are backlog (no milestone).
 
 ## Blockers / open questions
 
-None blocking. Human gates remaining on the priority items: **#9** (manual
-Lighthouse/axe/VoiceOver), **#23** (add `CRON_SECRET` as a GitHub Actions repo secret),
-**#8** (recess-detection source + framing steer). Standing notes (unchanged): feedback Gmail
-(`reptrackerfeedback@gmail.com`) is unmonitored; `CRON_SECRET` is in Vercel Production
-(Sensitive) + the macOS Keychain. New env knobs (optional): `CONGRESS_RATE_BURST`,
-`CONGRESS_RATE_PER_MIN` tune the #17 limiter; defaults are safe.
+No code blockers. Every remaining priority item needs human intervention: **#8**
+(recess-detection source + framing steer), **#23** (add `CRON_SECRET` as a GitHub Actions
+repo secret), **#9** (manual AT pass), **#18** (icon design). Standing notes (unchanged):
+feedback Gmail (`reptrackerfeedback@gmail.com`) is unmonitored; `CRON_SECRET` is in Vercel
+Production (Sensitive) + the macOS Keychain. Optional env knobs: `CONGRESS_RATE_BURST` /
+`CONGRESS_RATE_PER_MIN` (#17 limiter) — defaults are safe.

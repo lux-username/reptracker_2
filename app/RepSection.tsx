@@ -109,6 +109,7 @@ function Contact({ contact }: { contact: ContactBlock }) {
     contact.dcOfficePhone ||
     contact.districtOfficePhone ||
     contact.dcOfficeAddress ||
+    contact.districtOfficeAddress ||
     contact.websiteUrl;
   if (!hasAny) return null;
   return (
@@ -138,6 +139,12 @@ function Contact({ contact }: { contact: ContactBlock }) {
                 {contact.districtOfficePhone}
               </a>
             </dd>
+          </div>
+        )}
+        {contact.districtOfficeAddress && (
+          <div className="flex gap-2">
+            <dt className="w-32 shrink-0 text-slate-500">District office address</dt>
+            <dd className="text-slate-700">{contact.districtOfficeAddress}</dd>
           </div>
         )}
         {contact.dcOfficeAddress && (

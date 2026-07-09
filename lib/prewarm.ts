@@ -21,6 +21,7 @@ import { fetchStateMembers } from "./congress";
 import { fetchContact } from "./rep-profile";
 import { mapLimit, refreshEventsIndex, type RefreshStats } from "./events-index";
 import { refreshFloorSchedule } from "./floor-schedule";
+import { refreshDistrictOffices } from "./district-offices";
 import { cacheKey, redisClient } from "./cache";
 
 /**
@@ -51,6 +52,8 @@ export interface PrewarmStats {
   events: RefreshStats | null;
   /** Floor-schedule scrape (Issue #4): house bill count + whether Senate posted. */
   floor: { houseBills: number; senate: boolean };
+  /** District-office index (Issue #13): members with a district office contact. */
+  districtOffices: { members: number };
 }
 
 export interface PrewarmOptions {
@@ -98,6 +101,16 @@ export async function prewarm(opts: PrewarmOptions): Promise<PrewarmStats> {
     }
   });
 
+  // 2b. District-office index (Issue #13) — one cheap fetch of a structured
+  //     dataset, warmed *before* contacts so the contact warm reads it from KV.
+  let districtOffices: PrewarmStats["districtOffices"] = { members: 0 };
+  try {
+    const idx = await refreshDistrictOffices();
+    if (idx) districtOffices = { members: Object.keys(idx).length };
+  } catch (e) {
+    console.warn(`[prewarm] district-office refresh failed: ${String(e)}`);
+  }
+
   // 3. Convergent contact warm: a cursor walks the (stable-sorted) roster so
   //    successive nights cover everyone without exceeding the function ceiling.
   const roster = [...bioguides].sort();
@@ -129,7 +142,7 @@ export async function prewarm(opts: PrewarmOptions): Promise<PrewarmStats> {
     console.warn(`[prewarm] floor schedule refresh failed: ${String(e)}`);
   }
 
-  return { congress, committeeData, members: { warmed: membersWarmed, failed: membersFailed, roster: roster.length }, contacts, events, floor };
+  return { congress, committeeData, members: { warmed: membersWarmed, failed: membersFailed, roster: roster.length }, contacts, events, floor, districtOffices };
 }
 
 /** Warm `budget` contacts starting at the persisted cursor; advance and wrap. */

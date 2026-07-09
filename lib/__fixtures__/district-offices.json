@@ -1,0 +1,121 @@
+[
+ {
+  "id": {
+   "bioguide": "A000055",
+   "govtrack": 400004,
+   "thomas": "01460"
+  },
+  "offices": [
+   {
+    "id": "A000055-cullman",
+    "address": "205 4th Ave. NE",
+    "suite": "Suite 104",
+    "city": "Cullman",
+    "state": "AL",
+    "zip": "35055",
+    "latitude": 34.181059,
+    "longitude": -86.840631,
+    "fax": "202-225-5587",
+    "phone": "256-734-6043"
+   },
+   {
+    "id": "A000055-jasper",
+    "address": "1710 Alabama Ave.",
+    "suite": "247",
+    "building": "Carl Elliott Building",
+    "city": "Jasper",
+    "state": "AL",
+    "zip": "35501",
+    "latitude": 33.83438,
+    "longitude": -87.274935,
+    "phone": "205-221-2310"
+   },
+   {
+    "id": "A000055-tuscumbia",
+    "address": "1011 George Wallace Blvd.",
+    "suite": "Suite 146",
+    "city": "Tuscumbia",
+    "state": "AL",
+    "zip": "35674",
+    "latitude": 34.7412348,
+    "longitude": -87.6794142,
+    "fax": "202-225-5587",
+    "phone": "256-381-3450"
+   }
+  ]
+ },
+ {
+  "id": {
+   "bioguide": "C001125",
+   "govtrack": 456860
+  },
+  "offices": [
+   {
+    "id": "C001125-gretna",
+    "address": "200 Derbigny St",
+    "suite": "Suite 3200",
+    "building": "Gretna Courthouse",
+    "city": "Gretna",
+    "state": "LA",
+    "zip": "70053",
+    "latitude": 29.9159844,
+    "longitude": -90.0676331
+   },
+   {
+    "id": "C001125-new_orleans",
+    "address": "3401 General DeGaulle Dr",
+    "suite": "Suite 100",
+    "city": "New Orleans",
+    "state": "LA",
+    "zip": "70114",
+    "latitude": 29.924804,
+    "longitude": -90.0244505,
+    "phone": "504-381-3970"
+   },
+   {
+    "id": "C001125-new_orleans-1",
+    "address": "650 Poydras St",
+    "suite": "Suite 2525",
+    "city": "New Orleans",
+    "state": "LA",
+    "zip": "70130",
+    "latitude": 29.9488746,
+    "longitude": -90.0701146,
+    "phone": "504-288-3777"
+   },
+   {
+    "id": "C001125-baton_rouge",
+    "address": "801 Harding Blvd",
+    "building": "T.H. Harris Hall",
+    "city": "Baton Rouge",
+    "state": "LA",
+    "zip": "70807",
+    "latitude": 30.5204744,
+    "longitude": -91.1855444
+   },
+   {
+    "id": "C001125-gonzales",
+    "address": "615 E. Worthy St",
+    "suite": "Rm 107",
+    "building": "Ascension Parish Government Bldg",
+    "city": "Gonzales",
+    "state": "LA",
+    "zip": "70737",
+    "latitude": 30.2243054,
+    "longitude": -90.9174972,
+    "hours": "By appointment only"
+   },
+   {
+    "id": "C001125-gonzales-1",
+    "address": "925 W. Edenborne Pkwy",
+    "suite": "Room T117",
+    "building": "River Parishes Community College Gonzales Technical Training Center",
+    "city": "Gonzales",
+    "state": "LA",
+    "zip": "70737",
+    "latitude": 30.1909973,
+    "longitude": -90.933357
+   }
+  ]
+ }
+]

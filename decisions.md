@@ -183,3 +183,26 @@ add a hot-path KV round-trip to every Congress.gov call for a quota that caching
 keeps us comfortably under. The real bulk consumer (the nightly cron, #16) runs on a single
 instance where the in-memory bucket does its job. Env-tunable if traffic ever warrants
 raising/lowering it. Closing #17.
+
+## 2026-07-09 — District offices from a structured dataset, not member-site scraping (#13)
+
+The spec's data-sources table says district-office phone/address is "scraped from house.gov /
+senate.gov member pages," and Known Risks calls it the **worst** scrape: every member site is
+laid out differently, and a wrong phone number defeats the product's purpose (making a useful
+call). Rather than accept that fragility, #13 consumes a **structured, community-maintained
+dataset** — `unitedstates/congress-legislators` `legislators-district-offices` (JSON mirror at
+`unitedstates.github.io`), keyed by the same bioguide id we already resolve. Same open-data
+project already trusted elsewhere in the civic-tech ecosystem; refreshed regularly; no
+per-site HTML parsing. This removes the layout-fragility entirely; the remaining hygiene the
+spec asks for — validating a string looks like a phone before rendering it callable — is kept
+(`isPhoneLike`), and the Congress.gov DC office stays the guaranteed fallback (this only
+*fills* the district slot). We pick the first office carrying a valid phone as the primary.
+
+**No cache-namespace bump for the ContactBlock shape change.** Adding `districtOfficeAddress`
+is a value-shape change, which `cache.ts` says a NS bump can invalidate — but a bump
+(`rt:v1`→`v2`) invalidates the *entire* namespace, including the cron-built **events index**
+and **floor schedule**, which only rebuild on the daily cron. That would blank the product's
+core upcoming-decisions feed for up to a day on deploy. The change is additive and
+backward-compatible on read (old entries lack the field → it reads falsy → the row simply
+doesn't render), and stale contacts self-heal within the 5h reference TTL or on the next cron.
+So the additive change ships without a bump. Closing #13.

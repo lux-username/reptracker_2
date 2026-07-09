@@ -115,6 +115,8 @@ export interface ContactBlock {
   dcOfficePhone: string | null;
   dcOfficeAddress: string | null;
   districtOfficePhone: string | null;
+  /** District-office mailing address (Issue #13), enriched best-effort. */
+  districtOfficeAddress: string | null;
   websiteUrl: string | null;
 }
 

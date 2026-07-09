@@ -23,6 +23,7 @@ import { fetchUpcomingDecisions } from "./decisions";
 import { fetchBillSources, extractBillSummary } from "./summaries";
 import { cached, cacheKey, TTL } from "./cache";
 import { congressFetch } from "./rate-limit";
+import { fetchDistrictOffice } from "./district-offices";
 
 /** Attach the verbatim CRS summary (Issue #5, no LLM) to a secondary bill. */
 async function enrichBillSummary(bill: SecondaryBill): Promise<SecondaryBill> {
@@ -99,10 +100,17 @@ async function fetchContactLive(bioguideId: string): Promise<ContactBlock> {
   if (!resp.ok) throw new ProfileError(`Congress.gov returned HTTP ${resp.status}`);
   const data = (await resp.json()) as RawMemberDetail;
   const a = data.member?.addressInformation;
+
+  // District office (Issue #13): best-effort enrichment on top of the guaranteed
+  // Congress.gov DC office — a lookup failure just leaves the district slot null,
+  // never the DC fallback.
+  const district = await fetchDistrictOffice(bioguideId).catch(() => null);
+
   return {
     dcOfficePhone: a?.phoneNumber ?? null,
     dcOfficeAddress: formatOfficeAddress(a),
-    districtOfficePhone: null, // scraped best-effort — deferred (see spec §risks)
+    districtOfficePhone: district?.phone ?? null,
+    districtOfficeAddress: district?.address ?? null,
     websiteUrl: data.member?.officialWebsiteUrl ?? null,
   };
 }
