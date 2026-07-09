@@ -14,4 +14,9 @@ describe("Home page", () => {
       screen.getByRole("heading", { name: /representative tracker/i }),
     ).toBeInTheDocument();
   });
+
+  it("exposes a main landmark as the skip-to-content target", async () => {
+    render(await Home());
+    expect(screen.getByRole("main")).toHaveAttribute("id", "main-content");
+  });
 });

@@ -9,7 +9,11 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const floor = await getFloorSchedule(new Date());
   return (
-    <main className="mx-auto flex max-w-2xl flex-col gap-8 px-6 py-16">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="mx-auto flex max-w-2xl flex-col gap-8 px-6 py-16 focus:outline-none"
+    >
       <header className="flex flex-col gap-3">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">
           Representative Tracker

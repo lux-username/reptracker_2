@@ -52,7 +52,7 @@ export default function FloorThisWeek({ data }: { data: FloorSchedule | null }) 
           {data.house.categories.map((cat) => (
             <div key={cat.heading} className="flex flex-col gap-2">
               {cat.heading && (
-                <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
                   {cat.heading}
                 </p>
               )}
@@ -95,14 +95,14 @@ export default function FloorThisWeek({ data }: { data: FloorSchedule | null }) 
             {data.senate.date && data.senate.note ? " — " : ""}
             {data.senate.note}
           </p>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             The Senate publishes bill-level floor plans close to the day; see
             Congress.gov for the daily schedule.
           </p>
         </div>
       )}
 
-      <p className="text-xs text-slate-400">
+      <p className="text-xs text-slate-500">
         Floor schedules change frequently. As of {formatStamp(data.builtAt)}. Sourced
         from docs.house.gov and senate.gov.
       </p>

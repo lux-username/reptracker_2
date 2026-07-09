@@ -117,7 +117,7 @@ function Results({
           This seat appears to be vacant in the current Congress.
         </p>
       )}
-      <p className="text-xs text-slate-400" aria-live="polite">
+      <p className="text-xs text-slate-500" aria-live="polite">
         {profilesLoading
           ? "Loading committee roles, contact info, and upcoming decisions…"
           : "Detailed sections couldn't be loaded right now — showing your representatives above."}
@@ -221,10 +221,11 @@ export default function AddressLookup() {
             name="address"
             type="text"
             autoComplete="street-address"
+            aria-describedby="address-hint"
             placeholder="1600 Pennsylvania Ave NW, Washington, DC"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
           />
           <button
             type="submit"
@@ -234,7 +235,7 @@ export default function AddressLookup() {
             {pending ? "Looking up…" : "Find my reps"}
           </button>
         </div>
-        <p className="text-xs text-slate-500">
+        <p id="address-hint" className="text-xs text-slate-500">
           A full street address gives the most accurate result. A ZIP code works
           too, but may ask you to pick your district.
         </p>

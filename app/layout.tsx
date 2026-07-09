@@ -14,6 +14,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex min-h-screen flex-col bg-white text-slate-900 antialiased">
+        {/* Skip-to-content: first focusable element, visible only on focus (spec §Accessibility). */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-slate-900 focus:px-4 focus:py-2 focus:font-medium focus:text-white"
+        >
+          Skip to content
+        </a>
         <div className="flex-1">{children}</div>
         <Footer />
       </body>

@@ -245,7 +245,7 @@ export function Bills({ bills }: { bills: SecondaryBill[] }) {
             {b.summary ? (
               <>
                 <p className="mt-1 text-sm text-slate-700">{b.summary}</p>
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-1 text-xs text-slate-500">
                   Nonpartisan summary from the Congressional Research Service
                   {b.summaryBasedOn ? `; bill as introduced, ${formatDate(b.summaryBasedOn)}` : ""}.
                 </p>
@@ -257,7 +257,7 @@ export function Bills({ bills }: { bills: SecondaryBill[] }) {
                 )}
               </>
             ) : (
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-slate-500">
                 No plain-English summary yet — Congress.gov notes &ldquo;A summary
                 is in progress.&rdquo;
               </p>
