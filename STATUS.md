@@ -1,4 +1,4 @@
-> Generated 2026-07-09 by /end-session at commit a786ac3.
+> Generated 2026-07-09 by /end-session at commit 47b1468.
 
 # STATUS
 
@@ -42,7 +42,7 @@ post-MVP. The gate-free build queue is empty.
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
 | Deploy | authorized `curl /api/cron/prewarm` | ✓ **LIVE** · HTTP 200 (serving #4 floor + #13 district offices + events index) |
 | Scheduler | `gh run` (workflow_dispatch) | ✓ green · HTTP 200; now runs every 30 min (:15/:45 UTC) |
-| Git | `git log --oneline -1` | `a786ac3 Close session 15-of-day: #23 external scheduler …` (pre end-session commit) |
+| Git | `git log --oneline -1` | `47b1468 Close session 16-of-day: measure Congress.gov latency …` (pre end-session commit) |
 
 ## Active Milestone
 
