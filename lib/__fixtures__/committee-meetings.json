@@ -16,7 +16,8 @@
   "location": {
    "building": "Rayburn House Office Building",
    "room": "2123"
-  }
+  },
+  "congress": 119
  },
  {
   "eventId": "119351",
@@ -35,7 +36,8 @@
   "location": {
    "building": "Rayburn House Office Building",
    "room": "2123"
-  }
+  },
+  "congress": 119
  },
  {
   "eventId": "119378",
@@ -54,7 +56,8 @@
   "location": {
    "building": "Rayburn House Office Building",
    "room": "2123"
-  }
+  },
+  "congress": 119
  },
  {
   "eventId": "119441",
@@ -73,7 +76,8 @@
   "location": {
    "building": "Rayburn House Office Building",
    "room": "2359"
-  }
+  },
+  "congress": 119
  },
  {
   "eventId": "119451",
@@ -92,7 +96,8 @@
   "location": {
    "building": "Rayburn House Office Building",
    "room": "2172"
-  }
+  },
+  "congress": 119
  },
  {
   "eventId": "119452",
@@ -111,7 +116,8 @@
   "location": {
    "building": "Rayburn House Office Building",
    "room": "2200"
-  }
+  },
+  "congress": 119
  },
  {
   "eventId": "119453",
@@ -130,7 +136,8 @@
   "location": {
    "building": "Rayburn House Office Building",
    "room": "2128"
-  }
+  },
+  "congress": 119
  },
  {
   "eventId": "119454",
@@ -149,7 +156,8 @@
   "location": {
    "building": "Longworth House Office Building",
    "room": "1310"
-  }
+  },
+  "congress": 119
  },
  {
   "eventId": "119455",
@@ -168,7 +176,8 @@
   "location": {
    "building": "Rayburn House Office Building",
    "room": "2154"
-  }
+  },
+  "congress": 119
  },
  {
   "eventId": "119456",
@@ -187,7 +196,8 @@
   "location": {
    "building": "Capitol",
    "room": "HVC-210"
-  }
+  },
+  "congress": 119
  },
  {
   "eventId": "119500",
@@ -206,7 +216,8 @@
   "location": {
    "building": "Longworth House Office Building",
    "room": "1300"
-  }
+  },
+  "congress": 119
  },
  {
   "eventId": "119501",
@@ -225,6 +236,7 @@
   "location": {
    "building": "Longworth House Office Building",
    "room": "1302"
-  }
+  },
+  "congress": 119
  }
 ]

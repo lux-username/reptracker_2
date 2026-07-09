@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildUpcomingDecisions,
+  congressEventUrl,
   decisionRoleLabel,
   normalizeSystemCode,
 } from "./decisions";
@@ -51,6 +52,31 @@ describe("decisionRoleLabel", () => {
   });
 });
 
+describe("congressEventUrl", () => {
+  it("builds the public event page URL Congress.gov's API itself returns", () => {
+    // Matches the `videos[].url` form on a live meeting detail, verified against
+    // the Congress.gov API for both chambers (Issue #20).
+    expect(congressEventUrl(119, "house", "119394")).toBe(
+      "https://www.congress.gov/event/119th-Congress/house-event/119394",
+    );
+    expect(congressEventUrl(119, "senate", "338652")).toBe(
+      "https://www.congress.gov/event/119th-Congress/senate-event/338652",
+    );
+  });
+
+  it("uses the correct ordinal suffix per congress number", () => {
+    expect(congressEventUrl(121, "house", "1")).toContain("121st-Congress");
+    expect(congressEventUrl(122, "house", "1")).toContain("122nd-Congress");
+    expect(congressEventUrl(123, "house", "1")).toContain("123rd-Congress");
+    expect(congressEventUrl(113, "house", "1")).toContain("113th-Congress");
+  });
+
+  it("returns null when it can't build the URL (caller falls back)", () => {
+    expect(congressEventUrl(undefined, "house", "119394")).toBeNull();
+    expect(congressEventUrl(119, "house", "")).toBeNull();
+  });
+});
+
 describe("buildUpcomingDecisions", () => {
   const davids: CommitteeAssignment[] = [
     assign({ code: "HSAG", name: "House Committee on Agriculture", role: "Member" }),
@@ -72,6 +98,30 @@ describe("buildUpcomingDecisions", () => {
     expect(ids).toContain("119501"); // hsag16 hearing
     // A House Intelligence hearing (hlig00) is not one of her committees.
     expect(ids).not.toContain("119456");
+  });
+
+  it("links each decision to its specific event page, not the committee page (Issue #20)", () => {
+    const markup = out.find((d) => d.eventId === "119500");
+    expect(markup?.url).toBe(
+      "https://www.congress.gov/event/119th-Congress/house-event/119500",
+    );
+    // No decision should point at the generic committee landing page.
+    expect(out.every((d) => !d.url.includes("/committee/"))).toBe(true);
+  });
+
+  it("falls back to the committee page when the event URL can't be built", () => {
+    const noCongress: RawMeetingDetail[] = [
+      {
+        eventId: "119500",
+        type: "Markup",
+        title: "Markup missing congress",
+        date: "2026-07-20T14:00:00Z",
+        chamber: "House",
+        committees: [{ name: "Ag", systemCode: "hsag00" }],
+      },
+    ];
+    const [d] = buildUpcomingDecisions(noCongress, davids, NOW);
+    expect(d.url).toBe("https://www.congress.gov/committee/house-committee/hsag00");
   });
 
   it("labels each decision with the rep's role on that committee", () => {

@@ -33,6 +33,8 @@ export interface RawMeetingDetail {
   meetingStatus?: string;
   date?: string;
   chamber?: string;
+  /** Congress the meeting belongs to — needed for its public event URL. */
+  congress?: number;
   committees?: RawMeetingCommittee[];
   location?: { building?: string; room?: string };
 }
@@ -66,6 +68,39 @@ function formatLocation(loc: RawMeetingDetail["location"]): string | null {
   if (!loc) return null;
   const parts = [loc.room, loc.building].filter((p): p is string => !!p);
   return parts.length ? parts.join(", ") : null;
+}
+
+/** English ordinal suffix for a positive integer (119 → "th", 121 → "st"). */
+function ordinalSuffix(n: number): string {
+  const mod100 = n % 100;
+  if (mod100 >= 11 && mod100 <= 13) return "th";
+  switch (n % 10) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
+  }
+}
+
+/**
+ * The public Congress.gov page for a specific committee meeting/event — the page
+ * that actually shows *this Tuesday's meeting*, not the committee's landing page.
+ * This is the form Congress.gov's own API returns for an event (the `videos[].url`
+ * on a meeting detail, e.g.
+ * `https://www.congress.gov/event/119th-Congress/house-event/119394`).
+ * Returns null when we lack the pieces to build it (caller falls back).
+ */
+export function congressEventUrl(
+  congress: number | undefined,
+  chamber: "house" | "senate",
+  eventId: string,
+): string | null {
+  if (!congress || !eventId) return null;
+  return `https://www.congress.gov/event/${congress}${ordinalSuffix(congress)}-Congress/${chamber}-event/${eventId}`;
 }
 
 /** Statuses that mean the meeting is no longer an upcoming decision. */
@@ -105,8 +140,14 @@ export function buildUpcomingDecisions(
 
     const { committee, assignment } = best;
     const chamber = (m.chamber ?? "").toLowerCase() === "senate" ? "senate" : "house";
+    const eventId = m.eventId ?? "";
+    // Link to the specific event page (shows *this* meeting), falling back to the
+    // committee landing page only when we can't build the event URL (Issue #20).
+    const url =
+      congressEventUrl(m.congress, chamber, eventId) ??
+      `https://www.congress.gov/committee/${chamber}-committee/${(committee.systemCode ?? "").toLowerCase()}`;
     out.push({
-      eventId: m.eventId ?? "",
+      eventId,
       kind: m.type ?? "Meeting",
       title: m.title ?? `${assignment.name} ${m.type ?? "meeting"}`,
       date: m.date,
@@ -114,7 +155,7 @@ export function buildUpcomingDecisions(
       committeeName: committee.name ?? assignment.name,
       committeeCode: assignment.code,
       roleLabel: decisionRoleLabel(assignment),
-      url: `https://www.congress.gov/committee/${chamber}-committee/${(committee.systemCode ?? "").toLowerCase()}`,
+      url,
     });
   }
 
