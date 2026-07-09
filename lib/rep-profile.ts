@@ -1,0 +1,128 @@
+// Per-rep section assembly (spec §2, Issue #3).
+//
+// Takes a resolved `Rep` identity (Issue #2) and enriches it into a full
+// `RepProfile`: committee assignments + structural roles, a single contact
+// block, upcoming committee decisions, and the secondary sponsored/cosponsored
+// list. The neutral LLM TL;DR is Issue #5 and stays null here.
+//
+// Every fetch here is uncached; Issue #7 layers Upstash + a nightly pre-warm
+// cron so the common case is warm-cache and fast. The contact block always
+// carries the Congress.gov DC-office phone as the guaranteed callable number;
+// district-office phones are scraped best-effort (deferred) and null for now.
+import type {
+  CommitteeAssignment,
+  ContactBlock,
+  Rep,
+  RepProfile,
+  ResolvedReps,
+} from "./types";
+import { fetchAssignmentIndex } from "./committees";
+import { fetchSecondaryBills } from "./legislation";
+import { fetchUpcomingDecisions } from "./decisions";
+
+interface RawMemberDetail {
+  member?: {
+    addressInformation?: {
+      officeAddress?: string;
+      city?: string;
+      district?: string;
+      zipCode?: number | string;
+      phoneNumber?: string;
+    };
+    officialWebsiteUrl?: string;
+  };
+}
+
+export class ProfileError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ProfileError";
+  }
+}
+
+type RawAddress = NonNullable<RawMemberDetail["member"]>["addressInformation"];
+
+/**
+ * Format a Congress.gov office address. The payload is heterogeneous: House
+ * members carry just the building in `officeAddress` and complete it with
+ * city/district/zipCode, while Senators embed the whole street/city/zip in
+ * `officeAddress` already (and the top-level `zipCode` is a generic 20515 for
+ * everyone). So: if `officeAddress` already names the city, trust it verbatim;
+ * otherwise assemble the pieces.
+ */
+export function formatOfficeAddress(a: RawAddress): string | null {
+  const office = a?.officeAddress?.replace(/\s+/g, " ").trim();
+  if (!office) return null;
+  if (a?.city && office.includes(a.city)) return office; // already complete
+  const zipDistrict = [a?.district, a?.zipCode ? String(a.zipCode) : ""]
+    .filter(Boolean)
+    .join(" ");
+  const line2 = [a?.city, zipDistrict].filter(Boolean).join(", ");
+  return [office, line2].filter(Boolean).join(", ");
+}
+
+/** Fetch a member's DC-office contact block from Congress.gov member detail. */
+export async function fetchContact(bioguideId: string): Promise<ContactBlock> {
+  const apiKey = process.env.CONGRESS_GOV_API_KEY;
+  if (!apiKey) throw new ProfileError("CONGRESS_GOV_API_KEY is not set");
+  const url = new URL(`https://api.congress.gov/v3/member/${bioguideId}`);
+  url.searchParams.set("api_key", apiKey);
+  const resp = await fetch(url, { headers: { Accept: "application/json" } });
+  if (!resp.ok) throw new ProfileError(`Congress.gov returned HTTP ${resp.status}`);
+  const data = (await resp.json()) as RawMemberDetail;
+  const a = data.member?.addressInformation;
+  return {
+    dcOfficePhone: a?.phoneNumber ?? null,
+    dcOfficeAddress: formatOfficeAddress(a),
+    districtOfficePhone: null, // scraped best-effort — deferred (see spec §risks)
+    websiteUrl: data.member?.officialWebsiteUrl ?? null,
+  };
+}
+
+/** Enrich one resolved rep into a full section profile. */
+export async function buildRepProfile(
+  rep: Rep,
+  congress: number,
+  assignments: CommitteeAssignment[],
+  now: Date,
+): Promise<RepProfile> {
+  const committeeNames = assignments.map((c) => c.name);
+  const [contact, secondaryBills, upcomingDecisions] = await Promise.all([
+    fetchContact(rep.bioguideId),
+    fetchSecondaryBills(rep.bioguideId, committeeNames, now),
+    fetchUpcomingDecisions(congress, rep.chamber, assignments, now),
+  ]);
+  return {
+    rep,
+    committees: assignments,
+    contact,
+    upcomingDecisions,
+    secondaryBills,
+    tldr: null, // neutral LLM digest — Issue #5
+  };
+}
+
+/**
+ * Build every rep section for a resolved district. Fetches the committee
+ * assignment index once and enriches the House member + senators in parallel.
+ */
+export async function buildProfiles(
+  reps: ResolvedReps,
+  now: Date,
+): Promise<RepProfile[]> {
+  const assignmentIndex = await fetchAssignmentIndex();
+  const members: Rep[] = [
+    ...(reps.houseMember ? [reps.houseMember] : []),
+    ...reps.senators,
+  ];
+  return Promise.all(
+    members.map((rep) =>
+      buildRepProfile(
+        rep,
+        reps.congress,
+        assignmentIndex.get(rep.bioguideId) ?? [],
+        now,
+      ),
+    ),
+  );
+}

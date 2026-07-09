@@ -1,0 +1,32 @@
+[
+ {
+  "type": "house",
+  "name": "House Committee on Agriculture",
+  "thomas_id": "HSAG",
+  "subcommittees": [
+   {
+    "name": "General Farm Commodities, Risk Management, and Credit",
+    "thomas_id": "16"
+   },
+   {
+    "name": "Conservation, Research, and Biotechnology",
+    "thomas_id": "14"
+   }
+  ]
+ },
+ {
+  "type": "house",
+  "name": "House Committee on Transportation and Infrastructure",
+  "thomas_id": "HSPW",
+  "subcommittees": [
+   {
+    "name": "Aviation",
+    "thomas_id": "05"
+   },
+   {
+    "name": "Railroads, Pipelines, and Hazardous Materials",
+    "thomas_id": "14"
+   }
+  ]
+ }
+]

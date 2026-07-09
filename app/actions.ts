@@ -1,7 +1,8 @@
 "use server";
 
-import type { DistrictCandidate, LookupResult } from "@/lib/types";
+import type { DistrictCandidate, LookupResult, RepProfile, ResolvedReps } from "@/lib/types";
 import { lookupAddress, resolveCandidate } from "@/lib/resolve-reps";
+import { buildProfiles } from "@/lib/rep-profile";
 
 /** Look up an address string → reps, disambiguation, or a miss. */
 export async function lookupAction(address: string): Promise<LookupResult> {
@@ -20,5 +21,21 @@ export async function resolveCandidateAction(
       status: "error",
       message: "We couldn't load representatives for that district. Please try again.",
     };
+  }
+}
+
+/**
+ * Enrich resolved rep identities into full per-rep section profiles (Issue #3).
+ * Called after a `resolved` result so identities render immediately and the
+ * heavier committee/decisions/bills data fills in progressively. On failure the
+ * UI keeps the identity-level cards, so an empty result degrades gracefully.
+ */
+export async function buildProfilesAction(
+  reps: ResolvedReps,
+): Promise<RepProfile[]> {
+  try {
+    return await buildProfiles(reps, new Date());
+  } catch {
+    return [];
   }
 }

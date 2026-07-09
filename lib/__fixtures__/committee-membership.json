@@ -1,0 +1,146 @@
+{
+ "HSAG": [
+  {
+   "name": "Sharice Davids",
+   "party": "minority",
+   "rank": 8,
+   "bioguide": "D000629"
+  },
+  {
+   "name": "Glenn Thompson",
+   "party": "majority",
+   "rank": 1,
+   "title": "Chair",
+   "bioguide": "T000467"
+  },
+  {
+   "name": "Angie Craig",
+   "party": "minority",
+   "rank": 1,
+   "title": "Ranking Member",
+   "bioguide": "C001119"
+  },
+  {
+   "name": "Austin Scott",
+   "party": "majority",
+   "rank": 3,
+   "title": "Vice Chair",
+   "bioguide": "S001189"
+  }
+ ],
+ "HSAG16": [
+  {
+   "name": "Sharice Davids",
+   "party": "minority",
+   "rank": 1,
+   "title": "Ranking Member",
+   "bioguide": "D000629"
+  },
+  {
+   "name": "Austin Scott",
+   "party": "majority",
+   "rank": 1,
+   "title": "Chair",
+   "bioguide": "S001189"
+  },
+  {
+   "name": "David Rouzer",
+   "party": "majority",
+   "rank": 2,
+   "title": "Vice Chair",
+   "bioguide": "R000603"
+  },
+  {
+   "name": "Eric A. \"Rick\" Crawford",
+   "party": "majority",
+   "rank": 3,
+   "bioguide": "C001087"
+  }
+ ],
+ "HSAG14": [
+  {
+   "name": "Sharice Davids",
+   "party": "minority",
+   "rank": 3,
+   "bioguide": "D000629"
+  },
+  {
+   "name": "Frank D. Lucas",
+   "party": "majority",
+   "rank": 1,
+   "title": "Chair",
+   "bioguide": "L000491"
+  },
+  {
+   "name": "Jill N. Tokuda",
+   "party": "minority",
+   "rank": 1,
+   "title": "Ranking Member",
+   "bioguide": "T000487"
+  },
+  {
+   "name": "James R. Baird",
+   "party": "majority",
+   "rank": 2,
+   "title": "Vice Chair",
+   "bioguide": "B001307"
+  }
+ ],
+ "HSPW": [
+  {
+   "name": "Sharice Davids",
+   "party": "minority",
+   "rank": 14,
+   "bioguide": "D000629"
+  },
+  {
+   "name": "Sam Graves",
+   "party": "majority",
+   "rank": 1,
+   "title": "Chair",
+   "bioguide": "G000546"
+  },
+  {
+   "name": "Rick Larsen",
+   "party": "minority",
+   "rank": 1,
+   "title": "Ranking Member",
+   "bioguide": "L000560"
+  },
+  {
+   "name": "Eric A. \"Rick\" Crawford",
+   "party": "majority",
+   "rank": 2,
+   "title": "Vice Chair",
+   "bioguide": "C001087"
+  }
+ ],
+ "HSPW05": [
+  {
+   "name": "Sharice Davids",
+   "party": "minority",
+   "rank": 2,
+   "bioguide": "D000629"
+  },
+  {
+   "name": "Troy E. Nehls",
+   "party": "majority",
+   "rank": 1,
+   "title": "Chairman",
+   "bioguide": "N000026"
+  },
+  {
+   "name": "Andr\u00e9 Carson",
+   "party": "minority",
+   "rank": 1,
+   "title": "Ranking Member",
+   "bioguide": "C001072"
+  },
+  {
+   "name": "Thomas Massie",
+   "party": "majority",
+   "rank": 2,
+   "bioguide": "M001184"
+  }
+ ]
+}

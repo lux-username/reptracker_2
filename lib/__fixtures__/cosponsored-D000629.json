@@ -1,0 +1,314 @@
+{
+    "cosponsoredLegislation": [
+        {
+            "congress": 119,
+            "introducedDate": "2026-07-06",
+            "latestAction": {
+                "actionDate": "2025-03-14",
+                "text": "Referred to the Subcommittee on Highways and Transit."
+            },
+            "number": "2122",
+            "policyArea": {
+                "name": "Transportation and Public Works"
+            },
+            "title": "IMPACT Act 2.0",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/2122?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-30",
+            "latestAction": {
+                "actionDate": "2025-07-22",
+                "actionTime": "16:59:01",
+                "text": "ASSUMING FIRST SPONSORSHIP - Ms. Randall asked unanimous consent that she may hereafter be considered as the first sponsor of H.R. 1522, a bill originally introduced by Representative Connolly, for the purpose of adding cosponsors and requesting reprintings pursuant to clause 7 of rule XII. Agreed to without objection."
+            },
+            "number": "1522",
+            "policyArea": {
+                "name": "Government Operations and Politics"
+            },
+            "title": "Federal Retirement Fairness Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/1522?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-30",
+            "latestAction": {
+                "actionDate": "2026-06-30",
+                "text": "Referred to the House Committee on the Judiciary."
+            },
+            "number": "1405",
+            "policyArea": {
+                "name": null
+            },
+            "title": "Encouraging the celebration of the month of June as LGBTQIA+ Pride Month.",
+            "type": "HRES",
+            "url": "https://api.congress.gov/v3/bill/119/hres/1405?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-29",
+            "latestAction": {
+                "actionDate": "2026-04-29",
+                "text": "Referred to the House Committee on Foreign Affairs."
+            },
+            "number": "8582",
+            "policyArea": {
+                "name": "International Affairs"
+            },
+            "title": "Protecting Human Rights and Public Health in Foreign Assistance Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/8582?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-25",
+            "latestAction": {
+                "actionDate": "2026-04-27",
+                "text": "Sponsor introductory remarks on measure. (CR H3095)"
+            },
+            "number": "8375",
+            "policyArea": {
+                "name": "Health"
+            },
+            "title": "Medicare Advantage Improvement Act of 2026",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/8375?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-25",
+            "latestAction": {
+                "actionDate": "2026-01-15",
+                "text": "Referred to the Committee on Ways and Means, and in addition to the Committee on Energy and Commerce, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned."
+            },
+            "number": "7096",
+            "policyArea": {
+                "name": "Health"
+            },
+            "title": "Ensuring Seniors’ Access to Quality Care Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/7096?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-25",
+            "latestAction": {
+                "actionDate": "2026-04-14",
+                "text": "Referred to the House Committee on Ways and Means."
+            },
+            "number": "8273",
+            "policyArea": {
+                "name": "Taxation"
+            },
+            "title": "Catching Up Family Caregivers Act of 2026",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/8273?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-24",
+            "latestAction": {
+                "actionDate": "2026-06-11",
+                "text": "Referred to the House Committee on Ways and Means."
+            },
+            "number": "9289",
+            "policyArea": {
+                "name": "Taxation"
+            },
+            "title": "Keep Public Funds in Public Schools Act of 2026",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/9289?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-24",
+            "latestAction": {
+                "actionDate": "2026-06-24",
+                "text": "Ordered to be Reported in the Nature of a Substitute (Amended) by Voice Vote."
+            },
+            "number": "9250",
+            "policyArea": {
+                "name": "Public Lands and Natural Resources"
+            },
+            "title": "Great American Outdoors Act 250",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/9250?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-23",
+            "latestAction": {
+                "actionDate": "2026-06-23",
+                "text": "Referred to the Committee on Energy and Commerce, and in addition to the Committee on the Judiciary, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned."
+            },
+            "number": "9401",
+            "policyArea": {
+                "name": null
+            },
+            "title": "Latonya Reeves Freedom Act of 2026",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/9401?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-23",
+            "latestAction": {
+                "actionDate": "2025-09-03",
+                "text": "Ordered to be Reported (Amended) by the Yeas and Nays: 57 - 3."
+            },
+            "number": "4669",
+            "policyArea": {
+                "name": "Emergency Management"
+            },
+            "title": "FEMA Act of 2025",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/4669?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-23",
+            "latestAction": {
+                "actionDate": "2026-03-18",
+                "text": "Referred to the Committee on Energy and Commerce, and in addition to the Committees on Agriculture, Ways and Means, Natural Resources, Financial Services, Transportation and Infrastructure, Education and Workforce, Oversight and Government Reform, and Science, Space, and Technology, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned."
+            },
+            "number": "7977",
+            "policyArea": {
+                "name": "Energy"
+            },
+            "title": "Energy Bills Relief Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/7977?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-23",
+            "latestAction": {
+                "actionDate": "2026-05-07",
+                "text": "Referred to the Committee on Veterans' Affairs, and in addition to the Committee on Armed Services, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned."
+            },
+            "number": "8667",
+            "policyArea": {
+                "name": "Armed Forces and National Security"
+            },
+            "title": "MISSION Rx Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/8667?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-23",
+            "latestAction": {
+                "actionDate": "2026-03-18",
+                "text": "Committee Hearings Held"
+            },
+            "number": "4876",
+            "policyArea": {
+                "name": "Armed Forces and National Security"
+            },
+            "title": "Reproductive Freedom for Veterans Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/4876?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-18",
+            "latestAction": {
+                "actionDate": "2026-06-18",
+                "text": "Referred to the House Committee on Agriculture."
+            },
+            "number": "9377",
+            "policyArea": {
+                "name": "Agriculture and Food"
+            },
+            "title": "Protecting America’s Herds Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/9377?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-10",
+            "latestAction": {
+                "actionDate": "2026-05-21",
+                "text": "Ordered to be Reported in the Nature of a Substitute by the Yeas and Nays: 44 - 0."
+            },
+            "number": "8163",
+            "policyArea": {
+                "name": "Health"
+            },
+            "title": "Provider Reimbursement Stability Act of 2026",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/8163?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-10",
+            "latestAction": {
+                "actionDate": "2025-07-14",
+                "text": "Referred to the House Committee on Financial Services."
+            },
+            "number": "4382",
+            "policyArea": {
+                "name": "Finance and Financial Sector"
+            },
+            "title": "America’s Olympic and Paralympic Games Commemorative Coins Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/4382?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-09",
+            "latestAction": {
+                "actionDate": "2025-05-13",
+                "text": "Referred to the House Committee on the Judiciary."
+            },
+            "number": "3368",
+            "policyArea": {
+                "name": "Immigration"
+            },
+            "title": "Born in the USA Act of 2025",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/3368?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-09",
+            "latestAction": {
+                "actionDate": "2025-02-21",
+                "text": "Referred to the House Committee on Financial Services."
+            },
+            "number": "1502",
+            "policyArea": {
+                "name": "Armed Forces and National Security"
+            },
+            "title": "North Platte Canteen Congressional Gold Medal Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/1502?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-09",
+            "latestAction": {
+                "actionDate": "2026-04-23",
+                "text": "Referred to the Committee on Energy and Commerce, and in addition to the Committee on Ways and Means, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned."
+            },
+            "number": "8487",
+            "policyArea": {
+                "name": "Health"
+            },
+            "title": "Ensuring Excellence in Mental Health Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/8487?format=json"
+        }
+    ],
+    "pagination": {
+        "count": 1535,
+        "next": "https://api.congress.gov/v3/member/D000629/cosponsored-legislation?offset=20&limit=20&format=json"
+    },
+    "request": {
+        "bioguideId": "d000629",
+        "contentType": "application/json",
+        "format": "json"
+    }
+}

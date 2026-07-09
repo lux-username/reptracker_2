@@ -1,0 +1,230 @@
+[
+ {
+  "eventId": "119293",
+  "type": "Hearing",
+  "title": "Corrosion, Collapse, and Clean-Up: Examining the Potomac Interceptor Collapse.",
+  "meetingStatus": "Rescheduled",
+  "date": "2026-05-20T14:15:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "House Energy and Commerce Subcommittee on Oversight and Investigations",
+    "systemCode": "hsif02",
+    "url": "https://api.congress.gov/v3/committee/house/hsif02?format=json"
+   }
+  ],
+  "location": {
+   "building": "Rayburn House Office Building",
+   "room": "2123"
+  }
+ },
+ {
+  "eventId": "119351",
+  "type": "Hearing",
+  "title": "Where Are We?: Examining Positioning, Navigation, and Timing Capabilities in the United States",
+  "meetingStatus": "Scheduled",
+  "date": "2026-06-04T14:15:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "House Energy and Commerce Subcommittee on Communications and Technology",
+    "systemCode": "hsif16",
+    "url": "https://api.congress.gov/v3/committee/house/hsif16?format=json"
+   }
+  ],
+  "location": {
+   "building": "Rayburn House Office Building",
+   "room": "2123"
+  }
+ },
+ {
+  "eventId": "119378",
+  "type": "Hearing",
+  "title": "\"Lowering Health Care Costs for All Americans: Examining Policies to Increase Health Care Transparency.\"",
+  "meetingStatus": "Scheduled",
+  "date": "2026-06-10T14:15:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "House Energy and Commerce Subcommittee on Health",
+    "systemCode": "hsif14",
+    "url": "https://api.congress.gov/v3/committee/house/hsif14?format=json"
+   }
+  ],
+  "location": {
+   "building": "Rayburn House Office Building",
+   "room": "2123"
+  }
+ },
+ {
+  "eventId": "119441",
+  "type": "Hearing",
+  "title": "Budget Hearing - Supreme Court of the United States",
+  "meetingStatus": "Scheduled",
+  "date": "2026-07-14T14:00:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "House Appropriations Subcommittee on Financial Services and General Government",
+    "systemCode": "hsap23",
+    "url": "https://api.congress.gov/v3/committee/house/hsap23?format=json"
+   }
+  ],
+  "location": {
+   "building": "Rayburn House Office Building",
+   "room": "2359"
+  }
+ },
+ {
+  "eventId": "119451",
+  "type": "Hearing",
+  "title": "Ending Supply Chain Dependency: Aligning Tools, Capital, and Partnerships",
+  "meetingStatus": "Scheduled",
+  "date": "2026-07-15T14:00:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "House Foreign Affairs",
+    "systemCode": "hsfa00",
+    "url": "https://api.congress.gov/v3/committee/house/hsfa00?format=json"
+   }
+  ],
+  "location": {
+   "building": "Rayburn House Office Building",
+   "room": "2172"
+  }
+ },
+ {
+  "eventId": "119452",
+  "type": "Hearing",
+  "title": "A New Beginning for Colombia",
+  "meetingStatus": "Scheduled",
+  "date": "2026-07-15T18:00:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "House Foreign Affairs Subcommittee on Western Hemisphere",
+    "systemCode": "hsfa07",
+    "url": "https://api.congress.gov/v3/committee/house/hsfa07?format=json"
+   }
+  ],
+  "location": {
+   "building": "Rayburn House Office Building",
+   "room": "2200"
+  }
+ },
+ {
+  "eventId": "119453",
+  "type": "Hearing",
+  "title": "The Semi-Annual Report of the Bureau of Consumer Financial Protection",
+  "meetingStatus": "Scheduled",
+  "date": "2026-07-15T14:00:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "House Financial Services",
+    "systemCode": "hsba00",
+    "url": "https://api.congress.gov/v3/committee/house/hsba00?format=json"
+   }
+  ],
+  "location": {
+   "building": "Rayburn House Office Building",
+   "room": "2128"
+  }
+ },
+ {
+  "eventId": "119454",
+  "type": "Hearing",
+  "title": "Committee on House Administration Elections Subcommittee Hearing:\u201cElection Observation: Best Practices and Congress\u2019s Role\u201d",
+  "meetingStatus": "Scheduled",
+  "date": "2026-07-15T18:00:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "House Administration Subcommittee on Elections",
+    "systemCode": "hsha08",
+    "url": "https://api.congress.gov/v3/committee/house/hsha08?format=json"
+   }
+  ],
+  "location": {
+   "building": "Longworth House Office Building",
+   "room": "1310"
+  }
+ },
+ {
+  "eventId": "119455",
+  "type": "Hearing",
+  "title": "\u201cEmerging Fraud Threats and the Evolving Fraud Landscape\u201d",
+  "meetingStatus": "Scheduled",
+  "date": "2026-07-15T18:00:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "House Oversight and Government Reform Subcommittee on Government Operations",
+    "systemCode": "hsgo24",
+    "url": "https://api.congress.gov/v3/committee/house/hsgo24?format=json"
+   }
+  ],
+  "location": {
+   "building": "Rayburn House Office Building",
+   "room": "2154"
+  }
+ },
+ {
+  "eventId": "119456",
+  "type": "Hearing",
+  "title": "States on the Frontlines of Counterintelligence",
+  "meetingStatus": "Scheduled",
+  "date": "2026-07-15T18:00:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "House Intelligence (Permanent Select)",
+    "systemCode": "hlig00",
+    "url": "https://api.congress.gov/v3/committee/house/hlig00?format=json"
+   }
+  ],
+  "location": {
+   "building": "Capitol",
+   "room": "HVC-210"
+  }
+ },
+ {
+  "eventId": "119500",
+  "type": "Markup",
+  "title": "Markup of H.R. 9425, the Increasing Tribal Input on Nutrition Act",
+  "meetingStatus": "Scheduled",
+  "date": "2026-07-16T14:00:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "House Committee on Agriculture",
+    "systemCode": "hsag00",
+    "url": "https://api.congress.gov/v3/committee/house/hsag00?format=json"
+   }
+  ],
+  "location": {
+   "building": "Longworth House Office Building",
+   "room": "1300"
+  }
+ },
+ {
+  "eventId": "119501",
+  "type": "Hearing",
+  "title": "Reviewing Federal Crop Insurance",
+  "meetingStatus": "Scheduled",
+  "date": "2026-07-20T15:00:00Z",
+  "chamber": "House",
+  "committees": [
+   {
+    "name": "Subcommittee on General Farm Commodities, Risk Management, and Credit",
+    "systemCode": "hsag16",
+    "url": "https://api.congress.gov/v3/committee/house/hsag16?format=json"
+   }
+  ],
+  "location": {
+   "building": "Longworth House Office Building",
+   "room": "1302"
+  }
+ }
+]

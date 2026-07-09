@@ -1,64 +1,87 @@
-> Generated 2026-07-08 by /end-session at commit 8fd47a2.
+> Generated 2026-07-08 by /end-session at commit aba994f.
 
 # STATUS
 
 ## Where things stand
 
-**Issue #2 — Address → reps lookup with disambiguation — is done** (closed by this
-session's commit). The app now resolves a free-form US address (or ZIP) to the
-user's federal representatives:
+**Issue #3 — Per-rep section layout — is done** (closed this session). Each
+resolved rep now renders a full section, top-to-bottom per spec §2:
 
-- **Geocodio** handles geocoding + district disambiguation only. **Congress.gov is
-  the authoritative rep resolver** by `(congress, state, district)` — Geocodio's
-  embedded legislators are used only as a cheap disambiguation-screen preview, never
-  as the resolved answer (see decisions.md).
-- **Disambiguation** fires whenever an address maps to >1 distinct district — both
-  across Geocodio results (ZIP → many buildings) and within one result (a ZIP
-  centroid straddling a line). Copy generalizes to 3+. Never a silent pick.
-- **Non-standard representation is first-class:** DC + territories resolve to their
-  delegate / resident commissioner with an inline banner ("votes in committee but not
-  on the House floor … no Senate representation") and zero senators. Geocodio's
-  at-large code `98` is normalized to Congress.gov's `0`; voting at-large states (WY)
-  are correctly kept distinct (district 0, *with* senators).
+- **Header block:** name, party, state/district; the delegate banner renders
+  *inside* the header (before committees) for DC/territory; committee
+  assignments with structural role (Chair / Ranking Member / Vice Chair /
+  Member), full committees with their subcommittees nested.
+- **Contact block:** DC-office phone + office address + official website, in
+  natural document flow (not sticky), phones as click-to-call `tel:` links. The
+  DC-office phone is the guaranteed callable fallback; district-office phone is
+  deferred (scraped best-effort → **Issue #13**).
+- **Upcoming decisions:** committee meetings/hearings/markups matched to the rep
+  via their committees, ordered chronologically, each with a structural role
+  label and a Congress.gov link.
+- **Secondary context:** sponsored/cosponsored bills — primary-sponsored <60d
+  plus cosponsored with procedural activity <30d, hierarchically sorted, capped
+  at 7, each with a Primary sponsor / Cosponsor badge.
 
-Layer split: `lib/` holds pure, fixture-tested logic (`geocodio`, `congress`,
-`jurisdictions`, `resolve-reps`, `types`) separated from I/O; `app/` holds the form,
-disambiguation screen, and identity-level results wired through server actions so API
-keys stay server-side. Rich per-rep sections (committees, contact, upcoming decisions)
-are **Issue #3**, deliberately not built here.
+Architecture: the identity-level `Rep` (Issue #2) is enriched into a `RepProfile`
+by `lib/rep-profile.ts` (`buildProfiles`), fanning out to three new fixture-tested
+pure modules + their I/O — `lib/committees.ts`, `lib/legislation.ts`,
+`lib/decisions.ts`. The UI renders identity cards immediately, then progressively
+swaps in full `app/RepSection.tsx` sections once profiles resolve (server action
+`buildProfilesAction`), degrading to identity-only on failure.
 
-Verified end-to-end this session: 26 unit tests against **real captured API fixtures**,
-plus live-API and browser-driven runs (KS full address → resolved; ZIP 90210 →
-disambiguation → CA-32 reps; DC → delegate + banner; garbage → not_found).
+**Key data decision:** committee assignments (with chair/ranking role) are **not**
+in the Congress.gov API (`/member/{id}/committee` 404s); they come from the
+`unitedstates/congress-legislators` static JSON. See decisions.md.
 
-Next session: **Issue #3 — Per-rep section layout**, which consumes the resolved
-`Rep` / `ResolvedReps` identities produced here. Standing spec reminder: re-verify the
-Haiku model ID + pricing against Anthropic's docs (relevant at Issue #5).
+**Scope boundaries held** (deferred to their own issues, not #3): neutral LLM
+TL;DR + plain-English bill/hearing summaries → **#5** (`RepProfile.tldr` is null;
+official titles + Congress.gov links render now); caching + nightly pre-warm cron
+to make the meeting sweep fast → **#7** (the sweep is bounded at
+`SWEEP_LIMIT=60`/chamber and logs truncation — so a rep whose committee has no
+meeting in that recent window can honestly show "none scheduled" until #7 warms
+all events); district-office contact scrape → **#13**.
+
+Verified end-to-end this session: 53 unit tests (5 new suites) against real
+captured API fixtures, plus a live-API `buildProfiles` run and a browser-driven
+run (KS full address → 3 sections: Davids KS-03 with Agriculture committees +
+subcommittee Ranking Member role + 7 bills; both senators with real July
+committee meetings, subcommittee chair roles, contact + click-to-call).
+
+> Note: an unrelated macOS sandbox/TCC hiccup mid-session temporarily blocked
+> file reads under `~/Documents` (triggered by a `dangerouslyDisableSandbox`
+> call); resolved by quitting and relaunching the session. No code impact.
+
+Next session: any of the open MVP Issues. Natural follow-ons to #3 are **#5**
+(plain-English summaries + TL;DR that fill the slots #3 left) and **#7** (caching
++ cron that makes the upcoming-decisions sweep fast and complete). Standing spec
+reminder: re-verify the Haiku model ID + pricing against Anthropic's docs (#5).
 
 ## Derived facts (from CLAUDE.md commands)
 
 | Fact | Command | Result |
 |---|---|---|
-| Test status | `npm test` | ✓ 4 files, 26 tests passing (Vitest 4.1.10) |
+| Test status | `npm test` | ✓ 8 files, 53 tests passing (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 (TypeScript 5.9.3) |
 | Build | `npm run build` | ✓ Next.js 16.2.10; routes `/`, `/_not-found`, `/api/health` |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/health/route.ts`, `app/page.tsx` |
 | Deploy | `vercel ls` | Vercel CLI unavailable; no deploy yet (Issue #11) |
-| Git | `git log --oneline -1` | `8fd47a2 Close session 3: confirmed TS pin resolved, no code changes` (pre-commit) |
+| Git | `git log --oneline -1` | `aba994f Close session 4: address → reps lookup (Issue #2)` (pre-commit) |
 | Stack versions | `package.json` | next ^16.2.10 · react ^19.2.7 · tailwindcss ^4.3.2 · typescript ^5.9.3 · vitest ^4.1.10 · node v24.15.0 |
 
-Note: the lookup lives in `lib/` + `app/AddressLookup.tsx` + `app/actions.ts` (server
-actions); the `find` fact only lists `route.ts`/`page.tsx`, so those files don't appear
-there by design.
+Note: the per-rep section logic lives in `lib/` (`committees`, `legislation`,
+`decisions`, `rep-profile`) + `app/RepSection.tsx` + `app/actions.ts` (server
+actions) + `app/AddressLookup.tsx`; the `find` fact only lists
+`route.ts`/`page.tsx`, so those files don't appear there by design.
 
 ## Active Milestone
 
-**MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (9 open Issues after
-#2 closes: #3–#12). Roadmap lives there; not restated here.
+**MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (9 open Issues
+after #3 closes: #4–#13). Roadmap lives there; not restated here.
 
 ## Blockers / open questions
 
-None blocking. New this session: **Issue #12** — Geocodio fuzzy-matches garbage input
-to a real town and shows a misleading disambiguation instead of `not_found`; not a
-silent wrong pick (matched address is displayed), non-blocking, refinement of #2.
-Recommended entry point next session: Issue #3 (per-rep section layout).
+None blocking. New this session: **Issue #13** — district-office phone/address
+enrichment (scraped best-effort; DC-office phone is the guaranteed fallback so no
+rep is left uncallable). The upcoming-decisions sweep-window limitation is
+covered by existing **#7** (cross-referenced there). Recommended entry point next
+session: #5 or #7.

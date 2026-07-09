@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import type { DistrictCandidate, LookupResult, Rep } from "@/lib/types";
-import { lookupAction, resolveCandidateAction } from "./actions";
+import { useEffect, useState, useTransition } from "react";
+import type { DistrictCandidate, LookupResult, Rep, RepProfile } from "@/lib/types";
+import { lookupAction, resolveCandidateAction, buildProfilesAction } from "./actions";
+import RepSection from "./RepSection";
 
 // Issue #2 delivers the *lookup* — identifying who a constituent's reps are.
-// The rich per-rep section layout (committees, contact, upcoming decisions) is
-// Issue #3, so results here are deliberately an identity-level summary.
+// Issue #3 layers the rich per-rep sections (committees, contact, upcoming
+// decisions, bills) on top: identities render immediately as cards, then the
+// heavier profile data fills in progressively (spec DoD cold-cache behavior).
 
 const ORDINAL: Record<string, string> = { "1": "st", "2": "nd", "3": "rd" };
 function districtLabel(state: string, district: number, nonVoting: boolean): string {
@@ -56,8 +58,41 @@ function RepCard({ rep }: { rep: Rep }) {
   );
 }
 
-function Results({ result }: { result: Extract<LookupResult, { status: "resolved" }> }) {
+function Results({
+  result,
+  profiles,
+  profilesLoading,
+}: {
+  result: Extract<LookupResult, { status: "resolved" }>;
+  profiles: RepProfile[] | null;
+  profilesLoading: boolean;
+}) {
   const { reps } = result;
+
+  // Full per-rep sections are ready — render them (delegate banner moves inside
+  // the House member's header per spec §2.1).
+  if (profiles && profiles.length > 0) {
+    return (
+      <section aria-live="polite" className="flex flex-col gap-6">
+        <h2 className="text-xl font-semibold text-slate-900">
+          Your federal representatives
+        </h2>
+        {profiles.map((p) => (
+          <RepSection
+            key={p.rep.bioguideId}
+            profile={p}
+            delegateBanner={
+              p.rep.bioguideId === reps.houseMember?.bioguideId
+                ? reps.delegateBanner
+                : null
+            }
+          />
+        ))}
+      </section>
+    );
+  }
+
+  // Identity-level fallback: shown while profiles load, or if enrichment failed.
   return (
     <section aria-live="polite" className="flex flex-col gap-4">
       <h2 className="text-xl font-semibold text-slate-900">
@@ -82,9 +117,10 @@ function Results({ result }: { result: Extract<LookupResult, { status: "resolved
           This seat appears to be vacant in the current Congress.
         </p>
       )}
-      <p className="text-xs text-slate-400">
-        Detailed per-rep sections (committee roles, contact info, upcoming
-        decisions) are coming next.
+      <p className="text-xs text-slate-400" aria-live="polite">
+        {profilesLoading
+          ? "Loading committee roles, contact info, and upcoming decisions…"
+          : "Detailed sections couldn't be loaded right now — showing your representatives above."}
       </p>
     </section>
   );
@@ -137,7 +173,32 @@ function Disambiguation({
 export default function AddressLookup() {
   const [address, setAddress] = useState("");
   const [result, setResult] = useState<LookupResult | null>(null);
+  const [profiles, setProfiles] = useState<RepProfile[] | null>(null);
+  const [profilesLoading, setProfilesLoading] = useState(false);
   const [pending, startTransition] = useTransition();
+
+  // Enrich resolved identities into full sections. Runs whenever a new resolved
+  // result arrives; identities are already on screen, so this fills in behind them.
+  useEffect(() => {
+    if (result?.status !== "resolved") {
+      setProfiles(null);
+      setProfilesLoading(false);
+      return;
+    }
+    let ignore = false;
+    setProfiles(null);
+    setProfilesLoading(true);
+    buildProfilesAction(result.reps)
+      .then((p) => {
+        if (!ignore) setProfiles(p);
+      })
+      .finally(() => {
+        if (!ignore) setProfilesLoading(false);
+      });
+    return () => {
+      ignore = true;
+    };
+  }, [result]);
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -182,7 +243,9 @@ export default function AddressLookup() {
       {result?.status === "disambiguate" && (
         <Disambiguation candidates={result.candidates} onChoose={onChoose} pending={pending} />
       )}
-      {result?.status === "resolved" && <Results result={result} />}
+      {result?.status === "resolved" && (
+        <Results result={result} profiles={profiles} profilesLoading={profilesLoading} />
+      )}
       {(result?.status === "not_found" || result?.status === "error") && (
         <p role="alert" className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
           {result.message}

@@ -1,0 +1,313 @@
+{
+    "pagination": {
+        "count": 70,
+        "next": "https://api.congress.gov/v3/member/D000629/sponsored-legislation?offset=20&limit=20&format=json"
+    },
+    "request": {
+        "bioguideId": "d000629",
+        "contentType": "application/json",
+        "format": "json"
+    },
+    "sponsoredLegislation": [
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-24",
+            "latestAction": {
+                "actionDate": "2026-06-24",
+                "text": "Referred to the House Committee on Agriculture."
+            },
+            "number": "9425",
+            "policyArea": {
+                "name": "Native Americans"
+            },
+            "title": "Increasing Tribal Input on Nutrition Act of 2026",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/9425?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-06-18",
+            "latestAction": {
+                "actionDate": "2026-06-18",
+                "text": "Referred to the House Committee on Agriculture."
+            },
+            "number": "9346",
+            "policyArea": {
+                "name": "Agriculture and Food"
+            },
+            "title": "USDA Field Office Stability Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/9346?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-05-12",
+            "latestAction": {
+                "actionDate": "2026-05-12",
+                "text": "Referred to the House Committee on the Judiciary."
+            },
+            "number": "8742",
+            "policyArea": {
+                "name": "Native Americans"
+            },
+            "title": "Respect Tribal IDs Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/8742?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-04-28",
+            "latestAction": {
+                "actionDate": "2026-04-28",
+                "text": "Referred to the House Committee on Natural Resources."
+            },
+            "number": "8539",
+            "policyArea": {
+                "name": "Public Lands and Natural Resources"
+            },
+            "title": "Truth in National Parks Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/8539?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-04-21",
+            "latestAction": {
+                "actionDate": "2026-04-21",
+                "text": "Referred to the Committee on Small Business, and in addition to the Committee on Education and Workforce, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned."
+            },
+            "number": "8404",
+            "policyArea": {
+                "name": "Commerce"
+            },
+            "title": "21st Century Entrepreneurship Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/8404?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-04-15",
+            "latestAction": {
+                "actionDate": "2026-04-15",
+                "text": "Referred to the House Committee on Ways and Means."
+            },
+            "number": "8298",
+            "policyArea": {
+                "name": "Social Welfare"
+            },
+            "title": "SSI Savings and Efficiency Act of 2026",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/8298?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-03-25",
+            "latestAction": {
+                "actionDate": "2026-03-25",
+                "text": "Referred to the Committee on Energy and Commerce, and in addition to the Committee on Natural Resources, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned."
+            },
+            "number": "8080",
+            "policyArea": {
+                "name": "Health"
+            },
+            "title": "Data to Save Moms Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/8080?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-02-17",
+            "latestAction": {
+                "actionDate": "2026-02-17",
+                "text": "Referred to the House Committee on Agriculture."
+            },
+            "number": "7589",
+            "policyArea": {
+                "name": "Agriculture and Food"
+            },
+            "title": "Resilient Food Supply Chain and Affordability Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/7589?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-02-05",
+            "latestAction": {
+                "actionDate": "2026-06-24",
+                "text": "Received in the Senate and Read twice and referred to the Committee on Small Business and Entrepreneurship."
+            },
+            "number": "7396",
+            "policyArea": {
+                "name": "Native Americans"
+            },
+            "title": "Native American Entrepreneurial Opportunity Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/7396?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-02-03",
+            "latestAction": {
+                "actionDate": "2026-02-03",
+                "text": "Referred to the House Committee on Oversight and Government Reform."
+            },
+            "number": "1033",
+            "policyArea": {
+                "name": "Native Americans"
+            },
+            "title": "Expressing support for the designation of the week beginning February 2, 2026, as \"National Tribal Colleges and Universities Week\".",
+            "type": "HRES",
+            "url": "https://api.congress.gov/v3/bill/119/hres/1033?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2026-01-15",
+            "latestAction": {
+                "actionDate": "2026-01-15",
+                "text": "Referred to the House Committee on Ways and Means."
+            },
+            "number": "7093",
+            "policyArea": {
+                "name": "Taxation"
+            },
+            "title": "Afterschool ACCESS Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/7093?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2025-12-09",
+            "latestAction": {
+                "actionDate": "2025-12-09",
+                "text": "Referred to the House Committee on Ways and Means."
+            },
+            "number": "6518",
+            "policyArea": {
+                "name": "Taxation"
+            },
+            "title": "SAF Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/6518?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2025-12-04",
+            "latestAction": {
+                "actionDate": "2026-02-02",
+                "text": "Referred to the Subcommittee on Water Resources and Environment."
+            },
+            "number": "6432",
+            "policyArea": {
+                "name": "Environmental Protection"
+            },
+            "title": "Brownfields Reauthorization Act of 2025",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/6432?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2025-10-08",
+            "latestAction": {
+                "actionDate": "2025-10-08",
+                "text": "Referred to the House Committee on Oversight and Government Reform."
+            },
+            "number": "794",
+            "policyArea": {
+                "name": "Native Americans"
+            },
+            "title": "Recognizing the week of September 30th as \"National Orange Shirt Week\" or \"National Week of Remembrance\", which aims to honor those who were forced to attend Indian boarding schools, and to recognize the experience of Indian boarding school victims and survivors.",
+            "type": "HRES",
+            "url": "https://api.congress.gov/v3/bill/119/hres/794?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2025-07-23",
+            "latestAction": {
+                "actionDate": "2025-07-23",
+                "text": "Referred to the House Committee on Ways and Means."
+            },
+            "number": "4644",
+            "policyArea": {
+                "name": "Taxation"
+            },
+            "title": "ABLE Employment Flexibility Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/4644?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2025-06-12",
+            "latestAction": {
+                "actionDate": "2025-06-13",
+                "text": "Referred to the Subcommittee on Economic Development, Public Buildings, and Emergency Management."
+            },
+            "number": "3957",
+            "policyArea": {
+                "name": "Emergency Management"
+            },
+            "title": "To amend the Robert T. Stafford Disaster Relief and Emergency Assistance Act to authorize the President to provide certain fire management assistance to Indian Tribal Governments, and for other purposes.",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/3957?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2025-06-12",
+            "latestAction": {
+                "actionDate": "2025-06-12",
+                "text": "Referred to the House Committee on Agriculture."
+            },
+            "number": "3956",
+            "policyArea": {
+                "name": "Native Americans"
+            },
+            "title": "Food Distribution Program on Indian Reservations (FDPIR) Act of 2025",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/3956?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2025-06-11",
+            "latestAction": {
+                "actionDate": "2025-06-11",
+                "text": "Referred to the Committee on Energy and Commerce, and in addition to the Committees on Ways and Means, and Education and Workforce, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned."
+            },
+            "number": "3910",
+            "policyArea": {
+                "name": "Health"
+            },
+            "title": "Empowering Parents’ Healthcare Choices Act",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/3910?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2025-06-05",
+            "latestAction": {
+                "actionDate": "2025-06-05",
+                "text": "Referred to the House Committee on Energy and Commerce."
+            },
+            "number": "3757",
+            "policyArea": {
+                "name": "Health"
+            },
+            "title": "Pride In Mental Health Act of 2025",
+            "type": "HR",
+            "url": "https://api.congress.gov/v3/bill/119/hr/3757?format=json"
+        },
+        {
+            "congress": 119,
+            "introducedDate": "2025-06-03",
+            "latestAction": {
+                "actionDate": "2025-06-03",
+                "text": "Referred to the House Committee on House Administration."
+            },
+            "number": "460",
+            "policyArea": {
+                "name": "Congress"
+            },
+            "title": "Commemorating and celebrating the extraordinary contributions of the late Honorable Raúl Grijalva, honoring his legacy of service, dedication, and unwavering advocacy for the people of Arizona and indigenous communities across the country.",
+            "type": "HRES",
+            "url": "https://api.congress.gov/v3/bill/119/hres/460?format=json"
+        }
+    ]
+}

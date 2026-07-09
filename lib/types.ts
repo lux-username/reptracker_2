@@ -79,6 +79,101 @@ export interface ResolvedReps {
   senators: Rep[];
 }
 
+// ---------------------------------------------------------------------------
+// Issue #3 — per-rep section layout. Rich metadata enriched on top of the
+// identity-level `Rep` above. LLM-generated text (bill summaries, TL;DR) is
+// Issue #5 and is intentionally left as a null slot here.
+// ---------------------------------------------------------------------------
+
+/**
+ * Structural role on a committee. Neutral / factual only — no leverage scoring
+ * (spec editorial stance). "Vice Chair" is a real structural office and kept as
+ * such; everything untitled is a plain "Member".
+ */
+export type CommitteeRole = "Chair" | "Ranking Member" | "Vice Chair" | "Member";
+
+/** One committee or subcommittee a rep sits on, with their structural role. */
+export interface CommitteeAssignment {
+  /** committee-membership code: "HSAG" (full) or "HSAG16" (subcommittee). */
+  code: string;
+  /** Display name, e.g. "House Committee on Agriculture" or the subcommittee. */
+  name: string;
+  role: CommitteeRole;
+  isSubcommittee: boolean;
+  /** Parent full-committee display name (subcommittees only). */
+  parentName: string | null;
+  /** Parent full-committee code, e.g. "HSAG" (subcommittees only). */
+  parentCode: string | null;
+}
+
+/**
+ * Single contact block for a rep (spec §2.1). The DC office phone/address come
+ * from Congress.gov and are the guaranteed fallback; the district-office phone
+ * is scraped best-effort (deferred — null in this issue).
+ */
+export interface ContactBlock {
+  dcOfficePhone: string | null;
+  dcOfficeAddress: string | null;
+  districtOfficePhone: string | null;
+  websiteUrl: string | null;
+}
+
+/** An upcoming committee meeting/hearing/markup the rep has a role in. */
+export interface UpcomingDecision {
+  eventId: string;
+  /** Congress.gov meeting type, e.g. "Hearing" | "Markup" | "Meeting". */
+  kind: string;
+  title: string;
+  /** ISO datetime of the meeting. */
+  date: string;
+  /** "Room, Building" or null. */
+  location: string | null;
+  committeeName: string;
+  committeeCode: string;
+  /**
+   * Structural role label for this specific decision, derived from the rep's
+   * role on the committee holding it — "Chair", "Ranking Member",
+   * "Subcommittee Chair", "Committee Member", etc. Structural only.
+   */
+  roleLabel: string;
+  /** Official Congress.gov event URL. */
+  url: string;
+}
+
+export type SponsorBadge = "Primary sponsor" | "Cosponsor";
+
+/** A sponsored/cosponsored bill shown as secondary context (spec §2.3). */
+export interface SecondaryBill {
+  /** Stable key, e.g. "hr-9425-119". */
+  billId: string;
+  /** Human display id, e.g. "H.R. 9425". */
+  displayId: string;
+  congress: number;
+  type: string;
+  number: string;
+  title: string;
+  introducedDate: string | null;
+  latestActionDate: string | null;
+  latestActionText: string | null;
+  badge: SponsorBadge;
+  /** Congress.gov public bill URL. */
+  url: string;
+}
+
+/**
+ * Fully enriched per-rep section (spec §2). Assembled on top of a resolved
+ * `Rep` identity. `tldr` is the neutral LLM digest — populated by Issue #5,
+ * null until then.
+ */
+export interface RepProfile {
+  rep: Rep;
+  committees: CommitteeAssignment[];
+  contact: ContactBlock;
+  upcomingDecisions: UpcomingDecision[];
+  secondaryBills: SecondaryBill[];
+  tldr: string | null;
+}
+
 /** Result of a lookup. Either resolved, needs disambiguation, or nothing found. */
 export type LookupResult =
   | { status: "resolved"; reps: ResolvedReps }
