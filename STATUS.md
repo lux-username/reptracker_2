@@ -1,42 +1,35 @@
-> Generated 2026-07-09 by /end-session at commit 96b5efc.
+> Generated 2026-07-09 by /end-session at commit b394045.
 
 # STATUS
 
 ## Where things stand
 
-**#13 (district-office phone/address enrichment) implemented, verified, and closed.**
-This was the last gate-free MVP build item, and the key move was **avoiding** the spec's
-riskiest path: rather than scrape each member's own house.gov/senate.gov site (every layout
-differs; a wrong phone number defeats the product), it consumes a **structured, maintained
-dataset** — `unitedstates/congress-legislators` `legislators-district-offices` (JSON mirror),
-keyed by the same bioguide id we already resolve. That removes the layout-fragility entirely.
+**#23 (short-notice freshness) — external scheduler live and verified; issue kept open**
+for the remaining measurement/tuning. The owner picked this up and asked to wire the secret.
 
-`lib/district-offices.ts` reduces the dataset to a `bioguide → { phone, address }` index
-(picking the first office with a **validated** phone — spec's "validate before rendering"),
-cached in Upstash, refreshed by the cron (new step 2b), served on the read path with a short
-in-process memo so a burst of contact lookups shares one load. `fetchContactLive` now fills
-`districtOfficePhone` + the new `ContactBlock.districtOfficeAddress` **on top of** the
-guaranteed Congress.gov DC office (a lookup failure just leaves the district slot null —
-never the DC fallback). `RepSection` renders the district address row. Verified live: a
-senator's district office (phone + address) flows end-to-end through
-`lookupAddress → resolveCandidate → buildProfiles → contact`.
+The one missing piece was the **GitHub Actions repo secret** (Vercel env + Keychain copy
+already existed; Actions had `total_count: 0` and there was no workflow). Set it **from the
+Keychain over a pipe** (value never printed / never in argv), then confirmed with a live
+**authorized 200** against prod that all three copies (Keychain / Vercel / Actions) match.
+`.github/workflows/prewarm.yml` now curls `/api/cron/prewarm` **hourly at :20 UTC** with
+Bearer auth — offset from the Vercel daily cron (08:00 UTC, kept as a baseline) so the two
+never collide on one instance and throttle each other under the #17 limiter (that collision,
+reproduced during testing, is what 504'd). The workflow tolerates transient 502/503/504
+(incremental warm resumes next run) but hard-fails on auth/URL errors. Verified green: a
+dispatched run returned HTTP 200 in 9.3s (floor=16, districtOffices=533, eventsIdx=41).
 
-**Cache note (deliberate):** the `ContactBlock` shape change was *not* accompanied by a
-cache-namespace bump. A bump (`rt:v1`→`v2`) would cold-invalidate the *entire* cache —
-including the cron-built events index and floor schedule, which only rebuild daily — blanking
-them for up to a day. The added field reads back falsy on pre-#13 entries, so the UI degrades
-gracefully; district data appears as contact entries refresh (≤5h reference TTL) or on the
-next cron. See decisions.md (2026-07-09).
+**#23 stays open** for its remaining acceptance items: measure Congress.gov's own publish
+latency to confirm hourly isn't over-polling (and tune from data), investigate a fresher
+upstream source (docs.house.gov feeds), and the optional read-path head-check. Hourly is a
+safe conservative default until measured. Decision recorded in decisions.md (2026-07-09).
 
-Session-of-day tally: **#4** (floor schedule), **#17** (rate limiter), **#12** (geocode
-guard), **#13** (district offices) all shipped + closed; **#9** (accessibility) implemented,
-left open only for a manual browser AT pass.
+Day's build tally: **#4, #12, #13, #17 shipped & closed**; **#9 implemented** (open for the
+manual AT pass); **#23** scheduler live (open for measurement).
 
-Priorities next — all now behind a human gate or an owner decision: **#8** (recess pivot —
-needs an in-session detection source + a framing steer), **#23** (sub-daily freshness — needs
-`CRON_SECRET` as a GitHub Actions repo secret), **#9** (manual Lighthouse/axe/VoiceOver),
-**#18** (favicon — design taste), **#25**/**#26** (design/compliance strategy). **#21**/**#27**
-are post-MVP. The gate-free build queue is now empty.
+Priorities next — all behind a human gate or owner decision: **#8** (recess pivot — detection
+source + framing steer), **#9** (manual Lighthouse/axe/VoiceOver), **#18** (favicon — design
+taste), **#25/#26** (design/compliance strategy), plus **#23**'s measurement/tuning. **#21/#27**
+are post-MVP.
 
 ## Derived facts (from CLAUDE.md commands)
 
@@ -45,20 +38,21 @@ are post-MVP. The gate-free build queue is now empty.
 | Test status | `npm test` | ✓ 115 tests passing, 17 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `curl` | ✓ **LIVE** https://reptracker2.vercel.app · HTTP 200 |
-| Git | `git log --oneline -1` | `96b5efc Close session 13-of-day: resolve #17 … #12` (pre end-session commit) |
+| Deploy | authorized `curl /api/cron/prewarm` | ✓ **LIVE** · HTTP 200 (serving #4 floor + #13 district offices + events index) |
+| Scheduler | `gh run` (workflow_dispatch) | ✓ green · HTTP 200 in 9.3s |
+| Git | `git log --oneline -1` | `b394045 Harden #23 scheduler …` (pre end-session commit) |
 
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (open MVP Issues:
-#8, #9, #18). #4, #12, #13, #17 closed today; #9 advanced (manual AT verification remaining).
-#21, #23, #25, #26, #27 are backlog (no milestone).
+#8, #9, #18). #4, #12, #13, #17 closed today; #9 advanced (manual AT pass remaining).
+#21, #23, #25, #26, #27 are backlog (no milestone); #23 has its scheduler shipped.
 
 ## Blockers / open questions
 
-No code blockers. Every remaining priority item needs human intervention: **#8**
-(recess-detection source + framing steer), **#23** (add `CRON_SECRET` as a GitHub Actions
-repo secret), **#9** (manual AT pass), **#18** (icon design). Standing notes (unchanged):
-feedback Gmail (`reptrackerfeedback@gmail.com`) is unmonitored; `CRON_SECRET` is in Vercel
-Production (Sensitive) + the macOS Keychain. Optional env knobs: `CONGRESS_RATE_BURST` /
-`CONGRESS_RATE_PER_MIN` (#17 limiter) — defaults are safe.
+No code blockers. Human-gated items: **#8** (recess detection source + framing steer),
+**#9** (manual AT pass), **#18** (icon design), **#25/#26** (strategy), **#23** measurement.
+New infra: `.github/workflows/prewarm.yml` runs hourly (needs the `CRON_SECRET` Actions
+secret — now set). Standing notes: feedback Gmail (`reptrackerfeedback@gmail.com`) unmonitored;
+`CRON_SECRET` in Vercel Production (Sensitive) + macOS Keychain + GitHub Actions. Optional env
+knobs: `CONGRESS_RATE_BURST` / `CONGRESS_RATE_PER_MIN` (#17), `PREWARM_*` budgets (route).

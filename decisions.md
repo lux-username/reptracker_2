@@ -206,3 +206,30 @@ core upcoming-decisions feed for up to a day on deploy. The change is additive a
 backward-compatible on read (old entries lack the field → it reads falsy → the row simply
 doesn't render), and stale contacts self-heal within the 5h reference TTL or on the next cron.
 So the additive change ships without a bump. Closing #13.
+
+## 2026-07-09 — Sub-daily freshness via an external GitHub Actions scheduler at hourly/:20 (#23)
+
+Vercel Hobby crons are daily-only, so the nightly `vercel.json` cron (08:00 UTC) leaves
+worst-case cache staleness at ~24h — which degrades the product precisely on short-notice,
+high-stakes committee decisions (the #16 gap). Fix: an **external** GitHub Actions workflow
+(`.github/workflows/prewarm.yml`) that curls the same `/api/cron/prewarm` route on a timer
+with the shared `CRON_SECRET` (Bearer auth). Free, no Vercel plan change.
+
+**Secret path:** the value lives in Vercel Production (route validates against it) with a
+copy in the macOS Keychain; the GitHub Actions repo secret was set *from the Keychain* over a
+pipe (never printed / never in argv) and confirmed by a live authorized 200 against prod — so
+all three copies match.
+
+**Cadence: hourly, at :20 past the hour.** Hourly collapses worst-case staleness from ~24h to
+~1h; a full run is ~500 Congress.gov calls vs the 5,000/hr key ceiling (~10%), self-paced by
+the #17 limiter. The **:20 offset** keeps the GitHub run from ever colliding with the 08:00
+Vercel daily cron on the same instance — a collision drains the #17 per-instance token bucket
+and can push the second run past the 60s function ceiling (observed as a 504 during testing
+when two runs fired ~3 min apart). The Vercel daily cron is **kept** as a reliability baseline
+(in case Actions is ever disabled). The workflow treats a transient 502/503/504 as a warning
+(the incremental warm resumes next run) rather than failing, but hard-fails on auth/URL errors.
+
+**Not yet done (remaining on #23):** measure Congress.gov's own publish latency to confirm
+hourly isn't over-polling and to tune from data (the acceptance criterion), investigate a
+fresher upstream source (docs.house.gov feeds), and the optional read-path head-check. Hourly
+is a safe conservative default until then; #23 stays open for that measurement/tuning.
