@@ -9,10 +9,12 @@
 neutral 1–2 sentence plain-English summary, and each rep section carries a neutral
 TL;DR digest:
 
-- **Grounded generation only** (`lib/summaries.ts`): the LLM rewrites official
-  source — bill title + **CRS summary** (primary path) or bill title (fallback),
-  never the model's own knowledge. A markup of a bill not yet in Congress.gov, or
-  any failure, degrades to **structured-only** (official title + link).
+- **Grounded generation only** (`lib/summaries.ts`): a summary is produced ONLY
+  from real descriptive source — the **CRS summary**. It **never** summarizes from
+  the bill title alone (a title is a name, not a description). No CRS summary, a
+  markup of a bill not yet in Congress.gov, or any failure ⇒ **structured-only**
+  (official title + Congress.gov link, no generated text). The spec's grounded
+  bill-text fallback (first sentences of the actual text, not the title) is #15.
 - **Caching by `(bill_id, source_hash)`**: a revised CRS summary flips the hash
   and regenerates; everything else is reused. Per-rep TL;DR cached by
   `(bioguide, digest_hash)`, 6h TTL.
@@ -71,12 +73,14 @@ lists `route.ts`/`page.tsx`, so those files don't appear there by design.
 
 ## Active Milestone
 
-**MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (10 open Issues
-after #5 closes: #4, #6–#14). Roadmap lives there; not restated here.
+**MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (11 open Issues
+after #5 closes: #4, #6–#15). Roadmap lives there; not restated here.
 
 ## Blockers / open questions
 
 None blocking. New this session: **#14** (per-decision-item hearing summaries,
-deferred from #5). The daily spend cap is in code; a **console-side monthly spend
+deferred from #5) and **#15** (grounded bill-text fallback — restores summary
+coverage for no-CRS bills *safely*, after the title-only path was removed as
+ungrounded). The daily spend cap is in code; a **console-side monthly spend
 limit** is recommended as an account-level backstop (owner action, not code).
 Recommended entry point next session: **#7** (then #6).

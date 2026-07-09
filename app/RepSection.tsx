@@ -246,11 +246,9 @@ function Bills({ bills }: { bills: SecondaryBill[] }) {
               <>
                 <p className="mt-1 text-sm text-slate-700">{b.summary}</p>
                 <p className="mt-1 text-xs text-slate-400">
-                  {b.summaryBasis === "bill-text"
-                    ? "Summary based on the bill's title (no nonpartisan summary available yet)."
-                    : b.summaryBasedOn
-                      ? `Based on bill as introduced, ${formatDate(b.summaryBasedOn)}.`
-                      : "Plain-English summary."}
+                  {b.summaryBasedOn
+                    ? `Plain-English summary of the nonpartisan CRS summary; bill as introduced, ${formatDate(b.summaryBasedOn)}.`
+                    : "Plain-English summary of the official nonpartisan (CRS) summary."}
                 </p>
                 {b.summaryAmended && (
                   <p className="mt-1 rounded bg-amber-50 px-2 py-1 text-xs text-amber-900">

@@ -66,10 +66,10 @@ describe("buildGroundedSource", () => {
     expect(r.sourceText).toContain("CRS");
     expect(r.sourceText).toContain("This bill would do Y.");
   });
-  it("falls back to title + sponsor when no CRS", () => {
-    const r = buildGroundedSource({ title: "X Act", sponsorName: "Sharice Davids" });
-    expect(r.basis).toBe("bill-text");
-    expect(r.sourceText).toContain("Sharice Davids");
+  it("NEVER summarizes from the title alone — no CRS ⇒ no source (structured-only)", () => {
+    const r = buildGroundedSource({ title: "Duty Status Reform Act" });
+    expect(r.basis).toBe("none");
+    expect(r.sourceText).toBe("");
   });
   it("emits no source when there is nothing to ground on", () => {
     expect(buildGroundedSource({ title: "" }).basis).toBe("none");
@@ -120,14 +120,15 @@ describe("summarizeBill", () => {
     expect(generate).toHaveBeenCalledTimes(1); // cached — no second LLM call
   });
 
-  it("uses the bill-text fallback when there is no CRS summary", async () => {
-    const generate = vi.fn().mockResolvedValue("The bill, per its title, addresses tribal nutrition input.");
+  it("is structured-only with NO LLM call when there is no CRS summary (never summarizes the title)", async () => {
+    const generate = vi.fn().mockResolvedValue("should never be produced");
     const r = await summarizeBill(
-      { billId: "hr-9425-119", title: "Increasing Tribal Input on Nutrition Act", sponsorName: "Sharice Davids", crsSummaries: crs9425, textVersions: [] },
+      { billId: "hr-9425-119", title: "Increasing Tribal Input on Nutrition Act", crsSummaries: crs9425, textVersions: [] },
       { cache: new MemoryCache(), generate },
     );
-    expect(r.basis).toBe("bill-text");
-    expect(r.text).toContain("tribal");
+    expect(r.text).toBeNull();
+    expect(r.basis).toBe("none");
+    expect(generate).not.toHaveBeenCalled();
   });
 
   it("degrades to structured-only when generation throws", async () => {
@@ -147,15 +148,13 @@ describe("summarizeBill", () => {
     expect(r.text).toBeNull();
   });
 
-  it("degrades to structured-only when the model refuses (opaque title)", async () => {
+  it("suppresses model meta-commentary even on a CRS-backed bill (refusal guard)", async () => {
     const generate = vi.fn().mockResolvedValue(
-      "I cannot write a summary from the title alone; I need the bill text.",
+      "I cannot provide a summary based only on the source material provided.",
     );
-    const r = await summarizeBill(
-      { billId: "s-4801-119", title: "Duty Status Reform Act", crsSummaries: [], textVersions: [] },
-      { cache: new MemoryCache(), generate },
-    );
+    const r = await summarizeBill(base, { cache: new MemoryCache(), generate });
     expect(r.text).toBeNull();
+    expect(generate).toHaveBeenCalledTimes(1); // called, but output rejected
   });
 
   it("is structured-only for a markup of a bill not yet in Congress.gov", async () => {
