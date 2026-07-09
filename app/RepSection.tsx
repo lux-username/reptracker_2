@@ -212,7 +212,7 @@ function Decisions({ decisions }: { decisions: UpcomingDecision[] }) {
   );
 }
 
-function Bills({ bills }: { bills: SecondaryBill[] }) {
+export function Bills({ bills }: { bills: SecondaryBill[] }) {
   if (bills.length === 0) return null;
   return (
     <div className="flex flex-col gap-3">
@@ -256,7 +256,12 @@ function Bills({ bills }: { bills: SecondaryBill[] }) {
                   </p>
                 )}
               </>
-            ) : null}
+            ) : (
+              <p className="mt-1 text-xs text-slate-400">
+                No plain-English summary yet — Congress.gov notes &ldquo;A summary
+                is in progress.&rdquo;
+              </p>
+            )}
             {b.latestActionText && (
               <p className="mt-1 text-xs text-slate-500">
                 Latest: {b.latestActionText}
