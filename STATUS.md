@@ -21,8 +21,9 @@ Everything below is otherwise unchanged from session 9. Priorities stand: **#16*
 confirmed, then **#4** / **#8**. **#22** is a quick, sooner-preferred UI fill;
 **#20** is a correctness/trust fix worth doing early.
 
-Open Issues at close: #4, #8, #9, #12, #13, #16, #17, #18, #19, #20, #21, #22
-(none newly filed this session).
+Open Issues: #4, #8, #9, #12, #13, #16, #17, #18, #20, #21, #22. **#19 closed** by the
+2026-07-09 weekly reconciliation (spec.md reconciled to the session-6 LLM retirement;
+MAP.md tree refreshed) — see `journal/2026-07-09-5.md`.
 
 ## Derived facts (from CLAUDE.md commands)
 
@@ -37,7 +38,7 @@ Open Issues at close: #4, #8, #9, #12, #13, #16, #17, #18, #19, #20, #21, #22
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (open MVP
-Issues: #4, #8, #9, #12, #13, #16, #17, #18, #19, #20, #22). Roadmap lives there;
+Issues: #4, #8, #9, #12, #13, #16, #17, #18, #20, #22). Roadmap lives there;
 not restated here. #21 is backlog (no milestone).
 
 ## Blockers / open questions
