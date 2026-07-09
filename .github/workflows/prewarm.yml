@@ -1,0 +1,51 @@
+name: Pre-warm cache (hourly)
+
+# Sub-daily refresh of the Upstash caches (Issue #23). Vercel Hobby crons are
+# daily-only, so this external scheduler hits the same /api/cron/prewarm route
+# hourly to collapse worst-case staleness from ~24h toward ~1h — bounded by
+# Congress.gov's own publish latency, not our cadence. The route self-paces
+# under the Congress.gov key quota via the client-side limiter (Issue #17) and
+# authenticates with the shared CRON_SECRET (also set in Vercel Production).
+#
+# Cadence is hourly to start (see decisions.md 2026-07-09); tune once upstream
+# publish latency is measured.
+
+on:
+  schedule:
+    - cron: "0 * * * *" # top of every hour (UTC)
+  workflow_dispatch: {} # allow manual runs from the Actions tab / `gh workflow run`
+
+# Never stack runs if one is slow; let the in-flight one finish.
+concurrency:
+  group: prewarm
+  cancel-in-progress: false
+
+# The job only calls an external URL — it needs no repository permissions.
+permissions: {}
+
+jobs:
+  prewarm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger pre-warm cron
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "${CRON_SECRET}" ]; then
+            echo "::error::CRON_SECRET secret is not set on this repository"
+            exit 1
+          fi
+          code=$(curl -sS -X GET \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -o response.json -w '%{http_code}' \
+            --max-time 120 \
+            https://reptracker2.vercel.app/api/cron/prewarm)
+          echo "HTTP ${code}"
+          if [ "${code}" != "200" ]; then
+            echo "::error::prewarm returned HTTP ${code}"
+            cat response.json 2>/dev/null || true
+            exit 1
+          fi
+          # Non-sensitive run stats (no secrets in the response).
+          python3 -c "import json;d=json.load(open('response.json'));print('ok=%s elapsedMs=%s floorBills=%s districtMembers=%s eventsIdx=%s'%(d.get('ok'),d.get('elapsedMs'),(d.get('floor') or {}).get('houseBills'),(d.get('districtOffices') or {}).get('members'),(d.get('events') or {}).get('indexSize')))"
