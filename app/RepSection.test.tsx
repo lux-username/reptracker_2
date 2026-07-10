@@ -87,7 +87,7 @@ describe("RepSection — recess pivot (Issue #8)", () => {
       "The Senate is in recess until July 13, 2026.",
     );
     expect(
-      screen.getByText(/No committee meetings while the senate is in recess/i),
+      screen.getByText(/No committee meetings while the Senate is in recess/),
     ).toBeInTheDocument();
     // The contact block is still present as the point of action.
     expect(screen.getByRole("link", { name: /\(202\) 225-6601/ })).toBeInTheDocument();
@@ -98,7 +98,7 @@ describe("RepSection — recess pivot (Issue #8)", () => {
     render(<RepSection profile={profile("house")} delegateBanner={null} chamberStatus={status} />);
     expect(screen.getByRole("status")).toHaveTextContent("The House is not currently in session.");
     expect(
-      screen.getByText(/No committee meetings while the house is in recess/i),
+      screen.getByText(/No committee meetings while the House is in recess/),
     ).toBeInTheDocument();
   });
 

@@ -225,7 +225,7 @@ function Decisions({
       {decisions.length === 0 ? (
         <p className="text-sm text-slate-500">
           {inRecess
-            ? `No committee meetings while ${chamberLabel(chamber).toLowerCase()} is in recess.`
+            ? `No committee meetings while the ${chamber === "senate" ? "Senate" : "House"} is in recess.`
             : "No upcoming committee meetings scheduled for this rep right now."}
         </p>
       ) : (
