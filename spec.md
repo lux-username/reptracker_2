@@ -111,7 +111,7 @@ and how to contact the deciders. The user supplies the opinion.
    clearly visible freshness timestamp and an honest "schedules change frequently" note.
 
 4. **No accounts. No data persistence about users.** Address is used server-side once
-   for geocoding and immediately discarded.
+   for geocoding (forwarded to Geocodio) and immediately discarded — see §Privacy.
 
 5. **Feedback channel.** Two footer links — a `mailto:` ("Send feedback") and a GitHub
    issues link ("Report an issue"). Both zero-infra, zero-cost, serving different
@@ -331,10 +331,14 @@ Checked as part of the DoD, not deferred to post-launch polish.
 
 ## Privacy
 
-- Addresses are sent to the server for one geocoding call and then dropped — never
-  stored, never logged.
+- Addresses are sent to the server, which forwards them to Geocodio for one
+  geocoding call, then drops them. The address is never stored and never logged:
+  the geocode cache is keyed by a SHA-256 hash of the normalized address
+  (`lib/geocodio.ts` `hashAddressForKey`), so neither Upstash nor any cache-error
+  log line ever holds the raw input. Congress.gov and Anthropic receive no address.
 - No user accounts → no PII to leak.
-- No analytics beyond Vercel's built-in request counts in v1.
+- No product analytics, tracking, or ad profiling in v1 — only the host platform's
+  built-in request counts.
 
 ## Editorial stance (load-bearing)
 

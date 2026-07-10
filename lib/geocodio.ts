@@ -1,5 +1,6 @@
 // Server-only: reads GEOCODIO_API_KEY (a non-public env var, undefined in the
 // browser) and is imported exclusively by server actions / components.
+import { createHash } from "node:crypto";
 import type { DistrictCandidate } from "./types";
 import { isNonVoting, normalizeDistrict, parseCongressNumber } from "./jurisdictions";
 import { cached, cacheKey, TTL } from "./cache";
@@ -141,13 +142,22 @@ export class GeocodioError extends Error {
   }
 }
 
-/** Normalize an address into a stable cache key: lower, trim, collapse ws, strip punctuation. */
-function normalizeForKey(address: string): string {
-  return address
+/**
+ * Derive a stable, non-reversible cache key part from an address.
+ *
+ * We must NOT store the raw address anywhere — the footer/spec promise it is not
+ * stored (privacy §, Issue #31). But we still want cache hits for the same input,
+ * so we normalize (lower, trim, collapse ws, strip punctuation) then SHA-256: the
+ * same address always maps to the same key, yet the key in Upstash (and in any
+ * cache-error log line) reveals nothing about the address entered.
+ */
+function hashAddressForKey(address: string): string {
+  const normalized = address
     .toLowerCase()
     .replace(/[^\w\s]/g, "")
     .replace(/\s+/g, " ")
     .trim();
+  return createHash("sha256").update(normalized).digest("hex");
 }
 
 /**
@@ -159,7 +169,7 @@ function normalizeForKey(address: string): string {
  * (not_found / auth / network) propagates uncached.
  */
 export async function geocode(address: string): Promise<DistrictCandidate[]> {
-  return cached(cacheKey("geo", normalizeForKey(address)), TTL.geocode, () =>
+  return cached(cacheKey("geo", hashAddressForKey(address)), TTL.geocode, () =>
     geocodeLive(address),
   );
 }

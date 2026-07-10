@@ -23,9 +23,10 @@ export default function Footer() {
           .
         </p>
         <p>
-          Your address is used once to look up your district, then discarded — no
-          accounts, no personal data stored, no analytics beyond Vercel&apos;s
-          built-in request counts.
+          Your address is sent once to a geocoding service (Geocodio) to find your
+          district, then discarded — we don&apos;t store it, log it, or keep any
+          account for you. No tracking, we only count how many requests the site
+          receives.
         </p>
         <p className="flex flex-wrap gap-x-6 gap-y-2">
           <a
