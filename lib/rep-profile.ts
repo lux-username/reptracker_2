@@ -2,7 +2,7 @@
 //
 // Takes a resolved `Rep` identity (Issue #2) and enriches it into a full
 // `RepProfile`: committee assignments + structural roles, a single contact
-// block, upcoming committee decisions, and the secondary sponsored/cosponsored
+// block, upcoming committee action, and the secondary sponsored/cosponsored
 // list. The neutral LLM TL;DR is Issue #5 and stays null here.
 //
 // Every fetch here is uncached; Issue #7 layers Upstash + a nightly pre-warm
@@ -19,7 +19,7 @@ import type {
 } from "./types";
 import { fetchAssignmentIndex } from "./committees";
 import { fetchSecondaryBills } from "./legislation";
-import { fetchUpcomingDecisions } from "./decisions";
+import { fetchUpcomingCommitteeActions } from "./committee-actions";
 import { fetchBillSources, extractBillSummary } from "./summaries";
 import { cached, cacheKey, TTL } from "./cache";
 import { congressFetch } from "./rate-limit";
@@ -123,16 +123,16 @@ export async function buildRepProfile(
   now: Date,
 ): Promise<RepProfile> {
   const committeeNames = assignments.map((c) => c.name);
-  const [contact, rawBills, upcomingDecisions] = await Promise.all([
+  const [contact, rawBills, upcomingCommitteeActions] = await Promise.all([
     fetchContact(rep.bioguideId),
     fetchSecondaryBills(rep.bioguideId, committeeNames, now),
-    fetchUpcomingDecisions(congress, rep.chamber, assignments, now),
+    fetchUpcomingCommitteeActions(congress, rep.chamber, assignments, now),
   ]);
 
   // Issue #5: attach each bill's verbatim CRS summary (parallel). No LLM.
   const secondaryBills = await Promise.all(rawBills.map(enrichBillSummary));
 
-  return { rep, committees: assignments, contact, upcomingDecisions, secondaryBills };
+  return { rep, committees: assignments, contact, upcomingCommitteeActions, secondaryBills };
 }
 
 /**

@@ -63,7 +63,7 @@ function profile(chamber: Chamber, overrides: Partial<RepProfile> = {}): RepProf
       districtOfficeAddress: null,
       websiteUrl: null,
     },
-    upcomingDecisions: [],
+    upcomingCommitteeActions: [],
     secondaryBills: [],
     ...overrides,
   };
@@ -80,7 +80,7 @@ describe("RepSection — recess pivot (Issue #8)", () => {
     ).toBeInTheDocument();
   });
 
-  it("leads a Senator's card with 'in recess until [date]' and ties the empty decisions to it", () => {
+  it("leads a Senator's card with 'in recess until [date]' and ties the empty committee action to it", () => {
     const status: ChamberStatus = { inSession: false, returnDate: "2026-07-13" };
     render(<RepSection profile={profile("senate")} delegateBanner={null} chamberStatus={status} />);
     expect(screen.getByRole("status")).toHaveTextContent(

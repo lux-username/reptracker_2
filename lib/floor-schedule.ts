@@ -1,6 +1,6 @@
 // "Floor this week" — the upcoming House and Senate floor schedule (Issue #4,
 // spec §2.3 item 3). This is the one *global*, address-independent section: every
-// member votes on these same floor items, so unlike committee decisions it is the
+// member votes on these same floor items, so unlike committee action it is the
 // same for every visitor.
 //
 // Sources (both public, best-effort — spec "Known risks: floor-schedule scrape
@@ -24,7 +24,7 @@
 //
 // The parsers are pure and fixture-tested; the I/O wraps them.
 import * as cheerio from "cheerio";
-import { ordinalSuffix } from "./decisions";
+import { ordinalSuffix } from "./committee-actions";
 import { cacheKey, redisClient, TTL } from "./cache";
 
 /** One bill/measure scheduled for floor consideration. */

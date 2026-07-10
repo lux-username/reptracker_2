@@ -9,8 +9,8 @@
 ## One-line goal
 
 A web app that lets a US constituent enter their address and see — in time to act —
-the specific upcoming decisions their federal representatives (a House member or
-non-voting delegate, plus up to two senators) are about to make, along with the
+the specific upcoming committee action their federal representatives (a House member or
+non-voting delegate, plus up to two senators) are about to take, along with the
 structural context (committee role, contact info) needed to weigh in effectively.
 
 ## Why this framing
@@ -24,9 +24,9 @@ actually has influence over the decision in question. Two consequences:
    bill is one of ~25 people deciding whether it ever reaches the floor. Leading with
    committees is about leading with the decisions where a call actually moves the needle.
 2. **Upcoming matters more than recent.** The product's reason for being is the events
-   that haven't happened yet — decisions a constituent can still influence. Past votes
-   are explicitly not the point. The page is ordered by date of upcoming decision, not
-   by data source.
+   that haven't happened yet — committee action a constituent can still influence. Past
+   votes are explicitly not the point. The page is ordered by date of upcoming committee
+   action, not by data source.
 
 The product is **deliberately position-neutral**. We do not generate "what to say"
 talking points: we don't know whether the user supports or opposes any bill, and
@@ -65,7 +65,7 @@ and how to contact the deciders. The user supplies the opinion.
       - For DC / territory delegates, the delegate banner renders *inside* the header
         block, between the rep name and the committee list, so the "votes in committee
         but not on the floor" framing reads before committee context.
-   2. **Upcoming decisions list**, ordered chronologically by decision date, not by
+   2. **Upcoming committee action list**, ordered chronologically by action date, not by
       data source. Each item shows:
       - **What:** plain-English description of the bill or hearing topic, with link
         to the official Congress.gov record.
@@ -133,7 +133,7 @@ and how to contact the deciders. The user supplies the opinion.
 - LLM-generated talking points or "what to say" guidance — *deliberately omitted*.
 - Editorial leverage labels (e.g. "very high influence"). Structural role only.
 - Recent floor-vote history / voting records — *deliberately omitted*. The product is
-  about upcoming decisions a constituent can still influence, not a rep's past votes.
+  about upcoming committee action a constituent can still influence, not a rep's past votes.
 - Voting record analysis, ideology scores, position trackers.
 - State legislatures.
 - Historical deep dives beyond ~30 days back.
@@ -272,7 +272,7 @@ two senators once the cache is warm; marginal cost per additional user approache
 ## Recess behavior
 
 Congress is in scheduled recess for substantial portions of the year. During recess
-committees do not formally meet, so "upcoming decisions" goes near-empty — but this is
+committees do not formally meet, so "upcoming committee action" goes near-empty — but this is
 **not** a reason to take the product offline: constituents' ability to reach reps
 actually *increases* during recess (district offices active, town halls at home).
 
@@ -287,9 +287,9 @@ so a constituent's Representative can be out while their Senators are in session
 
 - **A factual status line leads the card** — "The Senate is in recess until [date]."
   when a return date is known, degrading to "The House is not currently in session."
-  when it isn't. The **contact block** (already above the decisions in document flow)
+  when it isn't. The **contact block** (already above the committee action in document flow)
   becomes the natural point of action.
-- **Upcoming-decisions** goes empty; its empty state ties itself to the recess
+- **Upcoming committee action** goes empty; its empty state ties itself to the recess
   ("No committee meetings while the House is in recess.") rather than reading as a
   data gap — distinct from the *in-session-but-nothing-scheduled* copy.
 - **Sponsored / cosponsored bills** keep their neutral heading, repositioned so the

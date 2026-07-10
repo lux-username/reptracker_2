@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
-  buildUpcomingDecisions,
+  buildUpcomingCommitteeActions,
   congressEventUrl,
-  decisionRoleLabel,
+  committeeActionRoleLabel,
   normalizeSystemCode,
-} from "./decisions";
-import type { RawMeetingDetail } from "./decisions";
+} from "./committee-actions";
+import type { RawMeetingDetail } from "./committee-actions";
 import type { CommitteeAssignment } from "./types";
 
 // Real Congress.gov meeting details + two synthetic HSAG meetings (Davids's
@@ -34,18 +34,18 @@ describe("normalizeSystemCode", () => {
   });
 });
 
-describe("decisionRoleLabel", () => {
+describe("committeeActionRoleLabel", () => {
   it("labels full-committee and subcommittee roles structurally", () => {
-    expect(decisionRoleLabel(assign({ code: "HSAG", role: "Chair" }))).toBe("Chair");
-    expect(decisionRoleLabel(assign({ code: "HSAG", role: "Ranking Member" }))).toBe(
+    expect(committeeActionRoleLabel(assign({ code: "HSAG", role: "Chair" }))).toBe("Chair");
+    expect(committeeActionRoleLabel(assign({ code: "HSAG", role: "Ranking Member" }))).toBe(
       "Ranking Member",
     );
-    expect(decisionRoleLabel(assign({ code: "HSAG", role: "Member" }))).toBe("Committee Member");
+    expect(committeeActionRoleLabel(assign({ code: "HSAG", role: "Member" }))).toBe("Committee Member");
     expect(
-      decisionRoleLabel(assign({ code: "HSAG16", role: "Chair", isSubcommittee: true })),
+      committeeActionRoleLabel(assign({ code: "HSAG16", role: "Chair", isSubcommittee: true })),
     ).toBe("Subcommittee Chair");
     expect(
-      decisionRoleLabel(
+      committeeActionRoleLabel(
         assign({ code: "HSAG16", role: "Ranking Member", isSubcommittee: true }),
       ),
     ).toBe("Subcommittee Ranking Member");
@@ -77,7 +77,7 @@ describe("congressEventUrl", () => {
   });
 });
 
-describe("buildUpcomingDecisions", () => {
+describe("buildUpcomingCommitteeActions", () => {
   const davids: CommitteeAssignment[] = [
     assign({ code: "HSAG", name: "House Committee on Agriculture", role: "Member" }),
     assign({
@@ -90,7 +90,7 @@ describe("buildUpcomingDecisions", () => {
     }),
   ];
 
-  const out = buildUpcomingDecisions(meetings, davids, NOW);
+  const out = buildUpcomingCommitteeActions(meetings, davids, NOW);
 
   it("keeps only meetings held by a committee the rep sits on", () => {
     const ids = out.map((d) => d.eventId);
@@ -100,12 +100,12 @@ describe("buildUpcomingDecisions", () => {
     expect(ids).not.toContain("119456");
   });
 
-  it("links each decision to its specific event page, not the committee page (Issue #20)", () => {
+  it("links each committee action to its specific event page, not the committee page (Issue #20)", () => {
     const markup = out.find((d) => d.eventId === "119500");
     expect(markup?.url).toBe(
       "https://www.congress.gov/event/119th-Congress/house-event/119500",
     );
-    // No decision should point at the generic committee landing page.
+    // No committee action should point at the generic committee landing page.
     expect(out.every((d) => !d.url.includes("/committee/"))).toBe(true);
   });
 
@@ -120,25 +120,25 @@ describe("buildUpcomingDecisions", () => {
         committees: [{ name: "Ag", systemCode: "hsag00" }],
       },
     ];
-    const [d] = buildUpcomingDecisions(noCongress, davids, NOW);
+    const [d] = buildUpcomingCommitteeActions(noCongress, davids, NOW);
     expect(d.url).toBe("https://www.congress.gov/committee/house-committee/hsag00");
   });
 
-  it("labels each decision with the rep's role on that committee", () => {
+  it("labels each committee action with the rep's role on that committee", () => {
     expect(out.find((d) => d.eventId === "119500")?.roleLabel).toBe("Committee Member");
     expect(out.find((d) => d.eventId === "119501")?.roleLabel).toBe(
       "Subcommittee Ranking Member",
     );
   });
 
-  it("orders decisions chronologically", () => {
+  it("orders committee actions chronologically", () => {
     const dates = out.map((d) => Date.parse(d.date));
     expect(dates).toEqual([...dates].sort((a, b) => a - b));
   });
 
   it("excludes past meetings", () => {
     const pastNow = new Date("2027-01-01T00:00:00Z");
-    expect(buildUpcomingDecisions(meetings, davids, pastNow)).toHaveLength(0);
+    expect(buildUpcomingCommitteeActions(meetings, davids, pastNow)).toHaveLength(0);
   });
 
   it("excludes canceled/postponed meetings", () => {
@@ -153,10 +153,10 @@ describe("buildUpcomingDecisions", () => {
         committees: [{ name: "Ag", systemCode: "hsag00" }],
       },
     ];
-    expect(buildUpcomingDecisions(canceled, davids, NOW)).toHaveLength(0);
+    expect(buildUpcomingCommitteeActions(canceled, davids, NOW)).toHaveLength(0);
   });
 
   it("returns nothing for a rep with no matching committees", () => {
-    expect(buildUpcomingDecisions(meetings, [assign({ code: "SSXX" })], NOW)).toHaveLength(0);
+    expect(buildUpcomingCommitteeActions(meetings, [assign({ code: "SSXX" })], NOW)).toHaveLength(0);
   });
 });

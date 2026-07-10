@@ -61,7 +61,7 @@ export default function FloorThisWeek({
         </h2>
         <p className="text-sm text-slate-600">
           What the full House and Senate are scheduled to take up. Unlike committee
-          decisions, every member votes on these — the same for everyone.
+          action, every member votes on these — the same for everyone.
         </p>
       </header>
 

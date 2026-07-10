@@ -38,9 +38,9 @@ Two homogeneous leaf dirs are collapsed with a count to keep the tree readable
 ├── lib/
 │   ├── __fixtures__/          (21 JSON fixtures — recorded API/geocode responses)
 │   ├── cache.ts
+│   ├── committee-actions.ts
 │   ├── committees.ts
 │   ├── congress.ts
-│   ├── decisions.ts
 │   ├── geocodio.ts
 │   ├── jurisdictions.ts
 │   ├── legislation.ts
@@ -82,7 +82,7 @@ Two homogeneous leaf dirs are collapsed with a count to keep the tree readable
 | `app/page.tsx` | The single page — header shell; mounts the `AddressLookup` client component |
 | `app/actions.ts` | Server actions (`lookupAction`, `resolveCandidateAction`) — the server-side boundary where keys stay |
 | `app/AddressLookup.tsx` | Client address-entry form + disambiguation UI; renders `RepSection`s |
-| `app/RepSection.tsx` | Per-rep section render: header, contacts, upcoming decisions, bills |
+| `app/RepSection.tsx` | Per-rep section render: header, contacts, upcoming committee action, bills |
 | `app/Footer.tsx` | Site-wide footer: disclaimer, privacy, feedback + report-issue links |
 | `app/layout.tsx` | Root layout; mounts the footer and global styles |
 | `app/api/health/route.ts` | Liveness probe (`/api/health` → 200) |
@@ -92,7 +92,7 @@ Two homogeneous leaf dirs are collapsed with a count to keep the tree readable
 | `lib/jurisdictions.ts` | Non-voting delegate / territory classification (OCD-id based) |
 | `lib/congress.ts` | Congress.gov API client (members, meetings, hearings, bills) |
 | `lib/committees.ts` | Committee assignments + structural role (chair/ranking/member) |
-| `lib/decisions.ts` | Upcoming-decisions assembly (meeting/hearing sweep, chronological) |
+| `lib/committee-actions.ts` | Upcoming-committee-action assembly (meeting/hearing sweep, chronological) |
 | `lib/legislation.ts` | Sponsored/cosponsored bill filter, sort, cap-at-7 |
 | `lib/summaries.ts` | Verbatim CRS bill summaries + "as introduced"/"amended since" stamps — no LLM |
 | `lib/rep-profile.ts` | Assembles the full per-rep profile from the above |

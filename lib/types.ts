@@ -2,7 +2,7 @@
 //
 // Boundary: this layer identifies *who* a constituent's federal representatives
 // are (identity + the bioguide_id join key). Rich per-rep metadata (committees,
-// contact, upcoming decisions) is enriched from Congress.gov in later issues and
+// contact, upcoming committee action) is enriched from Congress.gov in later issues and
 // is intentionally NOT modeled here.
 
 /** A US state or non-voting-jurisdiction two-letter code, e.g. "KS", "DC", "PR". */
@@ -121,7 +121,7 @@ export interface ContactBlock {
 }
 
 /** An upcoming committee meeting/hearing/markup the rep has a role in. */
-export interface UpcomingDecision {
+export interface UpcomingCommitteeAction {
   eventId: string;
   /** Congress.gov meeting type, e.g. "Hearing" | "Markup" | "Meeting". */
   kind: string;
@@ -133,7 +133,7 @@ export interface UpcomingDecision {
   committeeName: string;
   committeeCode: string;
   /**
-   * Structural role label for this specific decision, derived from the rep's
+   * Structural role label for this specific committee action, derived from the rep's
    * role on the committee holding it — "Chair", "Ranking Member",
    * "Subcommittee Chair", "Committee Member", etc. Structural only.
    */
@@ -180,7 +180,7 @@ export interface RepProfile {
   rep: Rep;
   committees: CommitteeAssignment[];
   contact: ContactBlock;
-  upcomingDecisions: UpcomingDecision[];
+  upcomingCommitteeActions: UpcomingCommitteeAction[];
   secondaryBills: SecondaryBill[];
 }
 

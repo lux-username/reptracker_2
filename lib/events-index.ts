@@ -1,6 +1,6 @@
 // Full upcoming-events index (Issue #16).
 //
-// `decisions.ts` used to do a bounded *live* sweep of the most-recently-updated
+// `committee-actions.ts` used to do a bounded *live* sweep of the most-recently-updated
 // committee meetings per request (SWEEP_LIMIT), because Congress.gov's
 // committee-meeting LIST returns only event ids — no date, no committee, no
 // member filter — so the date/committee live on each meeting's DETAIL and there
@@ -9,7 +9,7 @@
 //
 // This module replaces the per-request cap with a single pre-computed index in
 // Upstash, built by the nightly cron (Issue #16, #7): the servable set of
-// *upcoming, live* meetings across both chambers. `decisions.ts` reads the index
+// *upcoming, live* meetings across both chambers. `committee-actions.ts` reads the index
 // and filters it to a rep's committees — no network on the warm path.
 //
 // The 60s Vercel Hobby function ceiling makes one exhaustive pass impossible
@@ -20,7 +20,7 @@
 // few nights the cursor laps the full list, so no meeting stays missed — and the
 // LIST is update-ordered, so freshly (re)scheduled meetings cluster at offset 0
 // and surface on the very next run. See the 2026-07-09 free-tier decision.
-import { type RawMeetingDetail, MeetingError } from "./decisions";
+import { type RawMeetingDetail, MeetingError } from "./committee-actions";
 import { cached, cacheKey, redisClient, TTL } from "./cache";
 import { congressFetch } from "./rate-limit";
 
@@ -32,7 +32,7 @@ export interface EventsIndex {
   congress: number;
   /** Per-chamber LIST offset the next run resumes from (wraps at list end). */
   cursor: { house: number; senate: number };
-  /** Upcoming, live meeting details — exactly the set `decisions.ts` serves. */
+  /** Upcoming, live meeting details — exactly the set `committee-actions.ts` serves. */
   meetings: RawMeetingDetail[];
 }
 
@@ -79,7 +79,7 @@ export function mergeMeetings(
 }
 
 // ---------------------------------------------------------------------------
-// Read path (warm): decisions.ts serves from here.
+// Read path (warm): committee-actions.ts serves from here.
 // ---------------------------------------------------------------------------
 
 /**

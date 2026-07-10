@@ -8,7 +8,7 @@ import RepSection from "./RepSection";
 
 // Issue #2 delivers the *lookup* — identifying who a constituent's reps are.
 // Issue #3 layers the rich per-rep sections (committees, contact, upcoming
-// decisions, bills) on top: identities render immediately as cards, then the
+// committee action, bills) on top: identities render immediately as cards, then the
 // heavier profile data fills in progressively (spec DoD cold-cache behavior).
 
 const ORDINAL: Record<string, string> = { "1": "st", "2": "nd", "3": "rd" };

@@ -4,21 +4,21 @@ import type {
   ContactBlock,
   RepProfile,
   SecondaryBill,
-  UpcomingDecision,
+  UpcomingCommitteeAction,
 } from "@/lib/types";
 import type { ChamberStatus } from "@/lib/session-status";
 
 // Full per-rep section (spec §2): header (name, party, district, delegate
-// banner, committees) → contact block → upcoming decisions → secondary bills.
+// banner, committees) → contact block → upcoming committee action → secondary bills.
 // The contact block sits in natural document flow — not pinned/sticky. LLM
 // text (bill summaries, TL;DR) is Issue #5 and is intentionally absent here;
 // the "what" is the official title + a Congress.gov link.
 //
 // Recess pivot (Issue #8 / #27): when this rep's chamber is out of session, a
-// factual recess line leads the card and the (empty) decisions list explains
+// factual recess line leads the card and the (empty) committee-action list explains
 // itself by the recess rather than looking like a data gap. Copy is minimal /
 // factual only — no manufactured urgency (owner steer, decisions.md 2026-07-09).
-// The contact block already sits above the decisions, so it becomes the natural
+// The contact block already sits above the committee action, so it becomes the natural
 // point of action; the sponsored-bills list keeps its neutral heading.
 
 function readableName(name: string): string {
@@ -208,21 +208,21 @@ function Contact({ contact }: { contact: ContactBlock }) {
   );
 }
 
-function Decisions({
-  decisions,
+function CommitteeActions({
+  actions,
   chamber,
   inRecess,
 }: {
-  decisions: UpcomingDecision[];
+  actions: UpcomingCommitteeAction[];
   chamber: Chamber;
   inRecess: boolean;
 }) {
   return (
     <div className="flex flex-col gap-3">
       <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-        Upcoming decisions
+        Upcoming committee action
       </h4>
-      {decisions.length === 0 ? (
+      {actions.length === 0 ? (
         <p className="text-sm text-slate-500">
           {inRecess
             ? `No committee meetings while the ${chamber === "senate" ? "Senate" : "House"} is in recess.`
@@ -230,7 +230,7 @@ function Decisions({
         </p>
       ) : (
         <ol className="flex flex-col gap-3">
-          {decisions.map((d) => (
+          {actions.map((d) => (
             <li key={d.eventId} className="rounded-lg border border-slate-200 p-3">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
@@ -402,8 +402,8 @@ export default function RepSection({
         <Contact contact={profile.contact} />
       </header>
 
-      <Decisions
-        decisions={profile.upcomingDecisions}
+      <CommitteeActions
+        actions={profile.upcomingCommitteeActions}
         chamber={rep.chamber}
         inRecess={inRecess}
       />

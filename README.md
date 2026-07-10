@@ -1,6 +1,6 @@
 # Constituent Representative Tracker
 
-A web app that lets a US constituent enter their address and see — in time to act — the specific upcoming decisions their federal representatives (a House member or non-voting delegate, plus up to two senators) are about to make, along with the structural context (committee role, contact info) needed to weigh in effectively.
+A web app that lets a US constituent enter their address and see — in time to act — the specific upcoming committee action their federal representatives (a House member or non-voting delegate, plus up to two senators) are about to take, along with the structural context (committee role, contact info) needed to weigh in effectively.
 
 <!-- play/demo link here if any -->
 

@@ -325,3 +325,21 @@ tracking" as the phrase privacy-minded users actually scan for; replaced the "Ve
 built-in" jargon with plain language. **Ops decision:** flushed the 6 pre-existing raw-
 address keys from Upstash at deploy rather than letting them age out over 24h — clean
 store the moment the promise goes live. (Session 3-of-day, closed #31.)
+
+## 2026-07-10 — Retiring "upcoming decisions": rename the file, preserve the thesis prose (Session 4-of-day)
+
+Executing #30. The session-1 note said #30 should adopt the broadened pitch framing,
+not just swap a noun — and it does, but the two live at different altitudes and stay
+distinct: the homepage *pitch* is the honest umbrella "committee action ahead + bills
+they're sponsoring" (done session 1, `page.tsx`/`layout.tsx`); the per-rep *list* being
+renamed here is specifically the committee-meeting feed (bills are a separate section),
+so its heading is precisely "Upcoming committee action," not the umbrella. No conflict.
+**Chose to rename the file** `lib/decisions.ts` → `lib/committee-actions.ts`, not just
+its exports: sharing a name with the `decisions.md` rationale log was itself a low-grade
+confusion, and the rename retires it — done via `git mv` to keep history. **Chose to
+leave three other senses of "decision" untouched:** `decisions.md` references, the spec's
+load-bearing thesis prose ("leading with the decisions where a call moves the needle" — a
+markup genuinely *is* a decision; the overclaim was only ever the section *label* covering
+hearings too), and generic "design decision" phrasing. Swapping those would blur the point
+rather than sharpen it. Gate was tests + typecheck (no runtime change, so no deploy).
+(Session 4-of-day, closed #30.)

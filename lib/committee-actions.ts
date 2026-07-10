@@ -1,5 +1,5 @@
-// Upcoming decisions — the chronological list of committee meetings, hearings,
-// and markups a rep has a structural role in (spec §2.2).
+// Upcoming committee action — the chronological list of committee meetings,
+// hearings, and markups a rep has a structural role in (spec §2.2).
 //
 // Congress.gov's committee-meeting LIST returns only event ids; the committee,
 // date, and status live on each meeting's DETAIL. There is no member filter.
@@ -14,7 +14,7 @@
 // The match/order/label logic is pure and fixture-tested. Plain-English topic
 // summaries are Issue #5 — here the "what" is the official meeting title + a
 // Congress.gov committee link.
-import type { CommitteeAssignment, UpcomingDecision } from "./types";
+import type { CommitteeAssignment, UpcomingCommitteeAction } from "./types";
 import { cached, cacheKey, TTL } from "./cache";
 import { congressFetch } from "./rate-limit";
 import { readEventsIndex } from "./events-index";
@@ -50,8 +50,8 @@ export function normalizeSystemCode(systemCode: string): string {
   return up.endsWith("00") ? up.slice(0, -2) : up;
 }
 
-/** Structural role label for a decision, from the rep's role on its committee. */
-export function decisionRoleLabel(assignment: CommitteeAssignment): string {
+/** Structural role label for a committee action, from the rep's role on its committee. */
+export function committeeActionRoleLabel(assignment: CommitteeAssignment): string {
   const scope = assignment.isSubcommittee ? "Subcommittee" : "Committee";
   switch (assignment.role) {
     case "Chair":
@@ -104,21 +104,21 @@ export function congressEventUrl(
   return `https://www.congress.gov/event/${congress}${ordinalSuffix(congress)}-Congress/${chamber}-event/${eventId}`;
 }
 
-/** Statuses that mean the meeting is no longer an upcoming decision. */
+/** Statuses that mean the meeting is no longer upcoming committee action. */
 const DEAD_STATUSES = new Set(["canceled", "cancelled", "postponed"]);
 
 /**
- * Reduce a set of raw meeting details to the decisions a rep has a role in:
- * matched to the rep's committees, future + live only, chronological, each
+ * Reduce a set of raw meeting details to the committee actions a rep has a role
+ * in: matched to the rep's committees, future + live only, chronological, each
  * carrying the rep's structural role on the committee holding it.
  */
-export function buildUpcomingDecisions(
+export function buildUpcomingCommitteeActions(
   meetings: RawMeetingDetail[],
   assignments: CommitteeAssignment[],
   now: Date,
-): UpcomingDecision[] {
+): UpcomingCommitteeAction[] {
   const byCode = new Map(assignments.map((a) => [a.code, a]));
-  const out: UpcomingDecision[] = [];
+  const out: UpcomingCommitteeAction[] = [];
 
   for (const m of meetings) {
     if (!m.date) continue;
@@ -155,7 +155,7 @@ export function buildUpcomingDecisions(
       location: formatLocation(m.location),
       committeeName: committee.name ?? assignment.name,
       committeeCode: assignment.code,
-      roleLabel: decisionRoleLabel(assignment),
+      roleLabel: committeeActionRoleLabel(assignment),
       url,
     });
   }
@@ -194,24 +194,24 @@ async function apiJson<T>(url: string): Promise<T> {
 }
 
 /**
- * Return the upcoming decisions the rep (via `assignments`) has a role in.
+ * Return the upcoming committee action the rep (via `assignments`) has a role in.
  *
  * Warm path: read the cron-built events index and filter it — no network. Cold
  * path (index absent / KV disabled / Redis miss): fall back to the bounded live
  * sweep below.
  */
-export async function fetchUpcomingDecisions(
+export async function fetchUpcomingCommitteeActions(
   congress: number,
   chamber: "house" | "senate",
   assignments: CommitteeAssignment[],
   now: Date,
-): Promise<UpcomingDecision[]> {
+): Promise<UpcomingCommitteeAction[]> {
   if (assignments.length === 0) return [];
 
   const index = await readEventsIndex();
-  if (index) return buildUpcomingDecisions(index.meetings, assignments, now);
+  if (index) return buildUpcomingCommitteeActions(index.meetings, assignments, now);
 
-  return fetchUpcomingDecisionsLive(congress, chamber, assignments, now);
+  return fetchUpcomingCommitteeActionsLive(congress, chamber, assignments, now);
 }
 
 /**
@@ -219,12 +219,12 @@ export async function fetchUpcomingDecisions(
  * Bounded to SWEEP_LIMIT detail fetches; if the window is truncated we log it
  * (spec: no silent caps).
  */
-async function fetchUpcomingDecisionsLive(
+async function fetchUpcomingCommitteeActionsLive(
   congress: number,
   chamber: "house" | "senate",
   assignments: CommitteeAssignment[],
   now: Date,
-): Promise<UpcomingDecision[]> {
+): Promise<UpcomingCommitteeAction[]> {
   const apiKey = process.env.CONGRESS_GOV_API_KEY;
   if (!apiKey) throw new MeetingError("CONGRESS_GOV_API_KEY is not set");
 
@@ -248,7 +248,7 @@ async function fetchUpcomingDecisionsLive(
   const total = list.pagination?.count ?? items.length;
   if (total > SWEEP_LIMIT) {
     console.warn(
-      `[decisions] cold-path ${chamber} meeting sweep capped at ${SWEEP_LIMIT} of ${total} — the warm events index (Issue #16) covers the rest`,
+      `[committee-actions] cold-path ${chamber} meeting sweep capped at ${SWEEP_LIMIT} of ${total} — the warm events index (Issue #16) covers the rest`,
     );
   }
 
@@ -270,7 +270,7 @@ async function fetchUpcomingDecisionsLive(
     }),
   );
 
-  return buildUpcomingDecisions(
+  return buildUpcomingCommitteeActions(
     details.filter((d): d is RawMeetingDetail => d !== null),
     assignments,
     now,

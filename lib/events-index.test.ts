@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { mergeMeetings } from "./events-index";
-import type { RawMeetingDetail } from "./decisions";
+import type { RawMeetingDetail } from "./committee-actions";
 
 const NOW = new Date("2026-07-09T00:00:00Z");
 

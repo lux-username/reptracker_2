@@ -27,7 +27,7 @@ export async function resolveCandidateAction(
 /**
  * Enrich resolved rep identities into full per-rep section profiles (Issue #3).
  * Called after a `resolved` result so identities render immediately and the
- * heavier committee/decisions/bills data fills in progressively. On failure the
+ * heavier committee/committee-action/bills data fills in progressively. On failure the
  * UI keeps the identity-level cards, so an empty result degrades gracefully.
  */
 export async function buildProfilesAction(
