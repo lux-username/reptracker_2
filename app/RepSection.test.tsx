@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Bills } from "./RepSection";
-import type { SecondaryBill } from "@/lib/types";
+import RepSection, { Bills } from "./RepSection";
+import type { Chamber, RepProfile, SecondaryBill } from "@/lib/types";
+import type { ChamberStatus } from "@/lib/session-status";
 
 function bill(overrides: Partial<SecondaryBill> = {}): SecondaryBill {
   return {
@@ -39,5 +40,73 @@ describe("Bills — summary states", () => {
       "href",
       "https://www.congress.gov/bill/119th-congress/house-bill/9425",
     );
+  });
+});
+
+function profile(chamber: Chamber, overrides: Partial<RepProfile> = {}): RepProfile {
+  return {
+    rep: {
+      bioguideId: "S001227",
+      name: "Schmidt, Derek",
+      party: "Republican",
+      state: "KS",
+      chamber,
+      district: chamber === "house" ? 2 : null,
+      houseRole: chamber === "house" ? "representative" : null,
+      imageUrl: null,
+    },
+    committees: [],
+    contact: {
+      dcOfficePhone: "(202) 225-6601",
+      dcOfficeAddress: null,
+      districtOfficePhone: null,
+      districtOfficeAddress: null,
+      websiteUrl: null,
+    },
+    upcomingDecisions: [],
+    secondaryBills: [],
+    ...overrides,
+  };
+}
+
+describe("RepSection — recess pivot (Issue #8)", () => {
+  it("shows no recess line when the chamber is in session", () => {
+    const status: ChamberStatus = { inSession: true, returnDate: null };
+    render(<RepSection profile={profile("house")} delegateBanner={null} chamberStatus={status} />);
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    // In-session-but-nothing-scheduled copy (#27 other branch).
+    expect(
+      screen.getByText(/No upcoming committee meetings scheduled for this rep right now/i),
+    ).toBeInTheDocument();
+  });
+
+  it("leads a Senator's card with 'in recess until [date]' and ties the empty decisions to it", () => {
+    const status: ChamberStatus = { inSession: false, returnDate: "2026-07-13" };
+    render(<RepSection profile={profile("senate")} delegateBanner={null} chamberStatus={status} />);
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "The Senate is in recess until July 13, 2026.",
+    );
+    expect(
+      screen.getByText(/No committee meetings while the senate is in recess/i),
+    ).toBeInTheDocument();
+    // The contact block is still present as the point of action.
+    expect(screen.getByRole("link", { name: /\(202\) 225-6601/ })).toBeInTheDocument();
+  });
+
+  it("degrades to 'not currently in session' for the House (no return date)", () => {
+    const status: ChamberStatus = { inSession: false, returnDate: null };
+    render(<RepSection profile={profile("house")} delegateBanner={null} chamberStatus={status} />);
+    expect(screen.getByRole("status")).toHaveTextContent("The House is not currently in session.");
+    expect(
+      screen.getByText(/No committee meetings while the house is in recess/i),
+    ).toBeInTheDocument();
+  });
+
+  it("behaves exactly as before when no status is provided", () => {
+    render(<RepSection profile={profile("house")} delegateBanner={null} />);
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(
+      screen.getByText(/No upcoming committee meetings scheduled for this rep right now/i),
+    ).toBeInTheDocument();
   });
 });

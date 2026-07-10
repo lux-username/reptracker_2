@@ -21,6 +21,7 @@ import { fetchStateMembers } from "./congress";
 import { fetchContact } from "./rep-profile";
 import { mapLimit, refreshEventsIndex, type RefreshStats } from "./events-index";
 import { refreshFloorSchedule } from "./floor-schedule";
+import { getSenateRecesses } from "./session-status";
 import { refreshDistrictOffices } from "./district-offices";
 import { cacheKey, redisClient } from "./cache";
 
@@ -52,6 +53,8 @@ export interface PrewarmStats {
   events: RefreshStats | null;
   /** Floor-schedule scrape (Issue #4): house bill count + whether Senate posted. */
   floor: { houseBills: number; senate: boolean };
+  /** Senate recess calendar (Issue #8): count of State Work Period ranges warmed. */
+  sessionCalendar: { senateRecesses: number };
   /** District-office index (Issue #13): members with a district office contact. */
   districtOffices: { members: number };
 }
@@ -142,7 +145,11 @@ export async function prewarm(opts: PrewarmOptions): Promise<PrewarmStats> {
     console.warn(`[prewarm] floor schedule refresh failed: ${String(e)}`);
   }
 
-  return { congress, committeeData, members: { warmed: membersWarmed, failed: membersFailed, roster: roster.length }, contacts, events, floor, districtOffices };
+  // 6. Senate recess calendar (Issue #8) — one tiny near-static XML, warmed so
+  //    the recess pivot reads it from KV. getSenateRecesses never throws.
+  const senateRecesses = (await getSenateRecesses(now)).length;
+
+  return { congress, committeeData, members: { warmed: membersWarmed, failed: membersFailed, roster: roster.length }, contacts, events, floor, districtOffices, sessionCalendar: { senateRecesses } };
 }
 
 /** Warm `budget` contacts starting at the persisted cursor; advance and wrap. */

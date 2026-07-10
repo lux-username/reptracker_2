@@ -263,3 +263,43 @@ worst-case staleness (~1h → ~30m) while staying well within the Congress.gov 5
 Below ~20 min hits the upstream floor (diminishing returns) so we stop here. The :15/:45
 offset keeps both runs clear of the 08:00 UTC Vercel cron (no instance collision, #17). This
 supersedes the earlier "hourly" cadence in this file. #23 fully resolved.
+
+## 2026-07-09 — Recess behavior: per-chamber detection, minimal copy (#8, #27)
+
+Resolving #8. Four decisions, each owner-confirmed:
+
+**Detection source: authoritative calendar, corroborate, heuristic never decides alone.**
+A wrong recess call actively misleads on a civic tool, so the source hierarchy is:
+authoritative first (Senate annual schedule XML for the recess boundary), the cheap floor
+signals to refine (Senate next-convene for the precise return date), and the empty-data
+heuristic only as a tertiary sanity check — never the decider. Chose this over the cheap
+signals alone (weaker "until [date]", conflates a data gap with a real recess).
+
+**Granularity: per-chamber, not "Congress" as one thing.** The House and Senate recess on
+different schedules and every constituent has a Representative (House) + two Senators
+(Senate), so "Congress is in recess" is routinely false. Detected each chamber
+independently and applied the pivot per rep's chamber. Chose accuracy over the simpler
+single-banner model.
+
+**Copy: minimal / factual only.** Dropped the spec's "[Rep] is home in their district" —
+unverifiable (we can't know a member's location; "District/State Work Period" only means
+they're *expected* to do constituent work) and literally wrong for senators (state, not
+district). Also declined the "what to call about now" urgency framing: a sponsored bill
+often has no imminent decision, and recess by definition has no urgency. The pivot is
+carried by layout/prominence (empty decisions + elevated contact), not persuasion.
+
+**House return date omitted, not guessed.** The House publishes its calendar only as a
+PDF/JPG (no XML/table), so no machine-readable return date exists. Rather than parse a
+brittle PDF or fabricate a date, the House recess copy degrades to "not currently in
+session" (no date), consistent with the minimal-factual stance. Optional PDF path → #29.
+
+**Recess lead content deferred to #21.** Spec wanted "recent committee activity" as the
+primary recess content, but we only compute *upcoming* decisions — a new past-meetings
+fetch was out of scope. Committee assignments are stable across a recess, so #21 (bills
+waiting in the rep's committees) is the natural, stronger recess lead once built; for now
+the recess state leads with contact + the existing sponsored-bills list (neutral heading,
+repositioned). Chose reframe-existing-now over building a new fetch.
+
+Source of truth: `senate.gov/legislative/<year>_schedule.xml` (Senate recesses) +
+docs.house.gov weekly floor XML `weekOf` (House in/out this week). Implemented in
+`lib/session-status.ts`. #8 + #27 implemented (open for a live per-rep pass); #29 filed.

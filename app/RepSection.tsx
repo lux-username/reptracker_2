@@ -1,16 +1,25 @@
 import type {
   CommitteeAssignment,
+  Chamber,
   ContactBlock,
   RepProfile,
   SecondaryBill,
   UpcomingDecision,
 } from "@/lib/types";
+import type { ChamberStatus } from "@/lib/session-status";
 
 // Full per-rep section (spec §2): header (name, party, district, delegate
 // banner, committees) → contact block → upcoming decisions → secondary bills.
 // The contact block sits in natural document flow — not pinned/sticky. LLM
 // text (bill summaries, TL;DR) is Issue #5 and is intentionally absent here;
 // the "what" is the official title + a Congress.gov link.
+//
+// Recess pivot (Issue #8 / #27): when this rep's chamber is out of session, a
+// factual recess line leads the card and the (empty) decisions list explains
+// itself by the recess rather than looking like a data gap. Copy is minimal /
+// factual only — no manufactured urgency (owner steer, decisions.md 2026-07-09).
+// The contact block already sits above the decisions, so it becomes the natural
+// point of action; the sponsored-bills list keeps its neutral heading.
 
 function readableName(name: string): string {
   const [last, rest] = name.split(",", 2);
@@ -49,6 +58,32 @@ function formatDate(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+/** Format a date-only "2026-07-13" at local midnight (no UTC off-by-one). */
+function formatDayLocal(iso: string): string {
+  const d = new Date(iso.length <= 10 ? `${iso}T00:00:00` : iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+}
+
+/** The chamber's proper subject for recess copy. */
+function chamberLabel(chamber: Chamber): string {
+  return chamber === "senate" ? "The Senate" : "The House";
+}
+
+/**
+ * Factual recess line for a rep whose chamber is out of session, or null when in
+ * session / status unknown. "…in recess until [date]" when we have a return
+ * date; the House has none (no machine-readable calendar), so it degrades to
+ * "…not currently in session" rather than guessing a date.
+ */
+function recessLine(chamber: Chamber, status: ChamberStatus | null): string | null {
+  if (!status || status.inSession) return null;
+  const subject = chamberLabel(chamber);
+  return status.returnDate
+    ? `${subject} is in recess until ${formatDayLocal(status.returnDate)}.`
+    : `${subject} is not currently in session.`;
 }
 
 function RoleBadge({ role }: { role: CommitteeAssignment["role"] }) {
@@ -173,7 +208,15 @@ function Contact({ contact }: { contact: ContactBlock }) {
   );
 }
 
-function Decisions({ decisions }: { decisions: UpcomingDecision[] }) {
+function Decisions({
+  decisions,
+  chamber,
+  inRecess,
+}: {
+  decisions: UpcomingDecision[];
+  chamber: Chamber;
+  inRecess: boolean;
+}) {
   return (
     <div className="flex flex-col gap-3">
       <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
@@ -181,7 +224,9 @@ function Decisions({ decisions }: { decisions: UpcomingDecision[] }) {
       </h4>
       {decisions.length === 0 ? (
         <p className="text-sm text-slate-500">
-          No upcoming committee meetings scheduled for this rep right now.
+          {inRecess
+            ? `No committee meetings while ${chamberLabel(chamber).toLowerCase()} is in recess.`
+            : "No upcoming committee meetings scheduled for this rep right now."}
         </p>
       ) : (
         <ol className="flex flex-col gap-3">
@@ -285,12 +330,17 @@ export function Bills({ bills }: { bills: SecondaryBill[] }) {
 export default function RepSection({
   profile,
   delegateBanner,
+  chamberStatus,
 }: {
   profile: RepProfile;
   delegateBanner: string | null;
+  chamberStatus?: ChamberStatus | null;
 }) {
   const { rep } = profile;
   const isSenator = rep.chamber === "senate";
+  const status = chamberStatus ?? null;
+  const inRecess = !!status && !status.inSession;
+  const recess = recessLine(rep.chamber, status);
   const roleWord = isSenator
     ? "Senator"
     : rep.houseRole === "delegate"
@@ -306,6 +356,17 @@ export default function RepSection({
 
   return (
     <section className="flex flex-col gap-5 rounded-xl border border-slate-200 p-5">
+      {/* Recess pivot (Issue #8): factual status line leads the card; the
+          contact block below becomes the natural point of action. */}
+      {recess && (
+        <p
+          role="status"
+          className="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm font-medium text-slate-700"
+        >
+          {recess}
+        </p>
+      )}
+
       {/* Header block */}
       <header className="flex flex-col gap-4">
         <div className="flex items-center gap-4">
@@ -341,7 +402,11 @@ export default function RepSection({
         <Contact contact={profile.contact} />
       </header>
 
-      <Decisions decisions={profile.upcomingDecisions} />
+      <Decisions
+        decisions={profile.upcomingDecisions}
+        chamber={rep.chamber}
+        inRecess={inRecess}
+      />
       <Bills bills={profile.secondaryBills} />
     </section>
   );

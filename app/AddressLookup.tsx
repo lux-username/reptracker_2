@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import type { DistrictCandidate, LookupResult, Rep, RepProfile } from "@/lib/types";
+import type { SessionStatus } from "@/lib/session-status";
 import { lookupAction, resolveCandidateAction, buildProfilesAction } from "./actions";
 import RepSection from "./RepSection";
 
@@ -62,15 +63,18 @@ function Results({
   result,
   profiles,
   profilesLoading,
+  session,
 }: {
   result: Extract<LookupResult, { status: "resolved" }>;
   profiles: RepProfile[] | null;
   profilesLoading: boolean;
+  session?: SessionStatus | null;
 }) {
   const { reps } = result;
 
   // Full per-rep sections are ready — render them (delegate banner moves inside
-  // the House member's header per spec §2.1).
+  // the House member's header per spec §2.1). The rep's chamber recess status
+  // (Issue #8) drives the section's recess pivot.
   if (profiles && profiles.length > 0) {
     return (
       <section aria-live="polite" className="flex flex-col gap-6">
@@ -86,6 +90,7 @@ function Results({
                 ? reps.delegateBanner
                 : null
             }
+            chamberStatus={session ? session[p.rep.chamber] : null}
           />
         ))}
       </section>
@@ -170,7 +175,7 @@ function Disambiguation({
   );
 }
 
-export default function AddressLookup() {
+export default function AddressLookup({ session }: { session?: SessionStatus | null }) {
   const [address, setAddress] = useState("");
   const [result, setResult] = useState<LookupResult | null>(null);
   const [profiles, setProfiles] = useState<RepProfile[] | null>(null);
@@ -245,7 +250,12 @@ export default function AddressLookup() {
         <Disambiguation candidates={result.candidates} onChoose={onChoose} pending={pending} />
       )}
       {result?.status === "resolved" && (
-        <Results result={result} profiles={profiles} profilesLoading={profilesLoading} />
+        <Results
+          result={result}
+          profiles={profiles}
+          profilesLoading={profilesLoading}
+          session={session}
+        />
       )}
       {(result?.status === "not_found" || result?.status === "error") && (
         <p role="alert" className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">

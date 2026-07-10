@@ -276,17 +276,42 @@ committees do not formally meet, so "upcoming decisions" goes near-empty — but
 **not** a reason to take the product offline: constituents' ability to reach reps
 actually *increases* during recess (district offices active, town halls at home).
 
-The page pivots emphasis during recess:
+The page pivots emphasis during recess. Copy is **minimal and factual** — the
+pivot is carried by layout and prominence, not persuasive wording (owner steer,
+decisions.md 2026-07-09). We never claim a member's physical location ("is home
+in their district" is unverifiable and wrong for senators, who represent a state).
 
-- **Headline shifts** from "What's coming up" to "Congress is in recess until [date].
-  [Rep] is home in their district." with the contact block elevated.
-- **Recent committee activity** becomes the primary content — what the rep was working
-  on before recess.
-- **Sponsored / cosponsored bills** with pending status are shown — what to call about now.
-- **Floor schedule section** shows "Congress not in session" rather than a stale list.
+Detection is **per chamber** — the House and Senate recess on different schedules,
+so a constituent's Representative can be out while their Senators are in session
+(and vice versa). The pivot is applied to each rep's card by their own chamber:
 
-Detection: a server-side helper checks whether the House and Senate are in session
-today using the official congressional calendar (Congress.gov publishes session dates).
+- **A factual status line leads the card** — "The Senate is in recess until [date]."
+  when a return date is known, degrading to "The House is not currently in session."
+  when it isn't. The **contact block** (already above the decisions in document flow)
+  becomes the natural point of action.
+- **Upcoming-decisions** goes empty; its empty state ties itself to the recess
+  ("No committee meetings while the House is in recess.") rather than reading as a
+  data gap — distinct from the *in-session-but-nothing-scheduled* copy.
+- **Sponsored / cosponsored bills** keep their neutral heading, repositioned so the
+  bill list is never the card's visual center of gravity. The intended *primary*
+  recess content — the bills waiting in the rep's committees (#21) — becomes the
+  lead once that feature ships; committee assignments are stable across a recess.
+- **Floor schedule section** shows "not currently in session" per chamber (the
+  posted floor XML is stale during recess) rather than a stale list.
+
+Detection sources (authoritative first, corroborate, never let a bare data-gap
+heuristic decide):
+- **Senate** — the official annual tentative-schedule XML
+  (`senate.gov/legislative/<year>_schedule.xml`) gives ISO date ranges for the
+  year's "State Work Period" recesses; the Senate floor page's next-convene date
+  refines the precise return date. Authoritative + precise.
+- **House** — no machine-readable calendar exists (published only as a PDF), so we
+  use the docs.house.gov weekly floor XML already scraped for the floor section: a
+  `weekOf` earlier than the current week means the House is not in session. No
+  reliable return date without the PDF, so the House "until [date]" is omitted.
+- Failure degrades toward the normal UI, never a false recess.
+
+Implemented in `lib/session-status.ts` (Issues #8, #27).
 
 ## Accessibility
 
@@ -380,8 +405,10 @@ how a model is instructed. Checked in code review.
 - Ambiguous addresses trigger the disambiguation flow rather than a silent guess.
 - DC and territory residents see a normal rep section for their delegate, plus a clear
   inline banner explaining what their delegate can and cannot do.
-- During recess the page pivots: "Congress in recess until [date]" + elevated contact
-  block + recent-activity-led content.
+- During recess each rep's card pivots per its own chamber: a factual "[chamber] is
+  in recess until [date]" (or "not currently in session") status line + the contact
+  block as the point of action + bills kept secondary (committee-waiting bills (#21)
+  become the lead once built). See §"Recess behavior".
 - The filtered/capped sponsored & cosponsored bills list is visible as secondary context.
 - Each bill with a CRS summary renders that summary verbatim, attributed to the
   Congressional Research Service; bills without one show structured-only (title + link).

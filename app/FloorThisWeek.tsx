@@ -1,10 +1,14 @@
 import type { FloorSchedule } from "@/lib/floor-schedule";
+import type { SessionStatus } from "@/lib/session-status";
 
 // "On the floor this week" — the one global, address-independent section (Issue
 // #4, spec §2.3). Every member votes on these same floor items, so it's shown to
 // every visitor. Best-effort scraped: a clearly visible freshness stamp and a
-// "schedules change frequently" note keep expectations honest; if nothing was
-// scraped the section renders nothing (graceful hide).
+// "schedules change frequently" note keep expectations honest.
+//
+// Recess (Issue #8): when a chamber is out of session, the posted floor XML is
+// stale (an old week), so instead of that list we show a plain "not in session"
+// line — factual only, no editorializing (owner steer, decisions.md 2026-07-09).
 
 /** Format a date-only ("2026-06-29") or full ISO string as "June 29, 2026". */
 function formatDay(value: string): string {
@@ -26,8 +30,25 @@ function formatStamp(iso: string): string {
   });
 }
 
-export default function FloorThisWeek({ data }: { data: FloorSchedule | null }) {
-  if (!data || (!data.house && !data.senate)) return null;
+export default function FloorThisWeek({
+  data,
+  session,
+}: {
+  data: FloorSchedule | null;
+  session?: SessionStatus | null;
+}) {
+  const houseOut = !!session && !session.house.inSession;
+  const senateOut = !!session && !session.senate.inSession;
+
+  const showHouseSchedule = !!data?.house && !houseOut;
+  const showSenateSchedule =
+    !!data?.senate && (!!data.senate.date || !!data.senate.note) && !senateOut;
+  const showHouse = houseOut || showHouseSchedule;
+  const showSenate = senateOut || showSenateSchedule;
+
+  if (!showHouse && !showSenate) return null;
+
+  const senateReturn = session?.senate.returnDate;
 
   return (
     <section
@@ -44,7 +65,16 @@ export default function FloorThisWeek({ data }: { data: FloorSchedule | null }) 
         </p>
       </header>
 
-      {data.house && (
+      {houseOut && (
+        <div className="flex flex-col gap-1">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            House
+          </h3>
+          <p className="text-sm text-slate-700">The House is not currently in session.</p>
+        </div>
+      )}
+
+      {showHouseSchedule && data?.house && (
         <div className="flex flex-col gap-3">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
             House · week of {formatDay(data.house.weekOf)}
@@ -85,7 +115,20 @@ export default function FloorThisWeek({ data }: { data: FloorSchedule | null }) 
         </div>
       )}
 
-      {data.senate && (data.senate.date || data.senate.note) && (
+      {senateOut && (
+        <div className="flex flex-col gap-1">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            Senate
+          </h3>
+          <p className="text-sm text-slate-700">
+            {senateReturn
+              ? `The Senate is in recess until ${formatDay(senateReturn)}.`
+              : "The Senate is not currently in session."}
+          </p>
+        </div>
+      )}
+
+      {showSenateSchedule && data?.senate && (
         <div className="flex flex-col gap-1">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
             Senate
@@ -102,10 +145,12 @@ export default function FloorThisWeek({ data }: { data: FloorSchedule | null }) 
         </div>
       )}
 
-      <p className="text-xs text-slate-500">
-        Floor schedules change frequently. As of {formatStamp(data.builtAt)}. Sourced
-        from docs.house.gov and senate.gov.
-      </p>
+      {data && (
+        <p className="text-xs text-slate-500">
+          Floor schedules change frequently. As of {formatStamp(data.builtAt)}. Sourced
+          from docs.house.gov and senate.gov.
+        </p>
+      )}
     </section>
   );
 }

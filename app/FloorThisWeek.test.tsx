@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import type { FloorSchedule } from "@/lib/floor-schedule";
+import type { SessionStatus } from "@/lib/session-status";
 import FloorThisWeek from "./FloorThisWeek";
 
 const sample: FloorSchedule = {
@@ -53,5 +54,46 @@ describe("FloorThisWeek", () => {
 
     expect(screen.getByText(/Monday, Jul 13, 2026/)).toBeInTheDocument();
     expect(screen.getByText(/schedules change frequently/i)).toBeInTheDocument();
+  });
+
+  const bothInSession: SessionStatus = {
+    builtAt: "2026-06-30T00:00:00Z",
+    house: { inSession: true, returnDate: null },
+    senate: { inSession: true, returnDate: null },
+  };
+
+  it("in session, renders schedules as normal", () => {
+    render(<FloorThisWeek data={sample} session={bothInSession} />);
+    expect(screen.getByText(/week of June 29, 2026/i)).toBeInTheDocument();
+    expect(screen.queryByText(/in recess/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/not currently in session/i)).not.toBeInTheDocument();
+  });
+
+  it("in recess, replaces the stale schedule with a factual not-in-session line", () => {
+    const recess: SessionStatus = {
+      builtAt: "2026-07-09T00:00:00Z",
+      house: { inSession: false, returnDate: null },
+      senate: { inSession: false, returnDate: "2026-07-13" },
+    };
+    render(<FloorThisWeek data={sample} session={recess} />);
+
+    // The stale House week list must NOT show; the recess line does.
+    expect(screen.queryByRole("link", { name: "H.R. 8873" })).not.toBeInTheDocument();
+    expect(screen.getByText("The House is not currently in session.")).toBeInTheDocument();
+    // Senate has a return date → "in recess until [date]".
+    expect(screen.getByText("The Senate is in recess until July 13, 2026.")).toBeInTheDocument();
+    // The old convene note is gone.
+    expect(screen.queryByText(/Convene at 3:00 p.m./)).not.toBeInTheDocument();
+  });
+
+  it("renders the recess section even with no scraped data", () => {
+    const recess: SessionStatus = {
+      builtAt: "2026-07-09T00:00:00Z",
+      house: { inSession: false, returnDate: null },
+      senate: { inSession: false, returnDate: null },
+    };
+    render(<FloorThisWeek data={null} session={recess} />);
+    expect(screen.getByText("The House is not currently in session.")).toBeInTheDocument();
+    expect(screen.getByText("The Senate is not currently in session.")).toBeInTheDocument();
   });
 });
