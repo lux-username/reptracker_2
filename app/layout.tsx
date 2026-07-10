@@ -5,7 +5,7 @@ import Footer from "./Footer";
 export const metadata: Metadata = {
   title: "Representative Tracker",
   description:
-    "See the upcoming decisions your federal representatives are about to make — in time to act.",
+    "See what your federal representatives are working on — the committee action ahead and the bills they sponsor — in time to act.",
 };
 
 export default function RootLayout({

@@ -124,7 +124,7 @@ function Results({
       )}
       <p className="text-xs text-slate-500" aria-live="polite">
         {profilesLoading
-          ? "Loading committee roles, contact info, and upcoming decisions…"
+          ? "Loading committee roles, contact info, and upcoming action…"
           : "Detailed sections couldn't be loaded right now — showing your representatives above."}
       </p>
     </section>

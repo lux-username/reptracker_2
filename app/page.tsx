@@ -24,8 +24,9 @@ export default async function Home() {
           Representative Tracker
         </h1>
         <p className="text-lg text-slate-600">
-          Enter your address to see the upcoming decisions your federal
-          representatives are about to make — in time to act.
+          Enter your address to see what your federal representatives are working
+          on — the committee action ahead and the bills they&apos;re sponsoring — in
+          time to act.
         </p>
       </header>
       <AddressLookup session={session} />
