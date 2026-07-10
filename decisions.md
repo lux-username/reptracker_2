@@ -307,3 +307,21 @@ docs.house.gov weekly floor XML `weekOf` (House in/out this week). Implemented i
 ## 2026-07-10 — Homepage pitch: "what your reps are working on", not "upcoming decisions" (Session 1-of-day)
 
 The pitch had promised the "upcoming decisions" a rep is "about to make." Reworded for accuracy on both sides. **Overclaim:** an "upcoming decision" in our data (`lib/decisions.ts`) is a committee *meeting* — markups are genuine decisions, but hearings are testimony with no vote, so calling them "decisions" is false for half the rows. **Underclaim:** a rep card also renders sponsored bills (`RepSection.tsx`), which "committee action" (the first-pass fix) silently drops. Landed on *"see what your federal representatives are working on — the committee action ahead and the bills they're sponsoring — in time to act"* — an honest umbrella that still leads with the committee spine and keeps the "act in time" urgency. Applied to `app/page.tsx` + `app/layout.tsx`; considered and rejected leaving it as-is (drift from what the page shows) and the narrower "committee action" (omits bills). **Scope decision:** shipped user-facing copy only and filed the identifier/spec/README rename as one Issue (#30) rather than editing them piecemeal — a half-renamed vocabulary is worse drift than a consistent-but-old one, and #30 should adopt this same broadened framing, not just swap the noun. Separately filed #31 to audit the privacy disclaimer, which the copy review surfaced as possibly overclaiming ("never logged", no mention of Geocodio as a third-party recipient). (Session 1-of-day, Issues #30, #31.)
+
+## 2026-07-10 — Hash the geocode cache key, don't soften the privacy copy (Session 3-of-day)
+
+The #31 audit found two false privacy claims, both rooted in one cause: the geocode
+cache was keyed by the normalized *raw address*, so Upstash held addresses in the clear
+(24h TTL) and cache-error logs echoed them — contradicting "not stored, never logged."
+Two ways to reconcile: (a) soften the copy to admit a 24h address cache, or (b) fix the
+code so the claim becomes true. **Chose (b): SHA-256 the normalized address before it
+becomes the key** (`hashAddressForKey`). Rationale: hashing is deterministic, so the same
+input still maps to the same key — cache hit-rate is unchanged, zero functional cost — and
+it converts two false statements into true ones rather than weakening the promise. The
+Geocodio disclosure still had to go in the copy regardless: no hash changes the fact that
+we hand the raw address to a third party. **Copy decision:** cut "no ad profiling" as
+protest-too-much (nobody suspects a district-lookup of running ad networks) but kept "no
+tracking" as the phrase privacy-minded users actually scan for; replaced the "Vercel's
+built-in" jargon with plain language. **Ops decision:** flushed the 6 pre-existing raw-
+address keys from Upstash at deploy rather than letting them age out over 24h — clean
+store the moment the promise goes live. (Session 3-of-day, closed #31.)
