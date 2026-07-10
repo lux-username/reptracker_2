@@ -41,7 +41,7 @@ are enhancements. The gate-free build queue is empty.
 | Test status | `npm test` | ✓ 136 tests passing, 18 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `vercel ls` | Last prod deploy `3dpwp1nu9` (prior session); **not** redeployed this session (copy-only, unshipped) |
+| Deploy | `vercel --prod` | ✓ `reptracker2.vercel.app` → `gkbfulisq` (this session; pitch reword live) |
 | Git | `git log --oneline -1` | `91d6639 Close session 19: live per-rep pass verifies + closes #8/#27` |
 
 ## Active Milestone
@@ -52,8 +52,8 @@ backlog/enhancements/doc-debt (no milestone).
 
 ## Blockers / open questions
 
-No code blockers. **The pitch reword is committed but not deployed** — next deploy
-ships it. Human-gated items: **#9** (manual AT pass), **#18** (icon design),
+No code blockers. **The pitch reword is live in production** (deploy `gkbfulisq`).
+Human-gated items: **#9** (manual AT pass), **#18** (icon design),
 **#25/#26** (strategy). Infra: `prewarm.yml` runs every 30 min; `CRON_SECRET` in
 Vercel Production (Sensitive) + macOS Keychain + GitHub Actions. Standing note:
 feedback Gmail (`reptrackerfeedback@gmail.com`) unmonitored. Optional env knobs:
