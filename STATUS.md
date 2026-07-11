@@ -31,9 +31,10 @@ address text tab-focusable (a `tabindex` anti-pattern) and a "selectable address
 block" — the owner confirmed via VoiceOver that reading order was already fine, so
 both were dropped as needless churn.
 
-**Not yet deployed.** This is a client/UI a11y change (it alters rendered HTML — the
-sr-only new-tab text) but no production deploy was run this session. Safe to fold into
-the next deploy; tests + typecheck + build are the gate (all green).
+**Deployed to production.** `vercel --prod` shipped the a11y change (deployment
+`dpl_DCnt2yo8dZvT8oZvpiDWZjUnrad4`), aliased to https://reptracker2.vercel.app — verified
+live: 200, and the footer's external links carry the "opens in new tab" SR cue in the
+served HTML. Tests + typecheck + build were the gate (all green).
 
 **Priorities next** — the MVP milestone now has only **#18** (favicon design) open, and
 that's owner-gated on a design concept. Remaining work is all behind a human gate or
@@ -49,8 +50,8 @@ recess PDF) are enhancements. The gate-free build queue is empty.
 | Test status | `npm test` | ✓ 136 tests passing, 18 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `vercel ls` | Last prod on Vercel; #9 a11y change committed to repo but **not yet deployed** (no deploy run this session) |
-| Git | `git log --oneline -1` | `9fb53f5 Close session 23: retire "upcoming decisions" terminology` (pre-commit; this session's commit follows) |
+| Deploy | `vercel ls` | Prod `https://reptracker2.vercel.app` — #9 a11y change **deployed this session** (`dpl_DCnt2yo8dZvT8oZvpiDWZjUnrad4`, READY, verified live 200) |
+| Git | `git log --oneline -1` | `09c7991 Close session 24: accessibility bar met + verified (fixes #9)` |
 
 ## Active Milestone
 
