@@ -343,3 +343,20 @@ markup genuinely *is* a decision; the overclaim was only ever the section *label
 hearings too), and generic "design decision" phrasing. Swapping those would blur the point
 rather than sharpen it. Gate was tests + typecheck (no runtime change, so no deploy).
 (Session 4-of-day, closed #30.)
+
+## 2026-07-10 — Accessibility (#9): fix the real gaps, verify the rest, and *don't* over-engineer (Session 5-of-day)
+
+Closing #9. Most of the spec's a11y bar was already implemented, so this was audit +
+targeted fixes + the manual verification the issue required. **Chose three fixes that
+were genuine gaps:** a shared `ExternalLink` adding a visually-hidden "(opens in new
+tab)" cue on every `target="_blank"` link (SR/cognitive users previously got no
+warning, and the `rel` pattern was copy-pasted across three files); `aria-hidden` on
+the decorative `⚠`; and `aria-labelledby` making each rep `<section>` a named landmark
+region. **Chose NOT to make static content tab-focusable.** The owner's keyboard test
+flagged that addresses are skipped by Tab — but Tab is interactive-only by design, and
+adding `tabindex` to static text is a documented anti-pattern that degrades the SR
+experience. Explained VoiceOver navigation (VO+arrow / rotor) instead; the owner
+re-tested and confirmed reading order was already correct, so a proposed "selectable
+address block" was dropped as needless churn. **Chose to treat Lighthouse (100) + axe
+(0 issues) as sufficient contrast verification** — both run a WCAG AA color-contrast
+audit, so no separate manual contrast pass was warranted. (Session 5-of-day, closed #9.)

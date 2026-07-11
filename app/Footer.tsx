@@ -1,3 +1,5 @@
+import ExternalLink from "./ExternalLink";
+
 // Dedicated feedback inbox for non-GitHub users — a standalone Gmail, not a
 // personal/maintainer inbox (spec §5).
 const FEEDBACK_EMAIL = "reptrackerfeedback@gmail.com";
@@ -12,14 +14,12 @@ export default function Footer() {
           affiliated with the U.S. Congress or any government body</strong>.
           Schedules and contact details come from public records and may be
           incomplete or out of date. For the authoritative source, see{" "}
-          <a
+          <ExternalLink
             href="https://www.congress.gov"
             className="underline underline-offset-2 hover:text-slate-700"
-            target="_blank"
-            rel="noopener noreferrer"
           >
             Congress.gov
-          </a>
+          </ExternalLink>
           .
         </p>
         <p>
@@ -35,14 +35,12 @@ export default function Footer() {
           >
             Send feedback
           </a>
-          <a
+          <ExternalLink
             href={ISSUES_URL}
             className="underline underline-offset-2 hover:text-slate-700"
-            target="_blank"
-            rel="noopener noreferrer"
           >
             Report an issue
-          </a>
+          </ExternalLink>
         </p>
       </div>
     </footer>

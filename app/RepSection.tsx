@@ -7,6 +7,7 @@ import type {
   UpcomingCommitteeAction,
 } from "@/lib/types";
 import type { ChamberStatus } from "@/lib/session-status";
+import ExternalLink from "./ExternalLink";
 
 // Full per-rep section (spec §2): header (name, party, district, delegate
 // banner, committees) → contact block → upcoming committee action → secondary bills.
@@ -192,14 +193,12 @@ function Contact({ contact }: { contact: ContactBlock }) {
           <div className="flex gap-2">
             <dt className="w-32 shrink-0 text-slate-500">Web</dt>
             <dd>
-              <a
+              <ExternalLink
                 className="font-medium text-sky-800 underline"
                 href={contact.websiteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
               >
                 Official website & contact form
-              </a>
+              </ExternalLink>
             </dd>
           </div>
         )}
@@ -247,14 +246,9 @@ function CommitteeActions({
               </p>
               <p className="mt-1 text-sm text-slate-600">
                 {d.committeeName} ·{" "}
-                <a
-                  className="text-sky-800 underline"
-                  href={d.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink className="text-sky-800 underline" href={d.url}>
                   View on Congress.gov
-                </a>
+                </ExternalLink>
               </p>
             </li>
           ))}
@@ -275,14 +269,9 @@ export function Bills({ bills }: { bills: SecondaryBill[] }) {
         {bills.map((b) => (
           <li key={b.billId} className="rounded-lg border border-slate-200 p-3">
             <div className="flex flex-wrap items-baseline gap-2">
-              <a
-                className="font-medium text-sky-800 underline"
-                href={b.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <ExternalLink className="font-medium text-sky-800 underline" href={b.url}>
                 {b.displayId}
-              </a>
+              </ExternalLink>
               <span
                 className={`rounded px-1.5 py-0.5 text-xs font-medium ${
                   b.badge === "Primary sponsor"
@@ -303,7 +292,7 @@ export function Bills({ bills }: { bills: SecondaryBill[] }) {
                 </p>
                 {b.summaryAmended && (
                   <p className="mt-1 rounded bg-amber-50 px-2 py-1 text-xs text-amber-900">
-                    ⚠ This bill has been amended since this summary was written. See
+                    <span aria-hidden="true">⚠ </span>This bill has been amended since this summary was written. See
                     Congress.gov for current text.
                   </p>
                 )}
@@ -354,8 +343,13 @@ export default function RepSection({
       ? districtLabel(rep.state, rep.district, rep.houseRole !== "representative")
       : rep.state;
 
+  const headingId = `rep-${rep.bioguideId}`;
+
   return (
-    <section className="flex flex-col gap-5 rounded-xl border border-slate-200 p-5">
+    <section
+      aria-labelledby={headingId}
+      className="flex flex-col gap-5 rounded-xl border border-slate-200 p-5"
+    >
       {/* Recess pivot (Issue #8): factual status line leads the card; the
           contact block below becomes the natural point of action. */}
       {recess && (
@@ -381,7 +375,9 @@ export default function RepSection({
             <div className="h-16 w-16 shrink-0 rounded-full bg-slate-100" aria-hidden />
           )}
           <div>
-            <h3 className="text-xl font-bold text-slate-900">{readableName(rep.name)}</h3>
+            <h3 id={headingId} className="text-xl font-bold text-slate-900">
+              {readableName(rep.name)}
+            </h3>
             <p className="text-sm text-slate-600">
               {roleWord} · {rep.party} · {jurisdiction}
             </p>

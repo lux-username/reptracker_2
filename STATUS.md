@@ -1,41 +1,46 @@
-> Generated 2026-07-10 by /end-session at commit b271328.
+> Generated 2026-07-10 by /end-session at commit 9fb53f5 (HEAD before this session's commit).
 
 # STATUS
 
 ## Where things stand
 
-**Terminology session — #30 closed: the "upcoming decisions" language is retired
-across code identifiers, spec, and README.** This was the doc-debt cleanup flagged
-since the pitch-reword session (#20/#21): the user-facing UI already said "upcoming
-committee action" (a hearing is testimony, not a decision — calling it one
-overclaims), but the rest of the codebase still said "decision." Now they speak the
-same language.
+**Accessibility session — #9 closed: the WCAG AA / DoD accessibility bar is met and
+verified.** The codebase already carried most of the spec's a11y bar from prior work
+(semantic HTML, associated form label + `aria-describedby` hint, skip-to-content link,
+headshot alt text, focus rings, ARIA live regions, `lang="en"`). This session audited
+that surface, made the few genuine remaining fixes, and — critically — ran the manual
+verification the issue required (the human-gated part).
 
-**Done as one mechanical, typecheck-gated pass.** File rename via `git mv`
-(`lib/decisions.ts` → `lib/committee-actions.ts`, plus its test), preserving history.
-Identifiers renamed: `UpcomingDecision` → `UpcomingCommitteeAction`,
-`buildUpcomingDecisions`/`fetchUpcomingDecisions`(`Live`) →
-`…CommitteeActions`, `decisionRoleLabel` → `committeeActionRoleLabel`,
-`RepProfile.upcomingDecisions` → `upcomingCommitteeActions`, the `Decisions`
-component → `CommitteeActions` (heading now "Upcoming committee action"), log prefix
-`[decisions]` → `[committee-actions]`. Import paths and cross-file `decisions.ts`
-comment references updated. Docs: README one-liner, spec (§goal, §2.2, §MVP scope,
-recess section), MAP.md (tree + annotations).
+**Code fixes this session (all a11y, no behavior change):**
+- New `app/ExternalLink.tsx` — every `target="_blank"` link (Congress.gov, rep website,
+  floor bills, footer links; 7 total across 3 files) now carries a visually-hidden
+  "(opens in new tab)" cue plus the security `rel`, replacing a copy-pasted pattern.
+- Decorative `⚠` in the bill-amended note wrapped in `aria-hidden` so screen readers
+  don't read "warning sign."
+- Each rep `<section>` is now a **labeled landmark region** (`aria-labelledby` → the
+  rep's name heading), so VoiceOver users can jump rep-to-rep via region navigation.
+- Test lock-in in `FloorThisWeek.test.tsx` asserting external links open in a new tab
+  and announce it.
 
-**Three other senses of "decision" deliberately left alone:** references to
-`decisions.md` (the rationale log — append-only history), generic English in the
-spec's load-bearing thesis prose (e.g. "leading with the decisions where a call
-moves the needle" — the issue explicitly said to preserve the thesis), and
-"design decision"/"free-tier decision" phrasing.
+**Verification (owner ran it live):** Lighthouse Accessibility **100**; axe DevTools
+**0 issues** (its `color-contrast` rule covers the WCAG AA contrast check, so no
+separate contrast pass was needed); keyboard nav clean (tab order is interactive-only
+by design); VoiceOver reading order + landmark regions read correctly via
+VO+arrow/rotor. Two candidate changes were **deliberately not made**: making static
+address text tab-focusable (a `tabindex` anti-pattern) and a "selectable address
+block" — the owner confirmed via VoiceOver that reading order was already fine, so
+both were dropped as needless churn.
 
-**Not yet deployed.** This is a code/docs rename with no runtime behavior change;
-tests + typecheck are the gate (both green). No production deploy was needed this
-session.
+**Not yet deployed.** This is a client/UI a11y change (it alters rendered HTML — the
+sr-only new-tab text) but no production deploy was run this session. Safe to fold into
+the next deploy; tests + typecheck + build are the gate (all green).
 
-**Priorities next** — all behind a human gate or owner decision: **#9** (manual
-Lighthouse/axe/VoiceOver), **#18** (favicon design), **#25/#26** (design/
-compliance strategy). **#21** (committee → bills feature) and **#29** (recess PDF
-calendar) are enhancements. The gate-free build queue is empty.
+**Priorities next** — the MVP milestone now has only **#18** (favicon design) open, and
+that's owner-gated on a design concept. Remaining work is all behind a human gate or
+owner decision: **#18** (favicon), **#25** (design pass — needs an aesthetic direction
+first), **#26** (compliance review — a research-and-document task I can fully execute,
+strongest gate-clearing candidate). **#21** (committee → bills) and **#29** (House
+recess PDF) are enhancements. The gate-free build queue is empty.
 
 ## Derived facts (from CLAUDE.md commands)
 
@@ -44,19 +49,19 @@ calendar) are enhancements. The gate-free build queue is empty.
 | Test status | `npm test` | ✓ 136 tests passing, 18 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `vercel ls` | Last prod: `reptracker2.vercel.app` (#31 hash + privacy copy, prior session; #30 not deployed — no runtime change) |
-| Git | `git log --oneline -1` | `b271328 Close session 22: privacy fix #31 shipped; STATUS/journal/decisions sync` |
+| Deploy | `vercel ls` | Last prod on Vercel; #9 a11y change committed to repo but **not yet deployed** (no deploy run this session) |
+| Git | `git log --oneline -1` | `9fb53f5 Close session 23: retire "upcoming decisions" terminology` (pre-commit; this session's commit follows) |
 
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 (open MVP Issues:
-#9, #18). #4, #8, #12, #13, #17, #23, #27, #31 closed. #21, #25, #26, #29 are
-backlog/enhancements (no milestone); #30 closed this session.
+**#18** only). #4, #8, #9, #12, #13, #17, #23, #27, #31 closed. #21, #25, #26, #29 are
+backlog/enhancements (no milestone); #9 closed this session.
 
 ## Blockers / open questions
 
-No code blockers. Human-gated items: **#9** (manual AT pass), **#18** (icon design),
-**#25/#26** (strategy). Infra: `prewarm.yml` runs every 30 min; `CRON_SECRET` in
-Vercel Production (Sensitive) + macOS Keychain + GitHub Actions. Standing note:
-feedback Gmail (`reptrackerfeedback@gmail.com`) unmonitored. Optional env knobs:
-`CONGRESS_RATE_BURST` / `CONGRESS_RATE_PER_MIN` (#17), `PREWARM_*` budgets (route).
+No code blockers. Human-gated / owner-decision items: **#18** (icon design), **#25/#26**
+(strategy). Infra: `prewarm.yml` runs every 30 min; `CRON_SECRET` in Vercel Production
+(Sensitive) + macOS Keychain + GitHub Actions. Standing note: feedback Gmail
+(`reptrackerfeedback@gmail.com`) unmonitored. Optional env knobs: `CONGRESS_RATE_BURST`
+/ `CONGRESS_RATE_PER_MIN` (#17), `PREWARM_*` budgets (route).

@@ -1,5 +1,6 @@
 import type { FloorSchedule } from "@/lib/floor-schedule";
 import type { SessionStatus } from "@/lib/session-status";
+import ExternalLink from "./ExternalLink";
 
 // "On the floor this week" — the one global, address-independent section (Issue
 // #4, spec §2.3). Every member votes on these same floor items, so it's shown to
@@ -93,14 +94,9 @@ export default function FloorThisWeek({
                     className="rounded-lg border border-slate-200 p-3"
                   >
                     {b.url ? (
-                      <a
-                        className="font-medium text-sky-800 underline"
-                        href={b.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                      <ExternalLink className="font-medium text-sky-800 underline" href={b.url}>
                         {b.legisNum}
-                      </a>
+                      </ExternalLink>
                     ) : (
                       <span className="font-medium text-slate-900">{b.legisNum}</span>
                     )}

@@ -45,11 +45,14 @@ describe("FloorThisWeek", () => {
     expect(screen.getByRole("heading", { name: /on the floor this week/i })).toBeInTheDocument();
     expect(screen.getByText(/week of June 29, 2026/i)).toBeInTheDocument();
 
-    const link = screen.getByRole("link", { name: "H.R. 8873" });
+    const link = screen.getByRole("link", { name: /H\.R\. 8873/ });
     expect(link).toHaveAttribute(
       "href",
       "https://www.congress.gov/bill/119th-congress/house-bill/8873",
     );
+    // External links open in a new tab and say so for screen-reader users (Issue #9).
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAccessibleName(/opens in new tab/i);
     expect(screen.getByText(/Recover COVID Unemployment Fraud/i)).toBeInTheDocument();
 
     expect(screen.getByText(/Monday, Jul 13, 2026/)).toBeInTheDocument();
