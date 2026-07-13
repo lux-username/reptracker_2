@@ -51,7 +51,7 @@ recess PDF) are enhancements. The gate-free build queue is empty.
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
 | Deploy | `vercel ls` | Prod `https://reptracker2.vercel.app` — #9 a11y change **deployed this session** (`dpl_DCnt2yo8dZvT8oZvpiDWZjUnrad4`, READY, verified live 200) |
-| Git | `git log --oneline -1` | `09c7991 Close session 24: accessibility bar met + verified (fixes #9)` |
+| Git | `git log --oneline -1` | `8c54476 Update STATUS/journal: #9 a11y change deployed to production` |
 
 ## Active Milestone
 
