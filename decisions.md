@@ -400,3 +400,25 @@ risks reading as partisan and adds an a11y color-only-meaning trap. Party was
 already rendered as full-word text (`partyName` from Congress.gov), so "no color"
 is both the most neutral option and a zero-risk change. Loses a little
 at-a-glance scannability, which the owner accepted. (Session 3-of-day, closed #25.)
+
+## 2026-07-14 — Floor-bill topic tags fetch policyArea separately, not folded into fetchBillSources (#36/#37)
+
+Enriching "on the floor this week" bills (#37) with a policy tag needs
+Congress.gov's `policyArea`, which lives only on the base `/bill/{congress}/{type}/{number}`
+record — a different endpoint from the `/summaries` + `/text` sub-resources
+`fetchBillSources` already reads. So full floor-bill enrichment is **3 calls per
+bill** (base + summaries + text), not 2, and there is no single call that returns
+summary text + policyArea together. Chose a **dedicated `fetchBillPolicyArea`**
+(distinct `bill-detail` cache key) over folding policyArea into `fetchBillSources`:
+the per-rep bill path (#36) already carries `policyArea` inline from the
+sponsored/cosponsored *list* endpoint, so bloating `fetchBillSources` would add a
+wasted 3rd call to every per-rep summary fetch (535 reps × up to 7 bills) purely
+to serve the floor path. Cost is a non-issue regardless — enrichment runs once
+per cron scrape (~120 calls for a ~40-bill week) under the token bucket's
+4,600/hr self-imposed ceiling, all cached 5h, and the floor list is stable within
+a week so subsequent scrapes are cache hits. Cadence needs no change: it
+piggybacks the existing hourly prewarm (#23); the only fast-moving field (text
+version → "amended since") is what that warning already guards. Also extracted
+`parseLegisNum` from `billUrl` (shared) and a shared `app/BillSummary.tsx`
+(`PolicyTag` + `BillSummary`) so the floor and per-rep lists render identical
+markup from one home. (Session 4-of-day, closed #36 + #37.)

@@ -1,67 +1,68 @@
-> Generated 2026-07-14 by /end-session at commit d3bacb8.
+> Generated 2026-07-14 by /end-session at commit 5a067b5.
 
 # STATUS
 
 ## Where things stand
 
-**The UI now has a considered aesthetic.** #25 (the design pass) shipped: an
-owner-chosen **"modern clean"** direction — Inter/system sans, a calm **slate-50
-ground with white cards**, and a single consistent **indigo accent**. Party
-affiliation stays **plain text, no color-coding** (owner steer, keeps the
-editorial neutrality the spec demands). The product's reason for being —
-**"Upcoming committee action"** — is now the card's visual focal point (an
-indigo-tinted panel with an accent-dot heading and left-bordered hearing cards),
-reading above the quieter committees/contact/bills sections. Loading, empty,
-error, and disambiguation states each got intentional treatment, and the layout
-was verified responsive to 375px. The shipped Capitol-dome favicon (#18) is now
-reused as an inline masthead wordmark.
+**Two friend-feedback backlog items shipped this session, both about bill
+topicality.** The floor and per-rep bill lists now surface *what a bill is
+about* and *what it does*, not just its number.
 
-The MVP milestone remains **empty / done**. All open work is **post-MVP backlog**
-(no milestone): the friend-feedback batch (#33–#37), the new **#38** (a11y
-re-audit against the restyle), plus standing gate-bound items (#21, #26, #29, #32).
+- **#36 — policy-area topic tags** on per-rep sponsored/cosponsored bills. The
+  Congress.gov `policyArea` (already ingested for relevance scoring) is now a
+  neutral slate chip beside the sponsor badge. Rendered only when present; null
+  is handled with no empty chip.
+- **#37 — CRS summaries + policy tags on "On the floor this week."** Floor bills
+  (docs.house.gov XML → number + title only) are now enriched **at scrape time**
+  with their verbatim CRS summary (no LLM), the "as introduced" stamp +
+  "amended since" warning, and the policy tag — the same treatment per-rep bills
+  get. Enrichment runs inside `scrapeFloorSchedule` via `mapLimit` (bounded
+  concurrency), all cached in the 5h reference tier, so the warm page path stays
+  a single KV read. Cadence is unchanged (piggybacks the hourly prewarm, #23).
 
-**This session (2026-07-14, session 3):**
-- Closed **#25** — full design pass (committed + pushed as `d3bacb8`, auto-closed
-  via `closes #25` on push to `main`). New `app/BrandMark.tsx`; restyled
-  `page.tsx`, `layout.tsx`, `globals.css`, `AddressLookup.tsx`, `RepSection.tsx`,
-  `FloorThisWeek.tsx`.
-- Locked two owner decisions up front: aesthetic = "modern clean"; party = plain
-  text, no color (see decisions.md).
-- Replaced ad-hoc per-component focus rings with **one app-wide `:focus-visible`
-  ring** so no interactive element can ship without a keyboard focus state.
-- Verified end-to-end via Playwright (desktop + 375px mobile, live DC lookup).
-- Filed **#38** — re-run the a11y audit (contrast/focus/axe/Lighthouse) against
-  the new visual design; #9's bar was met pre-restyle, this is re-verification.
+A new shared `app/BillSummary.tsx` (`PolicyTag` + `BillSummary`) is the single
+home for the chip + summary markup; `RepSection` and `FloorThisWeek` both render
+through it so the two lists stay identical. `lib/summaries.ts` gained
+`fetchBillPolicyArea` (base `/bill` endpoint, distinct `bill-detail` cache key —
+`policyArea` is not on `/summaries`, and the per-rep path must not pay that call).
 
-**Priorities next** — no gate-free MVP work remains. Backlog candidates, easiest
-first: **#36** (bill policy-area tags — `policyArea` already ingested in
-`lib/legislation.ts`), **#38** (a11y re-audit, mechanical), then #34/#37
-(floor-section content) and the owner-gated strategy items (#26).
+The MVP milestone remains **empty / done**. All remaining work is **post-MVP
+backlog** (no milestone).
+
+**This session (2026-07-14, session 4):**
+- Closed **#36** (`3280f53`) and **#37** (`5a067b5`), both auto-closed on push.
+- Extracted `parseLegisNum` from `billUrl` (shared); `enrichFloorBill` is
+  best-effort and degrades per-field (unparseable / unknown congress / failed
+  fetch → structured-only), mirroring rep-profile's `enrichBillSummary`.
+- `lib/prewarm.ts` floor stat now reports `billsSummarized` (no silent caps).
+- Verified #37 live (Upstash off, real scrape): 27 floor bills → 26 tagged, 26
+  summarized, 16 amended-since, 1 structured-only.
+
+**Priorities next** — no gate-free MVP work remains. The floor-section polish
+cluster is the natural continuation of this session: **#34** (explain House
+categories + "may be considered" vs "scheduled vote") and **#33** (hide the floor
+list until after a lookup). Then **#38** (a11y re-audit, mechanical — now also
+covers the new floor summaries/tags), **#35** (address autocomplete), and the
+owner-gated **#26** (compliance/data-use review).
 
 ## Derived facts (from CLAUDE.md commands)
 
 | Fact | Command | Result |
 |---|---|---|
-| Test status | `npm test` | ✓ 136 tests passing, 18 files (Vitest 4.1.10) |
+| Test status | `npm test` | ✓ 150 tests passing, 18 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `vercel ls` | Prod alias `https://reptracker2.vercel.app`; push of `d3bacb8` triggers the design-pass deploy |
-| Git | `git log --oneline -1` (pre-doc-commit) | `d3bacb8 Design pass: modern-clean aesthetic + upcoming-action focal point (closes #25)` |
+| Deploy | `vercel ls` | Prod alias `https://reptracker2.vercel.app`; push of `5a067b5` triggers the #37 deploy |
+| Git | `git log --oneline -1` (pre-doc-commit) | `5a067b5 Enrich floor bills with CRS summaries + policy tags (closes #37)` |
 
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 — **no open Issues**
-(MVP definition of done met). #21, #26, #29, #32, #33–#38 are backlog/enhancements
-(no milestone).
+(MVP definition of done met). #21, #26, #29, #32, #33, #34, #35, #38 are
+backlog/enhancements (no milestone).
 
 ## Blockers / open questions
 
-No code blockers; MVP is done. Remaining items are all owner-decision / backlog:
-**#26** (compliance/data-use review), **#32** (session-label convention), **#33**
-(product call on floor-section visibility), **#34** (needs sourced glossary copy),
-**#35** (privacy/cost call on a third-party autocomplete provider), **#38** (a11y
-re-audit against the new design). Infra unchanged: `prewarm.yml` runs every 30 min
-(`15,45 * * * *`); `CRON_SECRET` in Vercel Production (Sensitive) + macOS Keychain
-+ GitHub Actions. Standing note: feedback Gmail (`reptrackerfeedback@gmail.com`)
-unmonitored. Optional env knobs: `CONGRESS_RATE_BURST` / `CONGRESS_RATE_PER_MIN`
-(#17), `PREWARM_*` budgets (route).
+No code blockers; MVP is done. Remaining items are all backlog / owner-decision:
+**#26** (compliance/data-use review), **#32** (session-label convention), and the
+floor-section + UX enhancements (#33, #34, #35, #38).
