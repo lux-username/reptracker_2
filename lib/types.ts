@@ -157,6 +157,12 @@ export interface SecondaryBill {
   introducedDate: string | null;
   latestActionDate: string | null;
   latestActionText: string | null;
+  /**
+   * Congress.gov top-level policy area, e.g. "Health" or "Armed Forces and
+   * National Security" — a single tag shown so users can scan topics at a
+   * glance (Issue #36). null when the payload omits it.
+   */
+  policyArea: string | null;
   badge: SponsorBadge;
   /** Congress.gov public bill URL. */
   url: string;

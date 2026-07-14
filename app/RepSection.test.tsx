@@ -15,6 +15,7 @@ function bill(overrides: Partial<SecondaryBill> = {}): SecondaryBill {
     introducedDate: "2026-06-01",
     latestActionDate: null,
     latestActionText: null,
+    policyArea: null,
     badge: "Primary sponsor",
     url: "https://www.congress.gov/bill/119th-congress/house-bill/9425",
     ...overrides,
@@ -40,6 +41,19 @@ describe("Bills — summary states", () => {
       "href",
       "https://www.congress.gov/bill/119th-congress/house-bill/9425",
     );
+  });
+});
+
+describe("Bills — policy-area tag (#36)", () => {
+  it("renders the policy area as a topic tag when present", () => {
+    render(<Bills bills={[bill({ policyArea: "Health" })]} />);
+    expect(screen.getByText("Health")).toBeInTheDocument();
+  });
+
+  it("omits the tag when policyArea is null", () => {
+    const { container } = render(<Bills bills={[bill({ policyArea: null })]} />);
+    // Only the sponsor badge chip renders, not a second (topic) chip.
+    expect(container.querySelectorAll("span.bg-slate-100")).toHaveLength(0);
   });
 });
 

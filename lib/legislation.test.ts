@@ -104,6 +104,18 @@ describe("selectSecondaryBills — sort + cap", () => {
     expect(b.url).toBe("https://www.congress.gov/bill/119th-congress/house-bill/9425");
     expect(b.billId).toBe("hr-9425-119");
   });
+
+  it("threads policyArea through, defaulting to null when absent (#36)", () => {
+    const [tagged] = selectSecondaryBills(
+      [bill({ number: "1", policyArea: { name: "Health" } })],
+      [],
+      [],
+      NOW,
+    );
+    expect(tagged.policyArea).toBe("Health");
+    const [untagged] = selectSecondaryBills([bill({ number: "2" })], [], [], NOW);
+    expect(untagged.policyArea).toBeNull();
+  });
 });
 
 describe("selectSecondaryBills — real fixture invariants", () => {

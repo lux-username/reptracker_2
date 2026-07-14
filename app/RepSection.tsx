@@ -290,6 +290,11 @@ export function Bills({ bills }: { bills: SecondaryBill[] }) {
               >
                 {b.badge}
               </span>
+              {b.policyArea && (
+                <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs font-medium text-slate-600">
+                  {b.policyArea}
+                </span>
+              )}
             </div>
             <p className="mt-1 text-sm font-medium text-slate-800">{b.title}</p>
             {b.summary ? (

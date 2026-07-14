@@ -89,6 +89,7 @@ function toSecondaryBill(item: RawLegislationItem, badge: SponsorBadge): Seconda
     introducedDate: item.introducedDate ?? null,
     latestActionDate: item.latestAction?.actionDate ?? null,
     latestActionText: item.latestAction?.text ?? null,
+    policyArea: item.policyArea?.name ?? null,
     badge,
     url: seg
       ? `https://www.congress.gov/bill/${ordinal(congress)}-congress/${seg}/${number}`
