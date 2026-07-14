@@ -360,3 +360,22 @@ re-tested and confirmed reading order was already correct, so a proposed "select
 address block" was dropped as needless churn. **Chose to treat Lighthouse (100) + axe
 (0 issues) as sufficient contrast verification** — both run a WCAG AA color-contrast
 audit, so no separate manual contrast pass was warranted. (Session 5-of-day, closed #9.)
+
+## 2026-07-14 — Favicon (#18): a Capitol-dome mark, white-on-slate, SVG-only (Session 2-of-day)
+
+Closing #18. Replaced the #10 placeholder (shield + checkmark — a generic "security badge"
+that made no product statement) with a **Capitol dome**. **Chose the dome over the other
+candidates** (location pin, ballot/envelope, "RT" monogram): the pin reads "local/location"
+not "federal," the envelope collides with mail apps at tiny sizes, and the monogram is the
+least literal about what the app does. The dome is the clearest "federal representatives"
+signal and survives as a solid silhouette at 16×16. **Chose white dome on the slate ground**
+(`#f8fafc` on `#0f172a`) at the owner's call — dome-colored on a contrasting field is more
+distinctive than the old monochrome-linework shield while staying inside the slate UI palette;
+rejected a red/white/blue treatment as risking a partisan/generic look. **Chose four chunky
+columns over five thin ones** after the first pass smeared to grey at true tab size — verified
+against nearest-neighbor 16px renders (actual device pixels), not smoothed previews, so the
+columns are genuinely resolvable. **Chose SVG-only** and deferred `apple-icon.png` / manifest
+PNGs: one vector serves both the 16 and 32 tab targets, and raster siblings only matter for
+iOS home-screen / PWA install, which the MVP doesn't ship — so no Issue filed for them. Gate
+was tests (136 ✓) + typecheck (clean); a favicon is a static asset with no runtime surface, so
+no deploy step. (Session 2-of-day, closed #18.)
