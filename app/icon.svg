@@ -1,5 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#0f172a"/>
-  <path d="M16 5 L25 9 V15 C25 21 21 25 16 27 C11 25 7 21 7 15 V9 Z" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-linejoin="round"/>
-  <path d="M12 16 l3 3 l5 -6" fill="none" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="32" height="32" rx="5" fill="#0f172a"/>
+  <g fill="#f8fafc">
+    <!-- finial -->
+    <rect x="14.8" y="3.6" width="2.4" height="2.4" rx="0.6"/>
+    <!-- dome -->
+    <path d="M7 15 A9 9 0 0 1 25 15 Z"/>
+    <!-- entablature beam under dome -->
+    <rect x="5.5" y="15" width="21" height="3" rx="0.6"/>
+    <!-- four chunky columns -->
+    <rect x="7"    y="18.4" width="3" height="6"/>
+    <rect x="11.7" y="18.4" width="3" height="6"/>
+    <rect x="17.3" y="18.4" width="3" height="6"/>
+    <rect x="22"   y="18.4" width="3" height="6"/>
+    <!-- stepped base -->
+    <rect x="6.5" y="24.4" width="19" height="2"/>
+    <rect x="4.8" y="26.4" width="22.4" height="2.4" rx="0.6"/>
+  </g>
 </svg>
