@@ -379,3 +379,24 @@ PNGs: one vector serves both the 16 and 32 tab targets, and raster siblings only
 iOS home-screen / PWA install, which the MVP doesn't ship — so no Issue filed for them. Gate
 was tests (136 ✓) + typecheck (clean); a favicon is a static asset with no runtime surface, so
 no deploy step. (Session 2-of-day, closed #18.)
+
+## 2026-07-14 — Aesthetic direction: "modern clean" (#25)
+
+**Chose "modern clean" over serif-civic-institutional and warm-approachable.** The
+design pass needed a locked direction first (the issue's ask). Modern-clean —
+all-sans (Inter/system), white cards on a slate-50 ground, one consistent indigo
+accent — reads as a well-built, credible civic tool without the cost/risk of a
+webfont or the partisan-adjacent warmth of a colored institutional palette. The
+accent is deliberately **indigo**, not red or blue, so it never reads as party
+branding. Serif-civic was the runner-up (more "document credibility") but heavier
+and easy to overdo; warm-approachable risked reading less authoritative for a
+data-trust tool. (Session 3-of-day, closed #25.)
+
+## 2026-07-14 — Party affiliation shown as plain text, no color-coding (#25)
+
+**Chose plain text over a subtle color chip or a thin accent bar.** The spec
+demands editorial neutrality; any D-blue / R-red coding — however desaturated —
+risks reading as partisan and adds an a11y color-only-meaning trap. Party was
+already rendered as full-word text (`partyName` from Congress.gov), so "no color"
+is both the most neutral option and a zero-risk change. Loses a little
+at-a-glance scannability, which the owner accepted. (Session 3-of-day, closed #25.)
