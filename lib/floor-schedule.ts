@@ -26,6 +26,8 @@
 import * as cheerio from "cheerio";
 import { ordinalSuffix } from "./committee-actions";
 import { cacheKey, redisClient, TTL } from "./cache";
+import { mapLimit } from "./events-index";
+import { extractBillSummary, fetchBillPolicyArea, fetchBillSources } from "./summaries";
 
 /** One bill/measure scheduled for floor consideration. */
 export interface FloorBill {
@@ -35,6 +37,17 @@ export interface FloorBill {
   title: string;
   /** Congress.gov bill page, or null when the number can't be parsed. */
   url: string | null;
+  // --- Per-bill enrichment (Issue #37), filled at scrape time from Congress.gov.
+  //     The House XML carries none of this; unparseable numbers / fetch failures
+  //     leave these null/false and the bill renders structured-only. ---
+  /** Congress.gov top-level policy area, e.g. "Health" (Issue #36 tag). */
+  policyArea?: string | null;
+  /** Verbatim CRS summary text, or null ⇒ structured-only. */
+  summary?: string | null;
+  /** "bill as introduced, [date]" stamp source; null when unknown. */
+  summaryBasedOn?: string | null;
+  /** Congress.gov has a newer text version than the CRS summary is based on. */
+  summaryAmended?: boolean;
 }
 
 /** A procedural grouping the House schedule uses, e.g. "under suspension of the rules". */
@@ -88,17 +101,31 @@ const BILL_TYPE_SLUGS: Record<string, string> = {
 };
 
 /**
+ * Parse a published legislative number like "H.R. 8873" or "H. Res. 1383" into
+ * the Congress.gov API bill-type code + number (e.g. `{ type: "hr", number:
+ * "8873" }`). Returns null when the number can't be parsed or the type isn't a
+ * recognized bill/resolution prefix. The type is the normalized prefix
+ * lowercased — the exact form `fetchBillSources`/`fetchBillPolicyArea` expect.
+ */
+export function parseLegisNum(legisNum: string): { type: string; number: string } | null {
+  const m = legisNum.toUpperCase().match(/^([A-Z.\s]+?)\s*(\d+)\s*$/);
+  if (!m) return null;
+  const code = m[1].replace(/[.\s]/g, "");
+  if (!BILL_TYPE_SLUGS[code]) return null;
+  return { type: code.toLowerCase(), number: m[2] };
+}
+
+/**
  * Build the Congress.gov page URL for a legislative number like "H.R. 8873" or
  * "H. Res. 1383". Returns null when the congress is unknown or the number can't
  * be parsed — the caller still renders the bill, just without a link.
  */
 export function billUrl(legisNum: string, congress: number | null): string | null {
   if (!congress) return null;
-  const m = legisNum.toUpperCase().match(/^([A-Z.\s]+?)\s*(\d+)\s*$/);
-  if (!m) return null;
-  const slug = BILL_TYPE_SLUGS[m[1].replace(/[.\s]/g, "")];
-  if (!slug) return null;
-  return `https://www.congress.gov/bill/${congress}${ordinalSuffix(congress)}-congress/${slug}/${m[2]}`;
+  const parsed = parseLegisNum(legisNum);
+  if (!parsed) return null;
+  const slug = BILL_TYPE_SLUGS[parsed.type.toUpperCase()];
+  return `https://www.congress.gov/bill/${congress}${ordinalSuffix(congress)}-congress/${slug}/${parsed.number}`;
 }
 
 /**
@@ -193,11 +220,75 @@ export async function fetchSenateFloor(): Promise<SenateFloor | null> {
 }
 
 /**
+ * Enrich one floor bill with its CRS summary + policy area (Issue #37/#36).
+ * Best-effort and non-throwing: an unparseable number, unknown congress, or a
+ * failed fetch leaves the bill structured-only (fields null/false), exactly like
+ * `enrichBillSummary` in rep-profile. Summary text + amended-since come from
+ * `fetchBillSources`; the policy-area tag needs the separate bill-detail fetch.
+ */
+export async function enrichFloorBill(
+  bill: FloorBill,
+  congress: number | null,
+): Promise<FloorBill> {
+  const parsed = congress ? parseLegisNum(bill.legisNum) : null;
+  if (!congress || !parsed) return bill;
+  const { type, number } = parsed;
+  const [sources, policyArea] = await Promise.all([
+    fetchBillSources(congress, type, number).then(
+      ({ crsSummaries, textVersions }) =>
+        extractBillSummary({ billId: bill.legisNum, crsSummaries, textVersions }),
+      (e) => {
+        console.warn(`[floor] summary fetch failed for ${bill.legisNum}: ${String(e)}`);
+        return null;
+      },
+    ),
+    fetchBillPolicyArea(congress, type, number).catch((e) => {
+      console.warn(`[floor] policy-area fetch failed for ${bill.legisNum}: ${String(e)}`);
+      return null;
+    }),
+  ]);
+  return {
+    ...bill,
+    policyArea,
+    summary: sources?.text ?? null,
+    summaryBasedOn: sources?.basedOnDate ?? null,
+    summaryAmended: sources?.amendedSince ?? false,
+  };
+}
+
+/** Concurrent Congress.gov fetches while enriching floor bills. */
+const FLOOR_ENRICH_CONCURRENCY = 6;
+
+/**
+ * Enrich every bill in a House schedule in place (bounded concurrency). Returns
+ * the schedule with each `FloorBill` carrying its summary + policy tag, and the
+ * count enriched-with-a-summary vs. total for logging (no silent caps).
+ */
+async function enrichHouseFloor(
+  house: HouseFloor,
+): Promise<{ house: HouseFloor; total: number; withSummary: number }> {
+  const flat = house.categories.flatMap((cat) => cat.bills.map((bill) => ({ cat, bill })));
+  const enriched = await mapLimit(flat, FLOOR_ENRICH_CONCURRENCY, ({ bill }) =>
+    enrichFloorBill(bill, house.congress),
+  );
+  // Rebuild categories preserving order, swapping each bill for its enriched form.
+  let i = 0;
+  const categories = house.categories.map((cat) => ({
+    ...cat,
+    bills: cat.bills.map(() => enriched[i++]),
+  }));
+  const withSummary = enriched.filter((b) => b.summary).length;
+  return { house: { ...house, categories }, total: enriched.length, withSummary };
+}
+
+/**
  * Scrape both chambers best-effort. A chamber that fails is logged and dropped;
  * only when *both* yield nothing do we return null (nothing to cache/show).
+ * House bills are enriched with CRS summaries + policy tags (Issue #37) before
+ * caching, so the warm page path stays a single KV read.
  */
 export async function scrapeFloorSchedule(now: Date): Promise<FloorSchedule | null> {
-  const [house, senate] = await Promise.all([
+  const [rawHouse, senate] = await Promise.all([
     fetchHouseFloor().catch((e) => {
       console.warn(`[floor] house scrape failed: ${String(e)}`);
       return null;
@@ -207,6 +298,12 @@ export async function scrapeFloorSchedule(now: Date): Promise<FloorSchedule | nu
       return null;
     }),
   ]);
+  let house = rawHouse;
+  if (rawHouse) {
+    const r = await enrichHouseFloor(rawHouse);
+    house = r.house;
+    console.info(`[floor] enriched ${r.withSummary}/${r.total} House bills with a CRS summary`);
+  }
   if (!house && !senate) return null;
   return { builtAt: now.toISOString(), house, senate };
 }

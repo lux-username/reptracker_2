@@ -1,6 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   extractBillSummary,
+  fetchBillPolicyArea,
   introducedTextVersionDate,
   isAmendedSince,
   latestTextVersionDate,
@@ -83,5 +84,29 @@ describe("extractBillSummary (no LLM — verbatim CRS)", () => {
       billNotInCongress: true,
     });
     expect(r.text).toBeNull();
+  });
+});
+
+describe("fetchBillPolicyArea", () => {
+  const origKey = process.env.CONGRESS_GOV_API_KEY;
+  beforeEach(() => {
+    process.env.CONGRESS_GOV_API_KEY = "test-key";
+  });
+  afterEach(() => {
+    process.env.CONGRESS_GOV_API_KEY = origKey;
+    vi.restoreAllMocks();
+  });
+
+  it("returns the bill's top-level policy area name", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response(JSON.stringify({ bill: { policyArea: { name: "Health" } } }))),
+    );
+    expect(await fetchBillPolicyArea(119, "hr", "139")).toBe("Health");
+  });
+
+  it("returns null when the bill has no policy area", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ bill: {} }))));
+    expect(await fetchBillPolicyArea(119, "hr", "140")).toBeNull();
   });
 });

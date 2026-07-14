@@ -155,3 +155,40 @@ async function fetchBillSourcesLive(
     textVersions: (x.textVersions as RawTextVersion[]) ?? [],
   };
 }
+
+/**
+ * Fetch a bill's top-level policy area (e.g. "Health"), cached in the reference
+ * tier. Floor bills (Issue #37) come from the House XML with no policy area, so
+ * we look it up here; per-rep bills already carry it inline from the list
+ * endpoint (Issue #36) and must NOT use this (it would be a wasted call).
+ *
+ * `policyArea` lives on the base `/bill/{congress}/{type}/{number}` record — a
+ * different endpoint from the summaries/text sub-resources `fetchBillSources`
+ * reads, hence a separate cache key ("bill-detail") to avoid a shape collision.
+ */
+export function fetchBillPolicyArea(
+  congress: number,
+  type: string,
+  number: string,
+): Promise<string | null> {
+  return cached(
+    cacheKey("bill-detail", congress, type.toLowerCase(), number),
+    TTL.reference,
+    () => fetchBillPolicyAreaLive(congress, type, number),
+  );
+}
+
+async function fetchBillPolicyAreaLive(
+  congress: number,
+  type: string,
+  number: string,
+): Promise<string | null> {
+  const apiKey = process.env.CONGRESS_GOV_API_KEY;
+  if (!apiKey) throw new BillSourceError("CONGRESS_GOV_API_KEY is not set");
+  const t = type.toLowerCase();
+  const url = `https://api.congress.gov/v3/bill/${congress}/${t}/${number}?api_key=${apiKey}`;
+  const resp = await congressFetch(url, { headers: { Accept: "application/json" } });
+  if (!resp.ok) throw new BillSourceError(`Congress.gov returned HTTP ${resp.status}`);
+  const data = (await resp.json()) as { bill?: { policyArea?: { name?: string } } };
+  return data.bill?.policyArea?.name ?? null;
+}

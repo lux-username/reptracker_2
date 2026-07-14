@@ -51,8 +51,11 @@ export interface PrewarmStats {
   members: { warmed: number; failed: number; roster: number };
   contacts: { warmed: number; failed: number; from: number; to: number; roster: number };
   events: RefreshStats | null;
-  /** Floor-schedule scrape (Issue #4): house bill count + whether Senate posted. */
-  floor: { houseBills: number; senate: boolean };
+  /**
+   * Floor-schedule scrape (Issue #4): house bill count, how many were enriched
+   * with a CRS summary (Issue #37), and whether Senate posted.
+   */
+  floor: { houseBills: number; billsSummarized: number; senate: boolean };
   /** Senate recess calendar (Issue #8): count of State Work Period ranges warmed. */
   sessionCalendar: { senateRecesses: number };
   /** District-office index (Issue #13): members with a district office contact. */
@@ -134,12 +137,13 @@ export async function prewarm(opts: PrewarmOptions): Promise<PrewarmStats> {
 
   // 5. Floor schedule (Issue #4) — a cheap best-effort scrape (~3 fetches) of the
   //    House weekly XML + Senate convene note, cached for the warm read path.
-  let floor: PrewarmStats["floor"] = { houseBills: 0, senate: false };
+  let floor: PrewarmStats["floor"] = { houseBills: 0, billsSummarized: 0, senate: false };
   try {
     const fs = await refreshFloorSchedule(now);
     if (fs) {
-      const houseBills = (fs.house?.categories ?? []).reduce((n, c) => n + c.bills.length, 0);
-      floor = { houseBills, senate: fs.senate !== null };
+      const bills = (fs.house?.categories ?? []).flatMap((c) => c.bills);
+      const billsSummarized = bills.filter((b) => b.summary).length;
+      floor = { houseBills: bills.length, billsSummarized, senate: fs.senate !== null };
     }
   } catch (e) {
     console.warn(`[prewarm] floor schedule refresh failed: ${String(e)}`);

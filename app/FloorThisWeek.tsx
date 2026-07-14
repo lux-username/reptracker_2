@@ -1,6 +1,7 @@
 import type { FloorSchedule } from "@/lib/floor-schedule";
 import type { SessionStatus } from "@/lib/session-status";
 import ExternalLink from "./ExternalLink";
+import { BillSummary, PolicyTag } from "./BillSummary";
 
 // "On the floor this week" — the one global, address-independent section (Issue
 // #4, spec §2.3). Every member votes on these same floor items, so it's shown to
@@ -93,16 +94,24 @@ export default function FloorThisWeek({
                     key={`${b.legisNum}:${b.title}`}
                     className="rounded-lg border border-slate-200 p-3"
                   >
-                    {b.url ? (
-                      <ExternalLink className="font-medium text-indigo-700 underline underline-offset-2 hover:text-indigo-900" href={b.url}>
-                        {b.legisNum}
-                      </ExternalLink>
-                    ) : (
-                      <span className="font-medium text-slate-900">{b.legisNum}</span>
-                    )}
+                    <div className="flex flex-wrap items-baseline gap-2">
+                      {b.url ? (
+                        <ExternalLink className="font-medium text-indigo-700 underline underline-offset-2 hover:text-indigo-900" href={b.url}>
+                          {b.legisNum}
+                        </ExternalLink>
+                      ) : (
+                        <span className="font-medium text-slate-900">{b.legisNum}</span>
+                      )}
+                      <PolicyTag policyArea={b.policyArea} />
+                    </div>
                     {b.title && b.title !== b.legisNum && (
-                      <p className="mt-1 text-sm text-slate-800">{b.title}</p>
+                      <p className="mt-1 text-sm font-medium text-slate-800">{b.title}</p>
                     )}
+                    <BillSummary
+                      summary={b.summary}
+                      summaryBasedOn={b.summaryBasedOn}
+                      summaryAmended={b.summaryAmended}
+                    />
                   </li>
                 ))}
               </ul>

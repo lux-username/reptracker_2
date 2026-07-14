@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import type { FloorSchedule } from "@/lib/floor-schedule";
+import type { FloorBill, FloorSchedule } from "@/lib/floor-schedule";
 import type { SessionStatus } from "@/lib/session-status";
 import FloorThisWeek from "./FloorThisWeek";
 
@@ -98,5 +98,54 @@ describe("FloorThisWeek", () => {
     render(<FloorThisWeek data={null} session={recess} />);
     expect(screen.getByText("The House is not currently in session.")).toBeInTheDocument();
     expect(screen.getByText("The Senate is not currently in session.")).toBeInTheDocument();
+  });
+
+  // Issue #37 / #36: per-bill CRS summary + policy tag enriched at scrape time.
+  const enriched = (bill: Partial<FloorBill>): FloorSchedule => ({
+    builtAt: "2026-06-30T14:43:32.530Z",
+    house: {
+      weekOf: "2026-06-29",
+      updatedAt: null,
+      congress: 119,
+      categories: [
+        {
+          heading: "Items that may be considered under suspension of the rules",
+          bills: [{ legisNum: "H.R. 139", title: "Sunshine Protection Act", url: "u", ...bill }],
+        },
+      ],
+    },
+    senate: null,
+  });
+
+  it("shows the policy tag and CRS summary when a bill is enriched", () => {
+    render(
+      <FloorThisWeek
+        data={enriched({
+          policyArea: "Government Operations and Politics",
+          summary: "Makes daylight saving time permanent.",
+          summaryBasedOn: "2026-01-03",
+          summaryAmended: false,
+        })}
+      />,
+    );
+    expect(screen.getByText("Government Operations and Politics")).toBeInTheDocument();
+    expect(screen.getByText(/Makes daylight saving time permanent/)).toBeInTheDocument();
+    expect(screen.getByText(/Congressional Research Service/)).toBeInTheDocument();
+  });
+
+  it("shows the amended-since warning when the bill text moved past the summary", () => {
+    render(
+      <FloorThisWeek
+        data={enriched({ summary: "Original text.", summaryBasedOn: "2026-01-03", summaryAmended: true })}
+      />,
+    );
+    expect(screen.getByText(/amended since this/i)).toBeInTheDocument();
+  });
+
+  it("falls back to the structured-only note when a bill has no summary", () => {
+    render(<FloorThisWeek data={enriched({ policyArea: null, summary: null })} />);
+    expect(screen.getByText(/A summary is in/i)).toBeInTheDocument();
+    // No policy chip should render for a null policyArea.
+    expect(screen.queryByText(/Government Operations/)).not.toBeInTheDocument();
   });
 });

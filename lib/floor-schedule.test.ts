@@ -1,12 +1,24 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+// Mock the network fetches enrichFloorBill drives; keep extractBillSummary real
+// so the summary transform is exercised end-to-end (Issue #37).
+vi.mock("./summaries", async (importActual) => {
+  const actual = await importActual<typeof import("./summaries")>();
+  return { ...actual, fetchBillSources: vi.fn(), fetchBillPolicyArea: vi.fn() };
+});
+
 import {
   billUrl,
+  enrichFloorBill,
   houseFloorXmlUrl,
   parseHouseFloorXml,
+  parseLegisNum,
   parseSenateFloorHtml,
+  type FloorBill,
 } from "./floor-schedule";
+import { fetchBillPolicyArea, fetchBillSources } from "./summaries";
 
 const fixture = (name: string) =>
   readFileSync(join(process.cwd(), "lib", "__fixtures__", name), "utf-8");
@@ -102,5 +114,64 @@ describe("parseSenateFloorHtml", () => {
 
   it("returns null when the schedule article is absent", () => {
     expect(parseSenateFloorHtml("<html><body>maintenance</body></html>")).toBeNull();
+  });
+});
+
+describe("parseLegisNum", () => {
+  it("parses House bill/resolution forms to API type codes", () => {
+    expect(parseLegisNum("H.R. 8873")).toEqual({ type: "hr", number: "8873" });
+    expect(parseLegisNum("H. Res. 1383")).toEqual({ type: "hres", number: "1383" });
+    expect(parseLegisNum("H.J. Res. 12")).toEqual({ type: "hjres", number: "12" });
+    expect(parseLegisNum("S. 456")).toEqual({ type: "s", number: "456" });
+  });
+
+  it("returns null for non-bill / unparseable text", () => {
+    expect(parseLegisNum("Motion to recommit")).toBeNull();
+    expect(parseLegisNum("")).toBeNull();
+    expect(parseLegisNum("H.R.")).toBeNull();
+  });
+});
+
+describe("enrichFloorBill", () => {
+  const bill: FloorBill = { legisNum: "H.R. 139", title: "Sunshine Protection Act", url: "u" };
+  const mockSources = vi.mocked(fetchBillSources);
+  const mockPolicy = vi.mocked(fetchBillPolicyArea);
+  afterEach(() => vi.clearAllMocks());
+
+  it("attaches the CRS summary + policy tag when both resolve", async () => {
+    mockSources.mockResolvedValue({
+      crsSummaries: [{ text: "<p>Makes DST permanent.</p>", updateDate: "2026-01-02", actionDate: "2026-01-01" }],
+      textVersions: [{ type: "Introduced in House", date: "2026-01-01" }],
+    });
+    mockPolicy.mockResolvedValue("Government Operations and Politics");
+    const out = await enrichFloorBill(bill, 119);
+    expect(out.summary).toBe("Makes DST permanent.");
+    expect(out.summaryBasedOn).toBe("2026-01-01");
+    expect(out.summaryAmended).toBe(false);
+    expect(out.policyArea).toBe("Government Operations and Politics");
+    expect(mockSources).toHaveBeenCalledWith(119, "hr", "139");
+  });
+
+  it("degrades per-field: a failed summary fetch still keeps the policy tag", async () => {
+    mockSources.mockRejectedValue(new Error("HTTP 500"));
+    mockPolicy.mockResolvedValue("Health");
+    const out = await enrichFloorBill(bill, 119);
+    expect(out.summary).toBeNull();
+    expect(out.summaryAmended).toBe(false);
+    expect(out.policyArea).toBe("Health");
+  });
+
+  it("returns structured-only (no fetch) for an unparseable number", async () => {
+    const out = await enrichFloorBill({ legisNum: "Motion to recommit", title: "t", url: null }, 119);
+    expect(out.policyArea).toBeUndefined();
+    expect(out.summary).toBeUndefined();
+    expect(mockSources).not.toHaveBeenCalled();
+    expect(mockPolicy).not.toHaveBeenCalled();
+  });
+
+  it("returns structured-only (no fetch) when congress is unknown", async () => {
+    const out = await enrichFloorBill(bill, null);
+    expect(out.summary).toBeUndefined();
+    expect(mockSources).not.toHaveBeenCalled();
   });
 });

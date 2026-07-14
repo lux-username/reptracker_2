@@ -8,6 +8,7 @@ import type {
 } from "@/lib/types";
 import type { ChamberStatus } from "@/lib/session-status";
 import ExternalLink from "./ExternalLink";
+import { BillSummary, PolicyTag } from "./BillSummary";
 
 // Full per-rep section (spec §2): header (name, party, district, delegate
 // banner, committees) → contact block → upcoming committee action → secondary bills.
@@ -53,12 +54,6 @@ function formatDateTime(iso: string): string {
     minute: "2-digit",
     timeZoneName: "short",
   });
-}
-
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
 /** Format a date-only "2026-07-13" at local midnight (no UTC off-by-one). */
@@ -290,33 +285,14 @@ export function Bills({ bills }: { bills: SecondaryBill[] }) {
               >
                 {b.badge}
               </span>
-              {b.policyArea && (
-                <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs font-medium text-slate-600">
-                  {b.policyArea}
-                </span>
-              )}
+              <PolicyTag policyArea={b.policyArea} />
             </div>
             <p className="mt-1 text-sm font-medium text-slate-800">{b.title}</p>
-            {b.summary ? (
-              <>
-                <p className="mt-1 text-sm text-slate-700">{b.summary}</p>
-                <p className="mt-1 text-xs text-slate-500">
-                  Nonpartisan summary from the Congressional Research Service
-                  {b.summaryBasedOn ? `; bill as introduced, ${formatDate(b.summaryBasedOn)}` : ""}.
-                </p>
-                {b.summaryAmended && (
-                  <p className="mt-1 rounded bg-amber-50 px-2 py-1 text-xs text-amber-900">
-                    <span aria-hidden="true">⚠ </span>This bill has been amended since this summary was written. See
-                    Congress.gov for current text.
-                  </p>
-                )}
-              </>
-            ) : (
-              <p className="mt-1 text-xs text-slate-500">
-                No plain-English summary yet — Congress.gov notes &ldquo;A summary
-                is in progress.&rdquo;
-              </p>
-            )}
+            <BillSummary
+              summary={b.summary}
+              summaryBasedOn={b.summaryBasedOn}
+              summaryAmended={b.summaryAmended}
+            />
             {b.latestActionText && (
               <p className="mt-1 text-xs text-slate-500">
                 Latest: {b.latestActionText}
