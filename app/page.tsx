@@ -1,5 +1,6 @@
 import AddressLookup from "./AddressLookup";
 import FloorThisWeek from "./FloorThisWeek";
+import BrandMark from "./BrandMark";
 import { getFloorSchedule } from "@/lib/floor-schedule";
 import { getSessionStatus } from "@/lib/session-status";
 
@@ -17,13 +18,16 @@ export default async function Home() {
     <main
       id="main-content"
       tabIndex={-1}
-      className="mx-auto flex max-w-2xl flex-col gap-8 px-6 py-16 focus:outline-none"
+      className="mx-auto flex max-w-2xl flex-col gap-8 px-4 py-12 focus:outline-none sm:px-6 sm:py-16"
     >
-      <header className="flex flex-col gap-3">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-          Representative Tracker
-        </h1>
-        <p className="text-lg text-slate-600">
+      <header className="flex flex-col gap-4">
+        <div className="flex items-center gap-3">
+          <BrandMark className="h-10 w-10 shrink-0 rounded-lg shadow-sm" />
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            Representative Tracker
+          </h1>
+        </div>
+        <p className="text-lg leading-relaxed text-slate-600">
           Enter your address to see what your federal representatives are working
           on — the committee action ahead and the bills they&apos;re sponsoring — in
           time to act.

@@ -31,20 +31,40 @@ const ROLE_LABEL: Record<NonNullable<Rep["houseRole"]>, string> = {
   "resident-commissioner": "Resident Commissioner",
 };
 
+/** Small inline activity spinner for in-flight states. Decorative — the
+ *  adjacent text carries the meaning for assistive tech. */
+function Spinner({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      className={`animate-spin ${className}`}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path
+        className="opacity-90"
+        fill="currentColor"
+        d="M4 12a8 8 0 0 1 8-8V0C5.4 0 0 5.4 0 12h4z"
+      />
+    </svg>
+  );
+}
+
 function RepCard({ rep }: { rep: Rep }) {
   const role =
     rep.chamber === "senate" ? "Senator" : rep.houseRole ? ROLE_LABEL[rep.houseRole] : "Representative";
   return (
-    <li className="flex items-center gap-4 rounded-lg border border-slate-200 p-4">
+    <li className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
       {rep.imageUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={rep.imageUrl}
           alt={`${readableName(rep.name)}, ${rep.party} ${rep.state}`}
-          className="h-14 w-14 shrink-0 rounded-full object-cover"
+          className="h-14 w-14 shrink-0 rounded-full object-cover ring-1 ring-slate-200"
         />
       ) : (
-        <div className="h-14 w-14 shrink-0 rounded-full bg-slate-100" aria-hidden />
+        <div className="h-14 w-14 shrink-0 rounded-full bg-slate-100 ring-1 ring-slate-200" aria-hidden />
       )}
       <div>
         <p className="font-semibold text-slate-900">{readableName(rep.name)}</p>
@@ -100,7 +120,7 @@ function Results({
   // Identity-level fallback: shown while profiles load, or if enrichment failed.
   return (
     <section aria-live="polite" className="flex flex-col gap-4">
-      <h2 className="text-xl font-semibold text-slate-900">
+      <h2 className="text-xl font-bold tracking-tight text-slate-900">
         Your federal representatives
       </h2>
       {reps.delegateBanner && (
@@ -122,11 +142,17 @@ function Results({
           This seat appears to be vacant in the current Congress.
         </p>
       )}
-      <p className="text-xs text-slate-500" aria-live="polite">
-        {profilesLoading
-          ? "Loading committee roles, contact info, and upcoming action…"
-          : "Detailed sections couldn't be loaded right now — showing your representatives above."}
-      </p>
+      {profilesLoading ? (
+        <p className="flex items-center gap-2 text-sm text-slate-500" aria-live="polite">
+          <Spinner className="h-4 w-4 text-indigo-600" />
+          Loading committee roles, contact info, and upcoming action…
+        </p>
+      ) : (
+        <p className="text-xs text-slate-500" aria-live="polite">
+          Detailed sections couldn&apos;t be loaded right now — showing your
+          representatives above.
+        </p>
+      )}
     </section>
   );
 }
@@ -142,8 +168,10 @@ function Disambiguation({
 }) {
   return (
     <section className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-xl font-semibold text-slate-900">Which district is yours?</h2>
+      <div className="flex flex-col gap-1">
+        <h2 className="text-xl font-bold tracking-tight text-slate-900">
+          Which district is yours?
+        </h2>
         <p className="text-sm text-slate-600">
           That address could fall in {candidates.length} different congressional
           districts. Pick the one that matches you so we show the right
@@ -157,16 +185,30 @@ function Disambiguation({
               type="button"
               disabled={pending}
               onClick={() => onChoose(c)}
-              className="w-full rounded-lg border border-slate-200 p-4 text-left hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500 disabled:opacity-50"
+              className="group flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-indigo-400 hover:bg-indigo-50/40 disabled:opacity-50"
             >
-              <span className="block font-semibold text-slate-900">
-                {districtLabel(c.state, c.district, c.nonVoting)}
+              <span className="min-w-0 flex-1">
+                <span className="block font-semibold text-slate-900">
+                  {districtLabel(c.state, c.district, c.nonVoting)}
+                </span>
+                <span className="block text-sm text-slate-600">
+                  {c.formattedAddress}
+                  {c.housePreviewSurname ? ` · Rep. ${c.housePreviewSurname}` : ""}
+                  {c.proportion < 1 ? ` · ${Math.round(c.proportion * 100)}% of this area` : ""}
+                </span>
               </span>
-              <span className="block text-sm text-slate-600">
-                {c.formattedAddress}
-                {c.housePreviewSurname ? ` · Rep. ${c.housePreviewSurname}` : ""}
-                {c.proportion < 1 ? ` · ${Math.round(c.proportion * 100)}% of this area` : ""}
-              </span>
+              <svg
+                className="h-5 w-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-indigo-600"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.293 14.707a1 1 0 0 1 0-1.414L10.586 10 7.293 6.707a1 1 0 1 1 1.414-1.414l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </button>
           </li>
         ))}
@@ -230,13 +272,14 @@ export default function AddressLookup({ session }: { session?: SessionStatus | n
             placeholder="1600 Pennsylvania Ave NW, Washington, DC"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500"
+            className="flex-1 rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-slate-900 shadow-sm placeholder:text-slate-400"
           />
           <button
             type="submit"
             disabled={pending || !address.trim()}
-            className="rounded-md bg-slate-900 px-5 py-2 font-medium text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
+            {pending && <Spinner className="h-4 w-4" />}
             {pending ? "Looking up…" : "Find my reps"}
           </button>
         </div>
@@ -258,8 +301,23 @@ export default function AddressLookup({ session }: { session?: SessionStatus | n
         />
       )}
       {(result?.status === "not_found" || result?.status === "error") && (
-        <p role="alert" className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
-          {result.message}
+        <p
+          role="alert"
+          className="flex items-start gap-2.5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+        >
+          <svg
+            className="mt-0.5 h-5 w-5 shrink-0 text-red-500"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M18 10A8 8 0 1 1 2 10a8 8 0 0 1 16 0zM10 5a1 1 0 0 1 1 1v4a1 1 0 1 1-2 0V6a1 1 0 0 1 1-1zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <span>{result.message}</span>
         </p>
       )}
     </div>

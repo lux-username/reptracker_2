@@ -13,7 +13,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="flex min-h-screen flex-col bg-white text-slate-900 antialiased">
+      <body className="flex min-h-screen flex-col bg-slate-50 text-slate-900 antialiased">
         {/* Skip-to-content: first focusable element, visible only on focus (spec §Accessibility). */}
         <a
           href="#main-content"

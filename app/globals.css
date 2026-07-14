@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+/* ── Design primitives (Issue #25) ────────────────────────────────────────
+   Direction: "modern clean" — a calm slate ground, white cards, a single
+   consistent indigo accent (interactive + the one focal panel), no party
+   color-coding (party is plain text, owner steer). All accent/text pairings
+   below are chosen to clear WCAG AA on their intended ground (spec §a11y). */
+@theme {
+  /* A neutral system sans; zero network cost, crisp on every platform. */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  /* One keyboard-focus treatment for the whole app, so no interactive element
+     can ship without a visible focus ring (components no longer hand-roll it). */
+  :focus-visible {
+    outline: 2px solid var(--color-indigo-600);
+    outline-offset: 2px;
+    border-radius: 0.125rem;
+  }
+  ::selection {
+    background-color: var(--color-indigo-100);
+    color: var(--color-indigo-950);
+  }
+}

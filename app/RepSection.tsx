@@ -155,21 +155,21 @@ function Contact({ contact }: { contact: ContactBlock }) {
       </h4>
       <dl className="flex flex-col gap-1 text-sm">
         {contact.dcOfficePhone && (
-          <div className="flex gap-2">
-            <dt className="w-32 shrink-0 text-slate-500">DC office phone</dt>
+          <div className="flex flex-col sm:flex-row sm:gap-2">
+            <dt className="text-slate-500 sm:w-32 sm:shrink-0">DC office phone</dt>
             <dd>
-              <a className="font-medium text-sky-800 underline" href={telHref(contact.dcOfficePhone)}>
+              <a className="font-medium text-indigo-700 underline underline-offset-2 hover:text-indigo-900" href={telHref(contact.dcOfficePhone)}>
                 {contact.dcOfficePhone}
               </a>
             </dd>
           </div>
         )}
         {contact.districtOfficePhone && (
-          <div className="flex gap-2">
-            <dt className="w-32 shrink-0 text-slate-500">District office phone</dt>
+          <div className="flex flex-col sm:flex-row sm:gap-2">
+            <dt className="text-slate-500 sm:w-32 sm:shrink-0">District office phone</dt>
             <dd>
               <a
-                className="font-medium text-sky-800 underline"
+                className="font-medium text-indigo-700 underline underline-offset-2 hover:text-indigo-900"
                 href={telHref(contact.districtOfficePhone)}
               >
                 {contact.districtOfficePhone}
@@ -178,23 +178,23 @@ function Contact({ contact }: { contact: ContactBlock }) {
           </div>
         )}
         {contact.districtOfficeAddress && (
-          <div className="flex gap-2">
-            <dt className="w-32 shrink-0 text-slate-500">District office address</dt>
+          <div className="flex flex-col sm:flex-row sm:gap-2">
+            <dt className="text-slate-500 sm:w-32 sm:shrink-0">District office address</dt>
             <dd className="text-slate-700">{contact.districtOfficeAddress}</dd>
           </div>
         )}
         {contact.dcOfficeAddress && (
-          <div className="flex gap-2">
-            <dt className="w-32 shrink-0 text-slate-500">DC office address</dt>
+          <div className="flex flex-col sm:flex-row sm:gap-2">
+            <dt className="text-slate-500 sm:w-32 sm:shrink-0">DC office address</dt>
             <dd className="text-slate-700">{contact.dcOfficeAddress}</dd>
           </div>
         )}
         {contact.websiteUrl && (
-          <div className="flex gap-2">
-            <dt className="w-32 shrink-0 text-slate-500">Web</dt>
+          <div className="flex flex-col sm:flex-row sm:gap-2">
+            <dt className="text-slate-500 sm:w-32 sm:shrink-0">Web</dt>
             <dd>
               <ExternalLink
-                className="font-medium text-sky-800 underline"
+                className="font-medium text-indigo-700 underline underline-offset-2 hover:text-indigo-900"
                 href={contact.websiteUrl}
               >
                 Official website & contact form
@@ -216,37 +216,46 @@ function CommitteeActions({
   chamber: Chamber;
   inRecess: boolean;
 }) {
+  // The product's reason for being (spec §2): rendered as the card's focal
+  // panel — an indigo-tinted well with a labelled heading — so it reads at a
+  // higher altitude than the supporting committee/contact/bill sections.
   return (
-    <div className="flex flex-col gap-3">
-      <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+    <div className="flex flex-col gap-3 rounded-xl border border-indigo-100 bg-indigo-50/60 p-4">
+      <h4 className="flex items-center gap-2 text-sm font-bold tracking-tight text-indigo-950">
+        <span className="h-2 w-2 rounded-full bg-indigo-500" aria-hidden />
         Upcoming committee action
       </h4>
       {actions.length === 0 ? (
-        <p className="text-sm text-slate-500">
-          {inRecess
-            ? `No committee meetings while the ${chamber === "senate" ? "Senate" : "House"} is in recess.`
-            : "No upcoming committee meetings scheduled for this rep right now."}
-        </p>
+        <div className="rounded-lg border border-dashed border-indigo-200 bg-white/60 px-4 py-6 text-center">
+          <p className="text-sm text-slate-500">
+            {inRecess
+              ? `No committee meetings while the ${chamber === "senate" ? "Senate" : "House"} is in recess.`
+              : "No upcoming committee meetings scheduled for this rep right now."}
+          </p>
+        </div>
       ) : (
         <ol className="flex flex-col gap-3">
           {actions.map((d) => (
-            <li key={d.eventId} className="rounded-lg border border-slate-200 p-3">
+            <li
+              key={d.eventId}
+              className="rounded-lg border border-indigo-100 border-l-4 border-l-indigo-500 bg-white p-4 shadow-sm"
+            >
               <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                <span className="text-xs font-semibold uppercase tracking-wide text-indigo-700">
                   {d.kind}
                 </span>
                 <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs font-medium text-slate-700">
                   {d.roleLabel}
                 </span>
               </div>
-              <p className="mt-1 font-medium text-slate-900">{d.title}</p>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-2 text-base font-semibold leading-snug text-slate-900">{d.title}</p>
+              <p className="mt-1.5 text-sm font-medium text-slate-700">
                 {formatDateTime(d.date)}
                 {d.location ? ` · ${d.location}` : ""}
               </p>
               <p className="mt-1 text-sm text-slate-600">
                 {d.committeeName} ·{" "}
-                <ExternalLink className="text-sky-800 underline" href={d.url}>
+                <ExternalLink className="text-indigo-700 underline underline-offset-2 hover:text-indigo-900" href={d.url}>
                   View on Congress.gov
                 </ExternalLink>
               </p>
@@ -269,7 +278,7 @@ export function Bills({ bills }: { bills: SecondaryBill[] }) {
         {bills.map((b) => (
           <li key={b.billId} className="rounded-lg border border-slate-200 p-3">
             <div className="flex flex-wrap items-baseline gap-2">
-              <ExternalLink className="font-medium text-sky-800 underline" href={b.url}>
+              <ExternalLink className="font-medium text-indigo-700 underline underline-offset-2 hover:text-indigo-900" href={b.url}>
                 {b.displayId}
               </ExternalLink>
               <span
@@ -348,14 +357,14 @@ export default function RepSection({
   return (
     <section
       aria-labelledby={headingId}
-      className="flex flex-col gap-5 rounded-xl border border-slate-200 p-5"
+      className="flex flex-col gap-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
     >
       {/* Recess pivot (Issue #8): factual status line leads the card; the
           contact block below becomes the natural point of action. */}
       {recess && (
         <p
           role="status"
-          className="rounded-md border border-slate-200 bg-slate-50 p-3 text-sm font-medium text-slate-700"
+          className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700"
         >
           {recess}
         </p>
@@ -369,13 +378,13 @@ export default function RepSection({
             <img
               src={rep.imageUrl}
               alt={`${readableName(rep.name)}, ${rep.party} ${rep.state}`}
-              className="h-16 w-16 shrink-0 rounded-full object-cover"
+              className="h-16 w-16 shrink-0 rounded-full object-cover ring-1 ring-slate-200"
             />
           ) : (
-            <div className="h-16 w-16 shrink-0 rounded-full bg-slate-100" aria-hidden />
+            <div className="h-16 w-16 shrink-0 rounded-full bg-slate-100 ring-1 ring-slate-200" aria-hidden />
           )}
           <div>
-            <h3 id={headingId} className="text-xl font-bold text-slate-900">
+            <h3 id={headingId} className="text-xl font-bold tracking-tight text-slate-900">
               {readableName(rep.name)}
             </h3>
             <p className="text-sm text-slate-600">

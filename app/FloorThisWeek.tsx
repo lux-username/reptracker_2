@@ -54,10 +54,10 @@ export default function FloorThisWeek({
   return (
     <section
       aria-labelledby="floor-heading"
-      className="flex flex-col gap-5 rounded-xl border border-slate-200 p-5"
+      className="flex flex-col gap-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
     >
       <header className="flex flex-col gap-1">
-        <h2 id="floor-heading" className="text-xl font-bold text-slate-900">
+        <h2 id="floor-heading" className="text-xl font-bold tracking-tight text-slate-900">
           On the floor this week
         </h2>
         <p className="text-sm text-slate-600">
@@ -94,7 +94,7 @@ export default function FloorThisWeek({
                     className="rounded-lg border border-slate-200 p-3"
                   >
                     {b.url ? (
-                      <ExternalLink className="font-medium text-sky-800 underline" href={b.url}>
+                      <ExternalLink className="font-medium text-indigo-700 underline underline-offset-2 hover:text-indigo-900" href={b.url}>
                         {b.legisNum}
                       </ExternalLink>
                     ) : (
