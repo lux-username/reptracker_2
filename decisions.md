@@ -422,3 +422,53 @@ version → "amended since") is what that warning already guards. Also extracted
 `parseLegisNum` from `billUrl` (shared) and a shared `app/BillSummary.tsx`
 (`PolicyTag` + `BillSummary`) so the floor and per-rep lists render identical
 markup from one home. (Session 4-of-day, closed #36 + #37.)
+
+## 2026-07-14 — decisions.md is append-only; supersede, never rewrite history
+
+**Chose to codify decisions.md as an append-only ledger over silently editing
+past entries when a decision reverses.** A reversal that overwrites the original
+entry destroys the reasoning trail — a later reader can no longer see *why* the
+old call was made, only that it changed, which is exactly the context needed to
+judge whether the reversal still holds. So when a new decision supersedes an old
+one, we append a fresh dated entry that states the reversal and references the
+entry it supersedes (optionally adding a one-line "→ Superseded by <date>" pointer
+*beneath* the old entry), and leave the original text untouched. Codified in the
+`/end-session` skill (§5, both this repo's copy and the init-workflow template so
+future projects inherit it). Prompted by the pending #33 reversal of spec §2.3.
+(Session 5-of-day.)
+
+## 2026-07-14 — Floor section gated on a resolved lookup (#33)
+
+**Chose to reveal "On the floor this week" only after an address lookup resolves,
+over keeping it on the initial page load.** Reverses the original behavior (spec
+§2.3 / #4): the floor section was deliberately the *one* global, address-independent
+section shown to every visitor on load, on the theory there is standing civic value
+in seeing floor activity without entering an address. Two friends independently
+found rep-adjacent content before searching confusing, and the owner judged that
+confusion outweighs the address-free value — a first-time visitor should see just
+the address input first. Weighed a lighter alternative (keep it always visible but
+move it *below* results) and rejected it: it doesn't remove the pre-search content
+the feedback was actually about. Implementation keeps the section server-rendered
+(data fetch stays on the server) by passing `FloorThisWeek` as `children` into the
+`AddressLookup` client component, gated on `result.status === "resolved"` — no
+lifting of the floor fetch into the client. The section's content remains
+chamber-wide; only its *visibility* is now gated. Supersedes the "shown to every
+visitor on load" decision embedded in spec §2.3 / #4; spec §2.3 updated to match.
+(Session 5-of-day, closed #33.)
+
+## 2026-07-14 — House floor category glosses: verbatim, sourced, no "scheduled" framing (#34)
+
+**Chose per-category plain-English glosses drawn verbatim from authoritative .gov
+sources, and dropped the requested "possible vs. scheduled vote" visual weight.**
+The friend feedback (#34) asked to (a) explain each opaque House category heading
+and (b) distinguish categories that signal "could be considered" from "a vote is
+scheduled." Checking the live docs.house.gov weekly XML across 8 weeks showed all
+three categories the House actually publishes begin with "Items that may be
+considered" — there is no "scheduled vote" category, so (b)'s visual distinction
+would have been factually wrong; dropped it and instead made the tentative nature
+explicit in the bare-category gloss. For (a), each heading gets a `<details>`
+expander whose copy is sourced (not loosely paraphrased, per the CLAUDE.md
+civic-accuracy rule): suspension → CRS 98-314; special rule → House Rules
+Committee; bare → docs.house.gov. New `lib/floor-categories.ts` is the single home
+for that copy, matching headings by normalized substring so wording drift still
+resolves and unknown headings degrade to no gloss. (Session 5-of-day, closed #34.)

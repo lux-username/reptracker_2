@@ -1,68 +1,62 @@
-> Generated 2026-07-14 by /end-session at commit 5a067b5.
+> Generated 2026-07-14 by /end-session at commit ee5cf7f.
 
 # STATUS
 
 ## Where things stand
 
-**Two friend-feedback backlog items shipped this session, both about bill
-topicality.** The floor and per-rep bill lists now surface *what a bill is
-about* and *what it does*, not just its number.
+**The floor-section polish cluster shipped this session (#33, #34).** Both were
+friend-feedback items about "On the floor this week."
 
-- **#36 — policy-area topic tags** on per-rep sponsored/cosponsored bills. The
-  Congress.gov `policyArea` (already ingested for relevance scoring) is now a
-  neutral slate chip beside the sponsor badge. Rendered only when present; null
-  is handled with no empty chip.
-- **#37 — CRS summaries + policy tags on "On the floor this week."** Floor bills
-  (docs.house.gov XML → number + title only) are now enriched **at scrape time**
-  with their verbatim CRS summary (no LLM), the "as introduced" stamp +
-  "amended since" warning, and the policy tag — the same treatment per-rep bills
-  get. Enrichment runs inside `scrapeFloorSchedule` via `mapLimit` (bounded
-  concurrency), all cached in the 5h reference tier, so the warm page path stays
-  a single KV read. Cadence is unchanged (piggybacks the hourly prewarm, #23).
+- **#33 — floor section gated on a resolved lookup.** The section no longer renders
+  on initial page load. `FloorThisWeek` is passed as `children` into the
+  `AddressLookup` client component (so its data fetch stays server-side) and rendered
+  only when `result.status === "resolved"`. A first-time visitor now sees just the
+  address input; the floor list appears below the results after a lookup. This
+  **reverses** spec §2.3 / #4 (floor = the one global, address-independent section
+  shown to every visitor) — spec §2.3 was updated and a superseding entry appended to
+  `decisions.md` (the original decision text was left intact).
+- **#34 — House category glosses.** Each House floor category heading now carries a
+  plain-English gloss in an accessible `<details>` expander, copy sourced verbatim
+  from authoritative .gov references (CRS 98-314 for suspension, House Rules Committee
+  for special rules, docs.house.gov for the bare category) with a cited source link.
+  The requested "possible vs. scheduled vote" visual weight was **dropped**: live
+  docs.house.gov XML (checked across 8 weeks) shows all three categories are "Items
+  that may be considered" — there is no scheduled-vote category, so a weight
+  difference would be inaccurate. New `lib/floor-categories.ts` is the single home for
+  that copy; it matches headings by normalized substring and degrades to no gloss for
+  unknown headings.
 
-A new shared `app/BillSummary.tsx` (`PolicyTag` + `BillSummary`) is the single
-home for the chip + summary markup; `RepSection` and `FloorThisWeek` both render
-through it so the two lists stay identical. `lib/summaries.ts` gained
-`fetchBillPolicyArea` (base `/bill` endpoint, distinct `bill-detail` cache key —
-`policyArea` is not on `/summaries`, and the per-rep path must not pay that call).
+**Process change this session:** codified `decisions.md` as an append-only ledger —
+reversals append a new superseding entry and never edit the original. Applied to both
+this repo's `/end-session` skill (§5) and the init-workflow template so future
+projects inherit it.
 
-The MVP milestone remains **empty / done**. All remaining work is **post-MVP
-backlog** (no milestone).
+The MVP milestone remains **empty / done**. All remaining work is **post-MVP backlog**
+(no milestone).
 
-**This session (2026-07-14, session 4):**
-- Closed **#36** (`3280f53`) and **#37** (`5a067b5`), both auto-closed on push.
-- Extracted `parseLegisNum` from `billUrl` (shared); `enrichFloorBill` is
-  best-effort and degrades per-field (unparseable / unknown congress / failed
-  fetch → structured-only), mirroring rep-profile's `enrichBillSummary`.
-- `lib/prewarm.ts` floor stat now reports `billsSummarized` (no silent caps).
-- Verified #37 live (Upstash off, real scrape): 27 floor bills → 26 tagged, 26
-  summarized, 16 amended-since, 1 structured-only.
+**This session (2026-07-14, session 5):**
+- Closed **#33** and **#34** (both shipped in `ee5cf7f`, merged fast-forward to main).
+- Verified live via Playwright: floor hidden on load, revealed after a real lookup;
+  all three category glosses render with working source links.
+- Updated spec §2.3 (floor gating + glosses) and appended three `decisions.md`
+  entries (#33 reversal, #34 glosses, and the append-only-ledger process decision).
 
-**Priorities next** — no gate-free MVP work remains. The floor-section polish
-cluster is the natural continuation of this session: **#34** (explain House
-categories + "may be considered" vs "scheduled vote") and **#33** (hide the floor
-list until after a lookup). Then **#38** (a11y re-audit, mechanical — now also
-covers the new floor summaries/tags), **#35** (address autocomplete), and the
-owner-gated **#26** (compliance/data-use review).
+**Priorities next** — no gate-free MVP work remains. **#38** (a11y re-audit, now also
+covering the new floor glosses/expanders and the gated reveal), **#35** (address
+autocomplete), and the owner-gated **#26** (compliance/data-use review). Lower:
+**#21** (committee → bills), **#29** (House recess date via PDF), **#32** (session
+numbering convention).
 
 ## Derived facts (from CLAUDE.md commands)
 
 | Fact | Command | Result |
 |---|---|---|
-| Test status | `npm test` | ✓ 150 tests passing, 18 files (Vitest 4.1.10) |
+| Test status | `npm test` | ✓ 159 tests passing, 20 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `vercel ls` | Prod alias `https://reptracker2.vercel.app`; push of `5a067b5` triggers the #37 deploy |
-| Git | `git log --oneline -1` (pre-doc-commit) | `5a067b5 Enrich floor bills with CRS summaries + policy tags (closes #37)` |
+| Deploy | `vercel ls` | Prod alias `https://reptracker2.vercel.app`; push of `ee5cf7f` triggers the #33/#34 deploy |
+| Git | `git log --oneline -1` (pre-doc-commit) | `ee5cf7f Gate floor section on lookup + gloss House categories (closes #33, closes #34)` |
 
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 — **no open Issues**
-(MVP definition of done met). #21, #26, #29, #32, #33, #34, #35, #38 are
-backlog/enhancements (no milestone).
-
-## Blockers / open questions
-
-No code blockers; MVP is done. Remaining items are all backlog / owner-decision:
-**#26** (compliance/data-use review), **#32** (session-label convention), and the
-floor-section + UX enhancements (#33, #34, #35, #38).

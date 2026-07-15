@@ -109,6 +109,12 @@ and how to contact the deciders. The user supplies the opinion.
 3. **"Floor this week" section** — a first-class section (not a tucked-away strip),
    showing the upcoming House and Senate floor schedule. Best-effort scraped, with a
    clearly visible freshness timestamp and an honest "schedules change frequently" note.
+   Its content is chamber-wide (address-independent), but as of #33 it is **revealed
+   only after an address lookup resolves** — a first-time visitor sees just the address
+   input, not rep-adjacent content, before searching. This reverses the earlier "shown
+   to every visitor on load" behavior (#4); see the 2026-07-14 "#33" decision in
+   `decisions.md`. Each House category heading carries a plain-English gloss with a
+   cited authoritative source (#34).
 
 4. **No accounts. No data persistence about users.** Address is used server-side once
    for geocoding (forwarded to Geocodio) and immediately discarded — see §Privacy.

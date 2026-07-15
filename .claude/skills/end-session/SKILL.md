@@ -42,9 +42,11 @@ Every problem, TODO, or "should fix later" surfaced this session that isn't alre
 
 Contents: what was done; decisions made (one line each — full rationale goes to decisions.md); Issues opened/closed (`#N`); pointer to `sessions/<same-name>.transcript.md`. Narrative is welcome; tracking is not — the journal narrates plans but is never their only home.
 
-## 5. Append decisions
+## 5. Append decisions — append-only, never rewrite history
 
 For each real "chose X over Y because Z" this session, append a dated entry to `decisions.md`. If there were none, skip — don't manufacture entries.
+
+`decisions.md` is an append-only ledger. **Never edit or delete a past decision, even when this session reverses it.** When a new decision supersedes an old one, append a fresh dated entry that states the reversal and references the entry it supersedes (e.g. "Supersedes the 2026-07-09 decision to …"); leave the original entry untouched so the reasoning trail stays intact. Optionally add a one-line "→ Superseded by <date>" pointer *appended beneath* the old entry, but do not alter its original text.
 
 ## 6. Render the transcript — derive, don't reconstruct
 
