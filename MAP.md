@@ -98,9 +98,10 @@ Two homogeneous leaf dirs are collapsed with a count to keep the tree readable
 | `.claude/skills/weekly-reconciliation/` | Per-repo /weekly-reconciliation skill |
 | `.github/workflows/prewarm.yml` | External hourly/:15,:45 scheduler curling `/api/cron/prewarm` (sub-daily freshness, #23) |
 | `app/page.tsx` | The single page — header shell; mounts the `AddressLookup` client component |
-| `app/actions.ts` | Server actions (`lookupAction`, `resolveCandidateAction`, `buildProfilesAction`) — the server-side boundary where keys stay |
+| `app/actions.ts` | Server actions (`lookupAction`, `resolveCandidateAction`, `buildProfilesAction`, `committeeDocketAction`) — the server-side boundary where keys stay |
 | `app/AddressLookup.tsx` | Client address-entry form + disambiguation UI; renders `RepSection`s + `FloorThisWeek` |
 | `app/RepSection.tsx` | Per-rep section render: header, contacts, upcoming committee action, bills |
+| `app/CommitteeBills.tsx` | Client disclosure: expand a committee to its pending-bills docket, fetched on demand (#21) |
 | `app/FloorThisWeek.tsx` | "Floor this week" section: House/Senate floor schedule + freshness stamp (#4) |
 | `app/ExternalLink.tsx` | Shared `target="_blank"` link with `rel` + visually-hidden "(opens in new tab)" SR cue (#9) |
 | `app/Footer.tsx` | Site-wide footer: disclaimer, privacy, feedback + report-issue links |
@@ -114,7 +115,9 @@ Two homogeneous leaf dirs are collapsed with a count to keep the tree readable
 | `lib/congress.ts` | Congress.gov API client (members, meetings, hearings, bills) |
 | `lib/committees.ts` | Committee assignments + structural role (chair/ranking/member) |
 | `lib/committee-actions.ts` | Upcoming-committee-action assembly (meeting/hearing sweep, chronological) |
+| `lib/committee-bills.ts` | Committee docket: bills waiting in a committee — select pending, cap 10, warm/cold fetch (#21) |
 | `lib/legislation.ts` | Sponsored/cosponsored bill filter, sort, cap-at-7 |
+| `lib/bill-format.ts` | Shared bill id/display/URL formatting (used by legislation + committee-bills) |
 | `lib/summaries.ts` | Verbatim CRS bill summaries + "as introduced"/"amended since" stamps — no LLM |
 | `lib/district-offices.ts` | District-office phone/address from `unitedstates/congress-legislators` dataset (#13) |
 | `lib/session-status.ts` | Per-chamber recess/in-session detection (Senate schedule XML + House weekly floor XML) (#8, #27) |

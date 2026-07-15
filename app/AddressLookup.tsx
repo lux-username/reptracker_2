@@ -105,6 +105,7 @@ function Results({
           <RepSection
             key={p.rep.bioguideId}
             profile={p}
+            congress={reps.congress}
             delegateBanner={
               p.rep.bioguideId === reps.houseMember?.bioguideId
                 ? reps.delegateBanner

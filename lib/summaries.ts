@@ -192,3 +192,36 @@ async function fetchBillPolicyAreaLive(
   const data = (await resp.json()) as { bill?: { policyArea?: { name?: string } } };
   return data.bill?.policyArea?.name ?? null;
 }
+
+/**
+ * Fetch a bill's official title, cached in the reference tier. The committee-
+ * docket list endpoint (Issue #21) carries no title — only type/number — so the
+ * docket looks it up here from the same base `/bill/{congress}/{type}/{number}`
+ * record `fetchBillPolicyArea` reads. Returns null when the payload omits it.
+ */
+export function fetchBillTitle(
+  congress: number,
+  type: string,
+  number: string,
+): Promise<string | null> {
+  return cached(
+    cacheKey("bill-title", congress, type.toLowerCase(), number),
+    TTL.reference,
+    () => fetchBillTitleLive(congress, type, number),
+  );
+}
+
+async function fetchBillTitleLive(
+  congress: number,
+  type: string,
+  number: string,
+): Promise<string | null> {
+  const apiKey = process.env.CONGRESS_GOV_API_KEY;
+  if (!apiKey) throw new BillSourceError("CONGRESS_GOV_API_KEY is not set");
+  const t = type.toLowerCase();
+  const url = `https://api.congress.gov/v3/bill/${congress}/${t}/${number}?api_key=${apiKey}`;
+  const resp = await congressFetch(url, { headers: { Accept: "application/json" } });
+  if (!resp.ok) throw new BillSourceError(`Congress.gov returned HTTP ${resp.status}`);
+  const data = (await resp.json()) as { bill?: { title?: string } };
+  return data.bill?.title ?? null;
+}

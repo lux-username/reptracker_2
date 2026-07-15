@@ -7,8 +7,10 @@ import type {
   UpcomingCommitteeAction,
 } from "@/lib/types";
 import type { ChamberStatus } from "@/lib/session-status";
+import { systemCodeFor, chamberForCommittee } from "@/lib/committee-bills";
 import ExternalLink from "./ExternalLink";
 import { BillSummary, PolicyTag } from "./BillSummary";
+import CommitteeBills from "./CommitteeBills";
 
 // Full per-rep section (spec §2): header (name, party, district, delegate
 // banner, committees) → contact block → upcoming committee action → secondary bills.
@@ -95,7 +97,36 @@ function RoleBadge({ role }: { role: CommitteeAssignment["role"] }) {
   );
 }
 
-function Committees({ committees }: { committees: CommitteeAssignment[] }) {
+/**
+ * The pending-docket expander for one committee (Issue #21). Rendered for House
+ * and Senate committees; joint committees have no single chamber for the bills
+ * endpoint (chamberForCommittee → null) so they degrade to no expander.
+ */
+function CommitteeDocketExpander({
+  committee,
+  congress,
+}: {
+  committee: CommitteeAssignment;
+  congress: number;
+}) {
+  const chamber = chamberForCommittee(committee.code);
+  if (!chamber) return null;
+  return (
+    <CommitteeBills
+      congress={congress}
+      chamber={chamber}
+      systemCode={systemCodeFor(committee.code, committee.isSubcommittee)}
+    />
+  );
+}
+
+function Committees({
+  committees,
+  congress,
+}: {
+  committees: CommitteeAssignment[];
+  congress: number;
+}) {
   if (committees.length === 0) {
     return (
       <p className="text-sm text-slate-500">Committee assignments unavailable.</p>
@@ -118,12 +149,14 @@ function Committees({ committees }: { committees: CommitteeAssignment[] }) {
           <li key={c.code}>
             <span className="font-medium text-slate-900">{c.name}</span>
             <RoleBadge role={c.role} />
+            <CommitteeDocketExpander committee={c} congress={congress} />
             {subsByParent.get(c.code) && (
               <ul className="ml-4 mt-1 flex flex-col gap-1 border-l border-slate-200 pl-3">
                 {subsByParent.get(c.code)!.map((s) => (
                   <li key={s.code} className="text-sm text-slate-700">
                     {s.name}
                     <RoleBadge role={s.role} />
+                    <CommitteeDocketExpander committee={s} congress={congress} />
                   </li>
                 ))}
               </ul>
@@ -308,10 +341,13 @@ export function Bills({ bills }: { bills: SecondaryBill[] }) {
 
 export default function RepSection({
   profile,
+  congress,
   delegateBanner,
   chamberStatus,
 }: {
   profile: RepProfile;
+  /** Current congress (from the resolved lookup) — needed for docket fetches. */
+  congress: number;
   delegateBanner: string | null;
   chamberStatus?: ChamberStatus | null;
 }) {
@@ -384,7 +420,7 @@ export default function RepSection({
           </p>
         )}
 
-        <Committees committees={profile.committees} />
+        <Committees committees={profile.committees} congress={congress} />
         <Contact contact={profile.contact} />
       </header>
 

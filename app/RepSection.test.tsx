@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import RepSection, { Bills } from "./RepSection";
-import type { Chamber, RepProfile, SecondaryBill } from "@/lib/types";
+import type { Chamber, CommitteeAssignment, RepProfile, SecondaryBill } from "@/lib/types";
 import type { ChamberStatus } from "@/lib/session-status";
 
 function bill(overrides: Partial<SecondaryBill> = {}): SecondaryBill {
@@ -86,7 +86,7 @@ function profile(chamber: Chamber, overrides: Partial<RepProfile> = {}): RepProf
 describe("RepSection — recess pivot (Issue #8)", () => {
   it("shows no recess line when the chamber is in session", () => {
     const status: ChamberStatus = { inSession: true, returnDate: null };
-    render(<RepSection profile={profile("house")} delegateBanner={null} chamberStatus={status} />);
+    render(<RepSection profile={profile("house")} congress={119} delegateBanner={null} chamberStatus={status} />);
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
     // In-session-but-nothing-scheduled copy (#27 other branch).
     expect(
@@ -96,7 +96,7 @@ describe("RepSection — recess pivot (Issue #8)", () => {
 
   it("leads a Senator's card with 'in recess until [date]' and ties the empty committee action to it", () => {
     const status: ChamberStatus = { inSession: false, returnDate: "2026-07-13" };
-    render(<RepSection profile={profile("senate")} delegateBanner={null} chamberStatus={status} />);
+    render(<RepSection profile={profile("senate")} congress={119} delegateBanner={null} chamberStatus={status} />);
     expect(screen.getByRole("status")).toHaveTextContent(
       "The Senate is in recess until July 13, 2026.",
     );
@@ -109,7 +109,7 @@ describe("RepSection — recess pivot (Issue #8)", () => {
 
   it("degrades to 'not currently in session' for the House (no return date)", () => {
     const status: ChamberStatus = { inSession: false, returnDate: null };
-    render(<RepSection profile={profile("house")} delegateBanner={null} chamberStatus={status} />);
+    render(<RepSection profile={profile("house")} congress={119} delegateBanner={null} chamberStatus={status} />);
     expect(screen.getByRole("status")).toHaveTextContent("The House is not currently in session.");
     expect(
       screen.getByText(/No committee meetings while the House is in recess/),
@@ -117,10 +117,53 @@ describe("RepSection — recess pivot (Issue #8)", () => {
   });
 
   it("behaves exactly as before when no status is provided", () => {
-    render(<RepSection profile={profile("house")} delegateBanner={null} />);
+    render(<RepSection profile={profile("house")} congress={119} delegateBanner={null} />);
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
     expect(
       screen.getByText(/No upcoming committee meetings scheduled for this rep right now/i),
     ).toBeInTheDocument();
+  });
+});
+
+describe("RepSection — committee docket expander (Issue #21)", () => {
+  const committee = (over: Partial<CommitteeAssignment>): CommitteeAssignment => ({
+    code: "HSAG",
+    name: "House Committee on Agriculture",
+    role: "Member",
+    isSubcommittee: false,
+    parentName: null,
+    parentCode: null,
+    ...over,
+  });
+
+  it("renders a 'bills waiting' expander for each full committee and subcommittee", () => {
+    const p = profile("house", {
+      committees: [
+        committee({}),
+        committee({
+          code: "HSAG16",
+          name: "Subcommittee on Nutrition",
+          isSubcommittee: true,
+          parentCode: "HSAG",
+        }),
+      ],
+    });
+    render(<RepSection profile={p} congress={119} delegateBanner={null} />);
+    // One expander per committee assignment (full + subcommittee).
+    expect(screen.getAllByRole("button", { name: /bills waiting in this committee/i })).toHaveLength(
+      2,
+    );
+  });
+
+  it("omits the expander for a joint committee (no single chamber to query)", () => {
+    const p = profile("house", {
+      committees: [committee({ code: "JSPR", name: "Joint Committee on Printing" })],
+    });
+    render(<RepSection profile={p} congress={119} delegateBanner={null} />);
+    expect(
+      screen.queryByRole("button", { name: /bills waiting in this committee/i }),
+    ).not.toBeInTheDocument();
+    // The committee itself still lists.
+    expect(screen.getByText("Joint Committee on Printing")).toBeInTheDocument();
   });
 });

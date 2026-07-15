@@ -1,61 +1,67 @@
-> Generated 2026-07-14 by /end-session at commit ee5cf7f.
+> Generated 2026-07-15 by /end-session at commit 218b847.
 
 # STATUS
 
 ## Where things stand
 
-**The floor-section polish cluster shipped this session (#33, #34).** Both were
-friend-feedback items about "On the floor this week."
+**The committee docket shipped this session (#21).** Every committee **and**
+subcommittee in a rep's assignment list is now expandable to reveal the bills
+currently referred to and waiting in it — a browsable view of the "in the rep's
+committee" relevance signal (spec §2.3 signal #3). Same structured, no-LLM treatment
+as the rest of the app: official title + Congress.gov link, with the verbatim CRS
+summary where one exists, structured-only otherwise.
 
-- **#33 — floor section gated on a resolved lookup.** The section no longer renders
-  on initial page load. `FloorThisWeek` is passed as `children` into the
-  `AddressLookup` client component (so its data fetch stays server-side) and rendered
-  only when `result.status === "resolved"`. A first-time visitor now sees just the
-  address input; the floor list appears below the results after a lookup. This
-  **reverses** spec §2.3 / #4 (floor = the one global, address-independent section
-  shown to every visitor) — spec §2.3 was updated and a superseding entry appended to
-  `decisions.md` (the original decision text was left intact).
-- **#34 — House category glosses.** Each House floor category heading now carries a
-  plain-English gloss in an accessible `<details>` expander, copy sourced verbatim
-  from authoritative .gov references (CRS 98-314 for suspension, House Rules Committee
-  for special rules, docs.house.gov for the bare category) with a cited source link.
-  The requested "possible vs. scheduled vote" visual weight was **dropped**: live
-  docs.house.gov XML (checked across 8 weeks) shows all three categories are "Items
-  that may be considered" — there is no scheduled-vote category, so a weight
-  difference would be inaccurate. New `lib/floor-categories.ts` is the single home for
-  that copy; it matches headings by normalized substring and degrades to no gloss for
-  unknown headings.
+Key mechanics (all verified live against api.congress.gov before building):
+- **Pending = `relationshipType` "referred to"** (case-insensitive — full committees
+  return "Referred To", subcommittees "Referred to"), matched against the
+  `/committee/{congress}/{chamber}/{systemCode}/bills` endpoint. Verified across the
+  full 632-row House Agriculture set that no bill appears twice, so the single-value
+  filter is sound; discharged/reported/marked-up bills are excluded.
+- **Ordering** is most-recently-**referred** first — the row's `actionDate` is the
+  referral date, and true per-bill latest-action is unaffordable across hundreds of
+  bills, so referral date is the honest bounded proxy (the UI copy says so).
+- **Capped at 10** with a "showing N of M waiting" line **plus a link to the
+  committee's Congress.gov page** so the cap never hides the rest.
+- **Fetched on demand** when a committee is expanded (server action), backed by a
+  **convergent nightly cron warm** of the ~200 committees reps sit on
+  (`warmDocketSlice`, cursor `prewarm-docket-cursor`), so an expand is a warm KV hit;
+  cold path degrades to a bounded live build. Docket artifact stored at the
+  cron-artifact TTL (40h) so a nightly warm serves the whole next day.
 
-**Process change this session:** codified `decisions.md` as an append-only ledger —
-reversals append a new superseding entry and never edit the original. Applied to both
-this repo's `/end-session` skill (§5) and the init-workflow template so future
-projects inherit it.
+**Two owner questions resolved this session:** (1) subcommittees *do* have referred
+bills (28 of 89 checked had count>0 — Highways & Transit 181, a Veterans sub 156, Ag
+subs 37–72), so subcommittee expanders stayed; the genuinely-empty ones show an honest
+empty state. (2) Added the "full list on Congress.gov" link. Both spawned low-priority
+follow-ups (#39, #40).
 
-The MVP milestone remains **empty / done**. All remaining work is **post-MVP backlog**
-(no milestone).
+New: `lib/committee-bills.ts` (pure select + warm/cold fetch), `lib/bill-format.ts`
+(shared bill id/URL formatting, extracted from `legislation.ts`), `app/CommitteeBills.tsx`
+(client disclosure). The MVP milestone remains **empty / done**; all remaining work is
+post-MVP backlog (no milestone).
 
-**This session (2026-07-14, session 5):**
-- Closed **#33** and **#34** (both shipped in `ee5cf7f`, merged fast-forward to main).
-- Verified live via Playwright: floor hidden on load, revealed after a real lookup;
-  all three category glosses render with working source links.
-- Updated spec §2.3 (floor gating + glosses) and appended three `decisions.md`
-  entries (#33 reversal, #34 glosses, and the append-only-ledger process decision).
+**This session (2026-07-15, session 1):**
+- Closed **#21** (committee docket).
+- Verified end-to-end via Playwright: full-committee docket (10 of 942 for House
+  Judiciary, correct newest-first order, real titles, working links across bill types,
+  Congress.gov "full list" link), subcommittee docket (endpoint 200 + accurate empty
+  state), structured-only rendering for un-summarized bills.
+- Filed **#39** (optionally suppress empty docket expanders) and **#40** (verify /
+  tighten the "full list" link target — Cloudflare blocked destination verification).
 
 **Priorities next** — no gate-free MVP work remains. **#38** (a11y re-audit, now also
-covering the new floor glosses/expanders and the gated reveal), **#35** (address
-autocomplete), and the owner-gated **#26** (compliance/data-use review). Lower:
-**#21** (committee → bills), **#29** (House recess date via PDF), **#32** (session
-numbering convention).
+covering the docket expanders/link), **#35** (address autocomplete), owner-gated **#26**
+(compliance/data-use). Lower: **#39**/**#40** (#21 polish), **#29** (House recess date
+via PDF), **#32** (session numbering convention).
 
 ## Derived facts (from CLAUDE.md commands)
 
 | Fact | Command | Result |
 |---|---|---|
-| Test status | `npm test` | ✓ 159 tests passing, 20 files (Vitest 4.1.10) |
+| Test status | `npm test` | ✓ 178 tests passing, 22 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `vercel ls` | Prod alias `https://reptracker2.vercel.app`; push of `ee5cf7f` triggers the #33/#34 deploy |
-| Git | `git log --oneline -1` (pre-doc-commit) | `ee5cf7f Gate floor section on lookup + gloss House categories (closes #33, closes #34)` |
+| Deploy | `vercel ls` | Prod project `reptracker2`; latest deploys listed (push of this session's commit triggers the #21 deploy) |
+| Git | `git log --oneline -1` (pre-doc-commit) | `218b847 Close session 2026-07-14 (5): floor-section polish shipped (#33, #34)` |
 
 ## Active Milestone
 

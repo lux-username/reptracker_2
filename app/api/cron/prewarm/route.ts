@@ -39,6 +39,7 @@ export async function GET(req: Request) {
       concurrency: intEnv("PREWARM_CONCURRENCY"),
       contactBudget: intEnv("PREWARM_CONTACT_BUDGET"),
       eventsDetailBudget: intEnv("PREWARM_DETAIL_BUDGET"),
+      docketBudget: intEnv("PREWARM_DOCKET_BUDGET"),
     });
     const elapsedMs = Date.now() - startedAt.getTime();
     return NextResponse.json({ ok: true, elapsedMs, ...stats });

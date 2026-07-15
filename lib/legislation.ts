@@ -7,6 +7,7 @@
 import type { SecondaryBill, SponsorBadge } from "./types";
 import { cached, cacheKey, TTL } from "./cache";
 import { congressFetch } from "./rate-limit";
+import { billDisplayId, billUrl } from "./bill-format";
 
 /** Raw Congress.gov sponsored/cosponsored-legislation list item. */
 export interface RawLegislationItem {
@@ -45,55 +46,23 @@ export function isProceduralMilestone(text: string | null | undefined): boolean 
   );
 }
 
-const TYPE_DISPLAY: Record<string, string> = {
-  HR: "H.R.",
-  S: "S.",
-  HJRES: "H.J.Res.",
-  SJRES: "S.J.Res.",
-  HCONRES: "H.Con.Res.",
-  SCONRES: "S.Con.Res.",
-  HRES: "H.Res.",
-  SRES: "S.Res.",
-};
-
-const TYPE_URL_SEGMENT: Record<string, string> = {
-  HR: "house-bill",
-  S: "senate-bill",
-  HJRES: "house-joint-resolution",
-  SJRES: "senate-joint-resolution",
-  HCONRES: "house-concurrent-resolution",
-  SCONRES: "senate-concurrent-resolution",
-  HRES: "house-resolution",
-  SRES: "senate-resolution",
-};
-
-function ordinal(n: number): string {
-  const rem100 = n % 100;
-  if (rem100 >= 11 && rem100 <= 13) return `${n}th`;
-  const suffix = { 1: "st", 2: "nd", 3: "rd" }[n % 10] ?? "th";
-  return `${n}${suffix}`;
-}
-
 function toSecondaryBill(item: RawLegislationItem, badge: SponsorBadge): SecondaryBill | null {
   const { congress, type, number } = item;
   if (!congress || !type || !number) return null;
   const upper = type.toUpperCase();
-  const seg = TYPE_URL_SEGMENT[upper];
   return {
     billId: `${upper.toLowerCase()}-${number}-${congress}`,
-    displayId: `${TYPE_DISPLAY[upper] ?? upper} ${number}`,
+    displayId: billDisplayId(upper, number),
     congress,
     type: upper,
     number,
-    title: item.title ?? `${TYPE_DISPLAY[upper] ?? upper} ${number}`,
+    title: item.title ?? billDisplayId(upper, number),
     introducedDate: item.introducedDate ?? null,
     latestActionDate: item.latestAction?.actionDate ?? null,
     latestActionText: item.latestAction?.text ?? null,
     policyArea: item.policyArea?.name ?? null,
     badge,
-    url: seg
-      ? `https://www.congress.gov/bill/${ordinal(congress)}-congress/${seg}/${number}`
-      : `https://www.congress.gov/search?q=${upper}${number}`,
+    url: billUrl(congress, upper, number),
   };
 }
 

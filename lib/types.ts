@@ -190,6 +190,53 @@ export interface RepProfile {
   secondaryBills: SecondaryBill[];
 }
 
+// ---------------------------------------------------------------------------
+// Issue #21 — the committee docket: bills currently waiting in a committee. A
+// browsable view of the "in the rep's committee" relevance signal (spec.md:93),
+// shown on demand when a constituent expands one of the rep's committees.
+// ---------------------------------------------------------------------------
+
+/**
+ * A bill currently referred to (and waiting in) a committee. Same structured,
+ * no-LLM treatment as `SecondaryBill`: official title + Congress.gov link, with
+ * the verbatim CRS summary attached where one exists.
+ */
+export interface PendingBill {
+  /** Stable key, e.g. "hr-9649-119". */
+  billId: string;
+  /** Human display id, e.g. "H.R. 9649". */
+  displayId: string;
+  congress: number;
+  type: string;
+  number: string;
+  title: string;
+  /** ISO date the bill was referred to this committee (the sort key). */
+  referredDate: string | null;
+  /** Congress.gov public bill URL. */
+  url: string;
+  // --- Plain-English description (Issue #5 pipeline, no LLM), attached during
+  //     docket assembly; absent/null ⇒ structured-only display. ---
+  summary?: string | null;
+  summaryBasedOn?: string | null;
+  summaryAmended?: boolean;
+}
+
+/**
+ * The pending docket for one committee (or subcommittee): the most-recently-
+ * referred bills, capped. `totalReferred` is the true count of bills waiting so
+ * the UI can say "showing N of M" — no silent caps (spec).
+ */
+export interface CommitteeDocket {
+  /** Congress.gov systemCode, e.g. "hsag00" (full) or "hsag16" (subcommittee). */
+  systemCode: string;
+  /** Total bills currently referred to the committee (before the cap). */
+  totalReferred: number;
+  /** The capped, enriched set actually shown (most-recently-referred first). */
+  bills: PendingBill[];
+  /** Congress.gov committee page — where its full legislation list lives. */
+  committeeUrl: string;
+}
+
 /** Result of a lookup. Either resolved, needs disambiguation, or nothing found. */
 export type LookupResult =
   | { status: "resolved"; reps: ResolvedReps }

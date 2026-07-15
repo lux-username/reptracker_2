@@ -472,3 +472,45 @@ civic-accuracy rule): suspension → CRS 98-314; special rule → House Rules
 Committee; bare → docs.house.gov. New `lib/floor-categories.ts` is the single home
 for that copy, matching headings by normalized substring so wording drift still
 resolves and unknown headings degrade to no gloss. (Session 5-of-day, closed #34.)
+
+## 2026-07-15 — Committee docket: "pending" = Referred To, ordered by referral date, capped, on-demand + cron-warm (#21)
+
+**Surfaced the bills waiting in each committee/subcommittee a rep sits on, deciding
+four things against the live Congress.gov `/committee/{congress}/{chamber}/{systemCode}/bills`
+endpoint (verified before building).** (a) **What "waiting" means:** the endpoint
+returns one row per bill with a single `relationshipType` — verified across the full
+632-row House Agriculture set that no bill appears twice — so pending is simply
+`relationshipType` == "referred to", matched **case-insensitively** (full committees
+return "Referred To", subcommittees "Referred to"); Discharged From / Reported By /
+Markup By mean the bill moved on and are excluded. (b) **Ordering:** the row's
+`actionDate` is the *referral* date, and true per-bill latest-action is unaffordable
+across hundreds of bills, so we sort most-recently-referred first as the honest bounded
+proxy — and say so in the UI copy rather than implying a "most active" ordering.
+(c) **Cap 10** with a "showing N of M waiting" line (busy committees run 600–800 bills;
+no silent caps per spec). (d) **Fetch model:** on demand when a committee is expanded
+(most visitors open none), backed by a convergent nightly cron warm of the ~200
+committees reps sit on (`warmDocketSlice`, cursor `prewarm-docket-cursor`, mirroring
+the contact/events convergence) so an expand is a warm KV hit; cold path degrades to a
+bounded live build. The docket artifact is stored at the cron-artifact TTL (40h, like
+the events index) so a nightly warm survives to serve the whole next day. New
+`lib/committee-bills.ts` (pure select + fetch) and `app/CommitteeBills.tsx` (client
+disclosure); bill id/URL formatting extracted to shared `lib/bill-format.ts`. Owner
+call: full committees **and** subcommittees are expandable. (Closed #21.)
+
+## 2026-07-15 — Committee docket refinements: keep subcommittee expanders, link to the committee's Congress.gov page (#21)
+
+**Kept the subcommittee expanders and added a "full list" link, after two owner
+questions.** (1) The initial demo (KS-02 Rep. Schmidt) showed empty subcommittee
+dockets, raising whether subcommittees ever have directly-referred bills and should
+therefore lose the expander. Checked real subcommittee systemCodes across both
+chambers: **28 of 89 reachable had count>0** (House Highways & Transit 181, a Veterans
+sub 156, Agriculture subs 37–72), so removing subcommittee expanders would drop real
+dockets — Schmidt's Armed Services subs are just an empty exception, and the empty
+state is honest. Kept them. (2) Added a link from the "showing 10 of N" cap line to
+the committee's Congress.gov page (`committeePageUrl`, the same
+`committee/{chamber}-committee/{systemCode}` pattern committee-actions.ts uses) so the
+cap never hides the rest. Congress.gov's Cloudflare wall blocked verifying that the
+page's default view is exactly our pending subset (it may be a superset), so the copy
+says "See the full list on Congress.gov" rather than "all N waiting" — precise-URL
+follow-up filed as #40; empty-expander suppression as #39. Refines the same-day #21
+entry above. (Closed #21.)

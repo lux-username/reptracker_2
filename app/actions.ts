@@ -1,8 +1,16 @@
 "use server";
 
-import type { DistrictCandidate, LookupResult, RepProfile, ResolvedReps } from "@/lib/types";
+import type {
+  Chamber,
+  CommitteeDocket,
+  DistrictCandidate,
+  LookupResult,
+  RepProfile,
+  ResolvedReps,
+} from "@/lib/types";
 import { lookupAddress, resolveCandidate } from "@/lib/resolve-reps";
 import { buildProfiles } from "@/lib/rep-profile";
+import { fetchCommitteeDocket } from "@/lib/committee-bills";
 
 /** Look up an address string → reps, disambiguation, or a miss. */
 export async function lookupAction(address: string): Promise<LookupResult> {
@@ -37,5 +45,23 @@ export async function buildProfilesAction(
     return await buildProfiles(reps, new Date());
   } catch {
     return [];
+  }
+}
+
+/**
+ * Fetch the pending-bills docket for one committee (Issue #21), on demand when a
+ * constituent expands it. Warm on the common path (cron-warmed KV); cold path
+ * builds it live. Returns `{ error }` on failure so the expander shows a graceful
+ * note rather than throwing.
+ */
+export async function committeeDocketAction(
+  congress: number,
+  chamber: Chamber,
+  systemCode: string,
+): Promise<CommitteeDocket | { error: string }> {
+  try {
+    return await fetchCommitteeDocket(congress, chamber, systemCode);
+  } catch {
+    return { error: "We couldn't load this committee's bills right now." };
   }
 }

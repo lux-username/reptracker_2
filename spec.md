@@ -65,6 +65,23 @@ and how to contact the deciders. The user supplies the opinion.
       - For DC / territory delegates, the delegate banner renders *inside* the header
         block, between the rep name and the committee list, so the "votes in committee
         but not on the floor" framing reads before committee context.
+      - **Committee docket (the bills waiting in it):** each committee **and
+        subcommittee** in the assignment list is expandable to reveal the bills
+        currently referred to and pending in it — a browsable view of the "in the
+        rep's committee" relevance signal (§2.3 ranking signal #3), i.e. the decisions
+        this rep can influence *before* a floor vote exists. Structured, no-LLM: each
+        bill shows its official title + Congress.gov link, with the verbatim CRS
+        summary where one exists (same treatment as the sponsored/cosponsored list).
+        Pending = the Congress.gov committee-bills relationship "Referred To"
+        (bills discharged / reported / marked up have moved on and are excluded). The
+        list runs to hundreds per committee, so it is **capped at the 10
+        most-recently-referred** (referral date is the affordable proxy for
+        latest-action across a large list) with a "showing N of M waiting" line — no
+        silent caps — plus a link to the committee's Congress.gov page (where the full
+        legislation list lives) so the capped set never hides the rest. Fetched **on
+        demand when a committee is expanded**, served from a
+        cron-warmed KV artifact on the common path and degrading to a bounded live
+        build on a cold miss. Joint committees (no single chamber) show no expander.
    2. **Upcoming committee action list**, ordered chronologically by action date, not by
       data source. Each item shows:
       - **What:** plain-English description of the bill or hearing topic, with link

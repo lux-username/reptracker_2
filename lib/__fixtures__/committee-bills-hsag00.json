@@ -1,0 +1,105 @@
+{
+  "committee-bills": {
+    "bills": [
+      {
+        "actionDate": "2025-01-03T16:00:10Z",
+        "congress": 119,
+        "number": "34",
+        "relationshipType": "Referred To",
+        "type": "HR",
+        "updateDate": "2025-01-07T14:39:36Z",
+        "url": "https://api.congress.gov/v3/bill/119/hr/34?format=json"
+      },
+      {
+        "actionDate": "2025-01-03T16:08:45Z",
+        "congress": 119,
+        "number": "112",
+        "relationshipType": "Referred To",
+        "type": "HR",
+        "updateDate": "2025-01-07T14:39:32Z",
+        "url": "https://api.congress.gov/v3/bill/119/hr/112?format=json"
+      },
+      {
+        "actionDate": "2026-07-02T13:01:35Z",
+        "congress": 119,
+        "number": "9586",
+        "relationshipType": "Referred To",
+        "type": "HR",
+        "updateDate": "2026-07-03T08:05:54Z",
+        "url": "https://api.congress.gov/v3/bill/119/hr/9586?format=json"
+      },
+      {
+        "actionDate": "2026-07-02T13:03:10Z",
+        "congress": 119,
+        "number": "9572",
+        "relationshipType": "Referred To",
+        "type": "HR",
+        "updateDate": "2026-07-03T08:05:41Z",
+        "url": "https://api.congress.gov/v3/bill/119/hr/9572?format=json"
+      },
+      {
+        "actionDate": "2026-07-13T16:01:45Z",
+        "congress": 119,
+        "number": "9649",
+        "relationshipType": "Referred To",
+        "type": "HR",
+        "updateDate": "2026-07-14T08:06:18Z",
+        "url": "https://api.congress.gov/v3/bill/119/hr/9649?format=json"
+      },
+      {
+        "actionDate": "2025-07-16T18:15:31Z",
+        "congress": 119,
+        "number": "183",
+        "relationshipType": "Discharged From",
+        "type": "HR",
+        "updateDate": "2025-07-17T11:33:41Z",
+        "url": "https://api.congress.gov/v3/bill/119/hr/183?format=json"
+      },
+      {
+        "actionDate": "2025-09-03T23:06:18Z",
+        "congress": 119,
+        "number": "4550",
+        "relationshipType": "Reported By",
+        "type": "HR",
+        "updateDate": "2025-09-04T08:06:42Z",
+        "url": "https://api.congress.gov/v3/bill/119/hr/4550?format=json"
+      },
+      {
+        "actionDate": "2025-06-10T17:05:41Z",
+        "congress": 119,
+        "number": "3633",
+        "relationshipType": "Markup By",
+        "type": "HR",
+        "updateDate": "2025-06-24T08:05:57Z",
+        "url": "https://api.congress.gov/v3/bill/119/hr/3633?format=json"
+      },
+      {
+        "actionDate": "2026-04-30T15:02:22Z",
+        "congress": 119,
+        "number": "7567",
+        "relationshipType": "Unknown",
+        "type": "HR",
+        "updateDate": "2026-05-01T08:09:24Z",
+        "url": "https://api.congress.gov/v3/bill/119/hr/7567?format=json"
+      },
+      {
+        "congress": 119,
+        "type": "HR",
+        "number": "9999",
+        "actionDate": "2026-07-14T10:00:00Z",
+        "relationshipType": "Referred to"
+      },
+      {
+        "congress": 119,
+        "type": "HR",
+        "actionDate": "2026-07-01T10:00:00Z",
+        "relationshipType": "Referred To"
+      }
+    ],
+    "count": 632,
+    "url": "https://api.congress.gov/v3/committee/house/hsag00/bills?format=json"
+  },
+  "pagination": {
+    "count": 632
+  }
+}

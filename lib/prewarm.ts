@@ -23,7 +23,13 @@ import { mapLimit, refreshEventsIndex, type RefreshStats } from "./events-index"
 import { refreshFloorSchedule } from "./floor-schedule";
 import { getSenateRecesses } from "./session-status";
 import { refreshDistrictOffices } from "./district-offices";
+import {
+  committeeRoster,
+  fetchCommitteeDocket,
+  type CommitteeRef,
+} from "./committee-bills";
 import { cacheKey, redisClient } from "./cache";
+import type { CommitteeAssignment } from "./types";
 
 /**
  * Jurisdictions Congress.gov lists members for: the 50 states plus the five
@@ -39,6 +45,7 @@ export const JURISDICTIONS: readonly string[] = [
 ];
 
 const CONTACT_CURSOR_KEY = cacheKey("prewarm-contact-cursor");
+const DOCKET_CURSOR_KEY = cacheKey("prewarm-docket-cursor");
 
 /** Best-effort current congress from the year (matches resolve-reps). */
 export function currentCongress(now: Date): number {
@@ -60,6 +67,11 @@ export interface PrewarmStats {
   sessionCalendar: { senateRecesses: number };
   /** District-office index (Issue #13): members with a district office contact. */
   districtOffices: { members: number };
+  /**
+   * Committee dockets (Issue #21) — a convergent slice of the ~200 committees
+   * reps sit on, warmed per run so an expand is a warm KV hit.
+   */
+  dockets: { warmed: number; failed: number; from: number; to: number; roster: number };
 }
 
 export interface PrewarmOptions {
@@ -70,6 +82,8 @@ export interface PrewarmOptions {
   contactBudget?: number;
   /** Detail fetches for the events index refresh. */
   eventsDetailBudget?: number;
+  /** Committee dockets warmed per run (the convergent slice). */
+  docketBudget?: number;
 }
 
 /**
@@ -81,12 +95,15 @@ export async function prewarm(opts: PrewarmOptions): Promise<PrewarmStats> {
   const { now } = opts;
   const concurrency = opts.concurrency ?? 8;
   const contactBudget = opts.contactBudget ?? 120;
+  const docketBudget = opts.docketBudget ?? 8;
   const congress = currentCongress(now);
 
-  // 1. Shared committee data (also feeds nothing else here, but warms the JSONs).
+  // 1. Shared committee data. Warms the two congress-legislators JSONs and gives
+  //    us the assignment index the committee-docket warm (step 7) walks.
   let committeeData: PrewarmStats["committeeData"] = "warmed";
+  let assignmentIndex: Map<string, CommitteeAssignment[]> | null = null;
   try {
-    await fetchAssignmentIndex();
+    assignmentIndex = await fetchAssignmentIndex();
   } catch (e) {
     committeeData = "failed";
     console.warn(`[prewarm] committee data warm failed: ${String(e)}`);
@@ -153,7 +170,17 @@ export async function prewarm(opts: PrewarmOptions): Promise<PrewarmStats> {
   //    the recess pivot reads it from KV. getSenateRecesses never throws.
   const senateRecesses = (await getSenateRecesses(now)).length;
 
-  return { congress, committeeData, members: { warmed: membersWarmed, failed: membersFailed, roster: roster.length }, contacts, events, floor, districtOffices, sessionCalendar: { senateRecesses } };
+  // 7. Committee dockets (Issue #21) — a convergent slice of the committees reps
+  //    sit on, so expanding one is a warm hit. Skipped when committee data (and
+  //    thus the roster) failed to load above.
+  const dockets = await warmDocketSlice(
+    assignmentIndex ? committeeRoster(assignmentIndex) : [],
+    congress,
+    docketBudget,
+    concurrency,
+  );
+
+  return { congress, committeeData, members: { warmed: membersWarmed, failed: membersFailed, roster: roster.length }, contacts, events, floor, districtOffices, sessionCalendar: { senateRecesses }, dockets };
 }
 
 /** Warm `budget` contacts starting at the persisted cursor; advance and wrap. */
@@ -197,6 +224,58 @@ async function warmContactSlice(
       await client.set(CONTACT_CURSOR_KEY, to);
     } catch (e) {
       console.warn(`[prewarm] contact cursor write failed: ${String(e)}`);
+    }
+  }
+  return { warmed, failed, from, to, roster: roster.length };
+}
+
+/**
+ * Warm `budget` committee dockets starting at the persisted cursor; advance and
+ * wrap. Same convergent-slice shape as warmContactSlice: over successive nights
+ * the cursor laps the full roster. A docket already warm in KV is a cheap KV read
+ * (fetchCommitteeDocket is `cached`), so a slot spent on it isn't wasted work.
+ */
+async function warmDocketSlice(
+  roster: CommitteeRef[],
+  congress: number,
+  budget: number,
+  concurrency: number,
+): Promise<PrewarmStats["dockets"]> {
+  const empty = { warmed: 0, failed: 0, from: 0, to: 0, roster: roster.length };
+  if (roster.length === 0) return empty;
+
+  const client = redisClient();
+  let from = 0;
+  if (client) {
+    try {
+      from = (await client.get<number>(DOCKET_CURSOR_KEY)) ?? 0;
+    } catch {
+      from = 0;
+    }
+  }
+  from = ((from % roster.length) + roster.length) % roster.length; // normalize
+
+  const take = Math.min(budget, roster.length);
+  const slice = Array.from({ length: take }, (_, i) => roster[(from + i) % roster.length]);
+
+  let warmed = 0;
+  let failed = 0;
+  await mapLimit(slice, concurrency, async (ref) => {
+    try {
+      await fetchCommitteeDocket(congress, ref.chamber, ref.systemCode);
+      warmed++;
+    } catch (e) {
+      failed++;
+      console.warn(`[prewarm] docket warm failed for ${ref.systemCode}: ${String(e)}`);
+    }
+  });
+
+  const to = (from + take) % roster.length;
+  if (client) {
+    try {
+      await client.set(DOCKET_CURSOR_KEY, to);
+    } catch (e) {
+      console.warn(`[prewarm] docket cursor write failed: ${String(e)}`);
     }
   }
   return { warmed, failed, from, to, roster: roster.length };
