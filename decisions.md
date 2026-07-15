@@ -514,3 +514,23 @@ page's default view is exactly our pending subset (it may be a superset), so the
 says "See the full list on Congress.gov" rather than "all N waiting" — precise-URL
 follow-up filed as #40; empty-expander suppression as #39. Refines the same-day #21
 entry above. (Closed #21.)
+
+## 2026-07-15 — Not building address autocomplete (#35): the API-cost multiplier isn't worth it for a moderate-use civic tool
+
+**Declined the as-you-type address suggestions request.** Geocodio is our only geocoder
+and offers no typeahead endpoint, so the three real options were: (a) debounced Geocodio
+— reuse the existing vendor, no new privacy surface; (b) a local ZIP/city prefix dataset
+— private but not street-level; (c) a third-party typeahead (Google Places / Mapbox /
+Radar) — best UX but streams partial addresses to a new party, squarely against our
+privacy posture (hashed cache keys, no raw-address storage, #31 footer promise). Ruled
+out (c) on privacy and (b) as too weak to be worth the work, leaving (a), where **cost
+decided it.** Verified from Geocodio docs: free tier **2,500 credits/day**, overage
+**$1/1,000**, and every call uses `fields=cd` — a field append that counts as a second
+lookup, so **2 credits/call → ~1,250 free lookups/day** today. Debounced autocomplete
+fires ~3 geocode calls per session instead of 1 (even with 400ms debounce, min-length
+gating, and cache reuse on the final submit), cutting the free runway ~3× to **~400
+lookups/day**. Since the app is being built toward moderate real use, preserving the
+~1,250/day headroom beats the typeahead nicety. Closed #35 (analysis recorded on the
+issue). The freed concern — that unthrottled automated traffic could drain that same
+budget — motivated new issue **#41** (per-IP rate limiting + a global daily-credit
+circuit breaker on Upstash). (Closed #35, opened #41.)

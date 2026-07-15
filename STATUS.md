@@ -1,57 +1,40 @@
-> Generated 2026-07-15 by /end-session at commit 218b847.
+> Generated 2026-07-15 by /end-session at commit 8d31777.
 
 # STATUS
 
 ## Where things stand
 
-**The committee docket shipped this session (#21).** Every committee **and**
-subcommittee in a rep's assignment list is now expandable to reveal the bills
-currently referred to and waiting in it — a browsable view of the "in the rep's
-committee" relevance signal (spec §2.3 signal #3). Same structured, no-LLM treatment
-as the rest of the app: official title + Congress.gov link, with the verbatim CRS
-summary where one exists, structured-only otherwise.
+**No code shipped this session (2026-07-15, session 2) — it was a scoping/decision
+session.** The committee docket (#21) shipped in session 1 and remains the last code
+change; the tree is clean. This session evaluated the address-autocomplete request and
+made an owner call to **not build it**, then spun the freed attention into a new
+abuse-protection issue.
 
-Key mechanics (all verified live against api.congress.gov before building):
-- **Pending = `relationshipType` "referred to"** (case-insensitive — full committees
-  return "Referred To", subcommittees "Referred to"), matched against the
-  `/committee/{congress}/{chamber}/{systemCode}/bills` endpoint. Verified across the
-  full 632-row House Agriculture set that no bill appears twice, so the single-value
-  filter is sound; discharged/reported/marked-up bills are excluded.
-- **Ordering** is most-recently-**referred** first — the row's `actionDate` is the
-  referral date, and true per-bill latest-action is unaffordable across hundreds of
-  bills, so referral date is the honest bounded proxy (the UI copy says so).
-- **Capped at 10** with a "showing N of M waiting" line **plus a link to the
-  committee's Congress.gov page** so the cap never hides the rest.
-- **Fetched on demand** when a committee is expanded (server action), backed by a
-  **convergent nightly cron warm** of the ~200 committees reps sit on
-  (`warmDocketSlice`, cursor `prewarm-docket-cursor`), so an expand is a warm KV hit;
-  cold path degrades to a bounded live build. Docket artifact stored at the
-  cron-artifact TTL (40h) so a nightly warm serves the whole next day.
+**#35 (address autocomplete) — closed, won't build.** Geocodio is our only geocoder and
+has no typeahead endpoint, so the privacy-safe path was "debounced Geocodio" (reuse the
+existing vendor, no new trust boundary). Cost was the deciding factor and it doesn't
+clear the bar for a tool meant to handle moderate real use:
+- Geocodio free tier is **2,500 credits/day**, overage **$1/1,000 credits**. Every call
+  uses `fields=cd`, and a field append counts as an extra lookup → **2 credits/call**, so
+  the free runway is **~1,250 lookups/day** today.
+- Debounced autocomplete fires ~3 geocode calls per session instead of 1 (even with a
+  400ms debounce, min-length gating, and cache reuse on submit), cutting the free runway
+  ~3× to **~400 lookups/day**.
+- Since we're building toward moderate real usage, preserving the ~1,250/day headroom
+  beats as-you-type suggestions. Full analysis is recorded on the closed issue and in
+  `decisions.md`.
 
-**Two owner questions resolved this session:** (1) subcommittees *do* have referred
-bills (28 of 89 checked had count>0 — Highways & Transit 181, a Veterans sub 156, Ag
-subs 37–72), so subcommittee expanders stayed; the genuinely-empty ones show an honest
-empty state. (2) Added the "full list on Congress.gov" link. Both spawned low-priority
-follow-ups (#39, #40).
+**#41 (anti-bot / abuse protection) — filed, motivated by that analysis.** Nothing today
+stops a scraper from spraying unique/garbage addresses at `lookupAction` to force
+cache-miss geocodes and drain the daily free tier (or trip Congress.gov limits). Likely
+MVP: **Upstash per-IP rate limiting + a global daily-credit circuit breaker** — both
+reuse the Redis we already have, add no vendor, and protect the wallet. Turnstile/CAPTCHA
+noted as an escalation only if real bot traffic appears (and flagged against #26 privacy).
 
-New: `lib/committee-bills.ts` (pure select + warm/cold fetch), `lib/bill-format.ts`
-(shared bill id/URL formatting, extracted from `legislation.ts`), `app/CommitteeBills.tsx`
-(client disclosure). The MVP milestone remains **empty / done**; all remaining work is
-post-MVP backlog (no milestone).
-
-**This session (2026-07-15, session 1):**
-- Closed **#21** (committee docket).
-- Verified end-to-end via Playwright: full-committee docket (10 of 942 for House
-  Judiciary, correct newest-first order, real titles, working links across bill types,
-  Congress.gov "full list" link), subcommittee docket (endpoint 200 + accurate empty
-  state), structured-only rendering for un-summarized bills.
-- Filed **#39** (optionally suppress empty docket expanders) and **#40** (verify /
-  tighten the "full list" link target — Cloudflare blocked destination verification).
-
-**Priorities next** — no gate-free MVP work remains. **#38** (a11y re-audit, now also
-covering the docket expanders/link), **#35** (address autocomplete), owner-gated **#26**
-(compliance/data-use). Lower: **#39**/**#40** (#21 polish), **#29** (House recess date
-via PDF), **#32** (session numbering convention).
+**Priorities next** — no gate-free MVP work remains. **#41** (abuse protection, now the
+most actionable feature), **#38** (a11y re-audit against the new design + docket
+expanders), owner-gated **#26** (compliance/data-use). Lower: **#39**/**#40** (#21
+polish), **#29** (House recess date via PDF), **#32** (session numbering convention).
 
 ## Derived facts (from CLAUDE.md commands)
 
@@ -60,9 +43,14 @@ via PDF), **#32** (session numbering convention).
 | Test status | `npm test` | ✓ 178 tests passing, 22 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Deploy | `vercel ls` | Prod project `reptracker2`; latest deploys listed (push of this session's commit triggers the #21 deploy) |
-| Git | `git log --oneline -1` (pre-doc-commit) | `218b847 Close session 2026-07-14 (5): floor-section polish shipped (#33, #34)` |
+| Git | `git log --oneline -1` (pre-doc-commit) | `8d31777 Close session 2026-07-15 (1): committee docket shipped (closes #21)` |
 
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 — **no open Issues**
+
+## Blockers / open questions
+
+- **#41** carries owner questions before build: acceptable friction (silent rate-limit vs.
+  visible challenge), per-IP limit numbers, and whether the global circuit breaker caps at
+  the free 2,500/day or allows a small paid buffer.
