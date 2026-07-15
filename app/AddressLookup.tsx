@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition, type ReactNode } from "react";
 import type { DistrictCandidate, LookupResult, Rep, RepProfile } from "@/lib/types";
 import type { SessionStatus } from "@/lib/session-status";
 import { lookupAction, resolveCandidateAction, buildProfilesAction } from "./actions";
@@ -217,7 +217,16 @@ function Disambiguation({
   );
 }
 
-export default function AddressLookup({ session }: { session?: SessionStatus | null }) {
+export default function AddressLookup({
+  session,
+  children,
+}: {
+  session?: SessionStatus | null;
+  // The "On the floor this week" section, server-rendered in page.tsx and passed
+  // through so its data fetch stays on the server. Revealed only once a lookup
+  // resolves (Issue #33) — before that, the page shows just the address input.
+  children?: ReactNode;
+}) {
   const [address, setAddress] = useState("");
   const [result, setResult] = useState<LookupResult | null>(null);
   const [profiles, setProfiles] = useState<RepProfile[] | null>(null);
@@ -320,6 +329,11 @@ export default function AddressLookup({ session }: { session?: SessionStatus | n
           <span>{result.message}</span>
         </p>
       )}
+
+      {/* Floor schedule (Issue #33): chamber-wide, address-independent, but only
+          revealed once a lookup resolves so first-time visitors aren't shown
+          rep-adjacent content before they've searched. */}
+      {result?.status === "resolved" && children}
     </div>
   );
 }

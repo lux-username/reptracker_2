@@ -59,6 +59,17 @@ describe("FloorThisWeek", () => {
     expect(screen.getByText(/schedules change frequently/i)).toBeInTheDocument();
   });
 
+  it("glosses each category heading with a plain-English explanation (#34)", () => {
+    render(<FloorThisWeek data={sample} />);
+    // The suspension category carries an expander with its authoritative gloss.
+    expect(screen.getByText(/What does this mean\?/i)).toBeInTheDocument();
+    expect(screen.getByText(/two-thirds vote/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Source: Congressional Research Service/i })).toHaveAttribute(
+      "href",
+      expect.stringContaining("congress.gov"),
+    );
+  });
+
   const bothInSession: SessionStatus = {
     builtAt: "2026-06-30T00:00:00Z",
     house: { inSession: true, returnDate: null },
@@ -130,7 +141,9 @@ describe("FloorThisWeek", () => {
     );
     expect(screen.getByText("Government Operations and Politics")).toBeInTheDocument();
     expect(screen.getByText(/Makes daylight saving time permanent/)).toBeInTheDocument();
-    expect(screen.getByText(/Congressional Research Service/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Nonpartisan summary from the Congressional Research Service/),
+    ).toBeInTheDocument();
   });
 
   it("shows the amended-since warning when the bill text moved past the summary", () => {

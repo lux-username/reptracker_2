@@ -33,8 +33,9 @@ export default async function Home() {
           time to act.
         </p>
       </header>
-      <AddressLookup session={session} />
-      <FloorThisWeek data={floor} session={session} />
+      <AddressLookup session={session}>
+        <FloorThisWeek data={floor} session={session} />
+      </AddressLookup>
     </main>
   );
 }

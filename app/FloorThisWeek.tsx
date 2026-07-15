@@ -2,11 +2,15 @@ import type { FloorSchedule } from "@/lib/floor-schedule";
 import type { SessionStatus } from "@/lib/session-status";
 import ExternalLink from "./ExternalLink";
 import { BillSummary, PolicyTag } from "./BillSummary";
+import { floorCategoryGloss } from "@/lib/floor-categories";
 
 // "On the floor this week" — the one global, address-independent section (Issue
-// #4, spec §2.3). Every member votes on these same floor items, so it's shown to
-// every visitor. Best-effort scraped: a clearly visible freshness stamp and a
-// "schedules change frequently" note keep expectations honest.
+// #4, spec §2.3). Every member votes on these same floor items. As of Issue #33
+// it's rendered by AddressLookup and revealed only after a lookup resolves (so
+// first-time visitors aren't shown rep-adjacent content before searching), but the
+// content itself is still chamber-wide, not per-rep. Best-effort scraped: a clearly
+// visible freshness stamp and a "schedules change frequently" note keep expectations
+// honest. Category headings carry a plain-English gloss (Issue #34, floor-categories.ts).
 //
 // Recess (Issue #8): when a chamber is out of session, the posted floor XML is
 // stale (an old week), so instead of that list we show a plain "not in session"
@@ -81,12 +85,31 @@ export default function FloorThisWeek({
           <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
             House · week of {formatDay(data.house.weekOf)}
           </h3>
-          {data.house.categories.map((cat) => (
+          {data.house.categories.map((cat) => {
+            const gloss = floorCategoryGloss(cat.heading);
+            return (
             <div key={cat.heading} className="flex flex-col gap-2">
               {cat.heading && (
                 <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
                   {cat.heading}
                 </p>
+              )}
+              {gloss && (
+                <details className="group -mt-1 text-xs text-slate-600">
+                  <summary className="cursor-pointer list-none font-medium text-indigo-700 underline underline-offset-2 hover:text-indigo-900 marker:content-none">
+                    <span className="group-open:hidden">What does this mean?</span>
+                    <span className="hidden group-open:inline">Hide explanation</span>
+                  </summary>
+                  <p className="mt-1.5 leading-relaxed">
+                    {gloss.text}{" "}
+                    <ExternalLink
+                      className="text-indigo-700 underline underline-offset-2 hover:text-indigo-900"
+                      href={gloss.sourceUrl}
+                    >
+                      Source: {gloss.sourceLabel}
+                    </ExternalLink>
+                  </p>
+                </details>
               )}
               <ul className="flex flex-col gap-2">
                 {cat.bills.map((b) => (
@@ -116,7 +139,8 @@ export default function FloorThisWeek({
                 ))}
               </ul>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
