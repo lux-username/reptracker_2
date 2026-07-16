@@ -1,40 +1,42 @@
-> Generated 2026-07-15 by /end-session at commit 8d31777.
+> Generated 2026-07-15 by /end-session at commit 3c634e4.
 
 # STATUS
 
 ## Where things stand
 
-**No code shipped this session (2026-07-15, session 2) — it was a scoping/decision
-session.** The committee docket (#21) shipped in session 1 and remains the last code
-change; the tree is clean. This session evaluated the address-autocomplete request and
-made an owner call to **not build it**, then spun the freed attention into a new
-abuse-protection issue.
+**Session 2026-07-15 (3) — an a11y + verification session.** Shipped one small
+accessibility fix and closed out two follow-up issues by investigation; the only code
+change is `app/AddressLookup.tsx`.
 
-**#35 (address autocomplete) — closed, won't build.** Geocodio is our only geocoder and
-has no typeahead endpoint, so the privacy-safe path was "debounced Geocodio" (reuse the
-existing vendor, no new trust boundary). Cost was the deciding factor and it doesn't
-clear the bar for a tool meant to handle moderate real use:
-- Geocodio free tier is **2,500 credits/day**, overage **$1/1,000 credits**. Every call
-  uses `fields=cd`, and a field append counts as an extra lookup → **2 credits/call**, so
-  the free runway is **~1,250 lookups/day** today.
-- Debounced autocomplete fires ~3 geocode calls per session instead of 1 (even with a
-  400ms debounce, min-length gating, and cache reuse on submit), cutting the free runway
-  ~3× to **~400 lookups/day**.
-- Since we're building toward moderate real usage, preserving the ~1,250/day headroom
-  beats as-you-type suggestions. Full analysis is recorded on the closed issue and in
-  `decisions.md`.
+**#38 (a11y re-audit post-#25) — done, AA bar holds.** Ran axe-core (WCAG 2.0/2.1 A+AA +
+best-practice) plus manual computed-contrast and a real keyboard focus pass across all
+four render states (landing, full profile with dockets expanded, error, disambiguation).
+**0 violations, 0 incomplete** on every state. All three #25 pairings this issue named
+clear AA (indigo-700 links 8.09:1, indigo-600 CTA 8.09:1, indigo-950-on-indigo-50 heading
+14.33:1); tightest overall is slate-500 muted text at 4.55:1 (passes, thin margin — noted
+for future palette tweaks). The single global `:focus-visible` ring paints on every
+control type with no per-component overrides; skip link wired to `#main-content`.
 
-**#41 (anti-bot / abuse protection) — filed, motivated by that analysis.** Nothing today
-stops a scraper from spraying unique/garbage addresses at `lookupAction` to force
-cache-miss geocodes and drain the daily free tier (or trip Congress.gov limits). Likely
-MVP: **Upstash per-IP rate limiting + a global daily-credit circuit breaker** — both
-reuse the Redis we already have, add no vendor, and protect the wallet. Turnstile/CAPTCHA
-noted as an escalation only if real bot traffic appears (and flagged against #26 privacy).
+**#42 (placeholder contrast) — filed and fixed this session.** The one thing axe misses:
+`::placeholder` is excluded from its contrast rule, and the address placeholder
+(`slate-400`) measured **2.63:1**, below AA. Owner call: rather than darken it, **removed
+the placeholder example entirely** and folded the format cue into the always-visible
+helper text ("Include your state or ZIP code…"). Designs the contrast problem out and
+drops the disappearing-placeholder anti-pattern. `fixes #42`.
 
-**Priorities next** — no gate-free MVP work remains. **#41** (abuse protection, now the
-most actionable feature), **#38** (a11y re-audit against the new design + docket
-expanders), owner-gated **#26** (compliance/data-use). Lower: **#39**/**#40** (#21
-polish), **#29** (House recess date via PDF), **#32** (session numbering convention).
+**#40 (committee 'full list' link) — verified, closed, no code change.** The destination
+page is still Cloudflare-walled to automation (reproduced the build-time 403 two ways;
+did not bypass). The Congress.gov API settled it: the committee page lists the committee's
+full associated legislation (Referred To + Reported By + Markup By + Discharged From) — a
+**superset** of our pending-only ("Referred To") docket. Current copy is accurate, so the
+link stays as-is. Also established the docket is **current-congress-only by construction**
+(date-derived `currentCongress()` → congress-scoped API endpoint → congress in the cache
+key), so prior-congress bills can never appear and drop automatically at the term rollover.
+
+**Priorities next** — no gate-free MVP work remains. **#41** (abuse protection, most
+actionable feature; carries owner questions), owner-gated **#26** (compliance/data-use).
+Lower: **#39** (#21 polish — suppress empty docket expanders), **#29** (House recess date
+via PDF), **#32** (session-numbering convention).
 
 ## Derived facts (from CLAUDE.md commands)
 
@@ -43,11 +45,12 @@ polish), **#29** (House recess date via PDF), **#32** (session numbering convent
 | Test status | `npm test` | ✓ 178 tests passing, 22 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Git | `git log --oneline -1` (pre-doc-commit) | `8d31777 Close session 2026-07-15 (1): committee docket shipped (closes #21)` |
+| Git | `git log --oneline -1` (pre-doc-commit) | `3c634e4 Close session 2026-07-15 (2): nix autocomplete (#35), file abuse protection (#41)` |
+| Deploy | `vercel ls` | latest: `reptracker2-fwn2iu4o6-lukitux-4243s-projects.vercel.app` |
 
 ## Active Milestone
 
-**MVP** — https://github.com/lux-username/reptracker_2/milestone/1 — **no open Issues**
+**MVP** — https://github.com/lux-username/reptracker_2/milestone/1 — **0 open Issues** (21 closed)
 
 ## Blockers / open questions
 

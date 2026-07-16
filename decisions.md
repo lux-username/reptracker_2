@@ -534,3 +534,46 @@ lookups/day**. Since the app is being built toward moderate real use, preserving
 issue). The freed concern — that unthrottled automated traffic could drain that same
 budget — motivated new issue **#41** (per-IP rate limiting + a global daily-credit
 circuit breaker on Upstash). (Closed #35, opened #41.)
+
+## 2026-07-15 — Removed the address placeholder instead of darkening it (#38 audit → #42)
+
+**The #38 a11y re-audit found the one thing axe-core misses: `::placeholder` is excluded
+from its color-contrast rule by default.** A manual computed check caught the address
+input's placeholder (`slate-400`) at **2.63:1** on white — below the WCAG AA 4.5:1 floor
+the project holds itself to (#9). Three options: (a) darken the placeholder to `slate-500`
+(~4.6:1) — minimal, but keeps a disappearing placeholder; (b) drop the placeholder and its
+example entirely — cleanest, but loses the concrete format cue; (c) keep an example but
+move it out of the placeholder. **Chose a hybrid of (a-avoid) and (b):** removed the
+placeholder example *and* the `placeholder:text-slate-400` utility, and reworked the
+always-visible helper text to lead with the format instruction ("Include your state or ZIP
+code. A full street address gives the most accurate result; a ZIP code alone works too…").
+This designs the contrast problem out (no placeholder → nothing to fail AA), keeps the
+format guidance *persistent* instead of vanishing on first keystroke (the well-known
+disappearing-placeholder usability anti-pattern), and stays wired to the input via
+`aria-describedby`. Verified: tsc clean, 178 tests pass, confirmed in the running app.
+(Fixed #42, part of closing #38.)
+
+## 2026-07-15 — Committee-docket "full list" link stays on the committee page; docket is current-congress-only by construction (#40)
+
+**Kept the committee-docket cap-line link pointed at
+`congress.gov/committee/{chamber}-committee/{systemCode}`, unchanged.** #40 flagged that we
+couldn't confirm (the page is Cloudflare-walled to automation — reproduced the build-time
+403 via both a real Chromium and a server fetch; did not bypass it) whether that page's
+default view is exactly our pending subset or a superset. Settled it through the authorized
+Congress.gov API instead: the committee's associated-legislation set spans multiple
+relationship types — for House Judiciary (119th), `Referred To` = **942** (exactly our
+"waiting" figure) plus `Reported By` 23, `Markup By` 19, `Discharged From` 2, etc. So the
+page is a **superset** of our pending-only ("Referred To") docket. Per the issue's decision
+tree that means keep the link as-is: the copy ("See the full list on Congress.gov", not
+"all N waiting") is accurate and doesn't over-promise. The optional cleaner-pending-only
+URL would need the same walled search UI via a real browser — low value, not pursued.
+
+**Related finding, recorded so it isn't re-litigated: the docket is current-congress-only
+by construction, so prior-congress bills can never appear and need no cleanup.** The
+congress number is date-derived (`currentCongress()` in resolve-reps.ts; same in
+prewarm.ts), the bills query is congress-scoped (`/committee/{congress}/{chamber}/
+{systemCode}/bills` — the API returns only that congress's bills), and the docket cache key
+includes the congress. When the term rolls over (Jan 2027 → 120th) every query shifts
+automatically and the old congress's "waiting" bills simply stop being fetched. So every
+bill shown is genuinely live: current congress, referred, not yet reported/discharged —
+one the committee could still advance toward the floor. (Closed #40.)

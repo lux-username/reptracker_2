@@ -279,10 +279,9 @@ export default function AddressLookup({
             type="text"
             autoComplete="street-address"
             aria-describedby="address-hint"
-            placeholder="1600 Pennsylvania Ave NW, Washington, DC"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className="flex-1 rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-slate-900 shadow-sm placeholder:text-slate-400"
+            className="flex-1 rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-slate-900 shadow-sm"
           />
           <button
             type="submit"
@@ -294,8 +293,9 @@ export default function AddressLookup({
           </button>
         </div>
         <p id="address-hint" className="text-xs text-slate-500">
-          A full street address gives the most accurate result. A ZIP code works
-          too, but may ask you to pick your district.
+          Include your state or ZIP code. A full street address gives the most
+          accurate result; a ZIP code alone works too, but may ask you to pick
+          your district.
         </p>
       </form>
 
