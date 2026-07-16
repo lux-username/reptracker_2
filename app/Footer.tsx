@@ -23,10 +23,17 @@ export default function Footer() {
           .
         </p>
         <p>
-          Your address is sent once to a geocoding service (Geocodio) to find your
-          district, then discarded — we don&apos;t store it, log it, or keep any
-          account for you. No tracking, we only count how many requests the site
-          receives.
+          Your address is sent once to our geocoding provider (Geocodio) to find
+          your district. We don&apos;t store it, log it, or keep any account for
+          you; Geocodio may briefly retain it in their own access logs (up to ~46
+          days) under their{" "}
+          <ExternalLink
+            href="https://www.geocod.io/data-retention-policy/"
+            className="underline underline-offset-2 hover:text-slate-700"
+          >
+            data-retention policy
+          </ExternalLink>
+          . No tracking — we only count how many requests the site receives.
         </p>
         <p className="flex flex-wrap gap-x-6 gap-y-2">
           <a

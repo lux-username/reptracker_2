@@ -577,3 +577,26 @@ includes the congress. When the term rolls over (Jan 2027 → 120th) every query
 automatically and the old congress's "waiting" bills simply stop being fetched. So every
 bill shown is genuinely live: current congress, referred, not yet reported/discharged —
 one the committee could still advance toward the floor. (Closed #40.)
+
+## 2026-07-15 — Compliance review cleared the build; adopted the existing source-link pattern as the citation standard (#26)
+
+**Researched every data source's terms + the legal/privacy landscape and found the project substantially compliant — no blocker.** Recorded here so the posture isn't re-derived; concrete fixes filed as their own issues.
+
+**Data sources — all permit our use, attribution not contractually required anywhere:**
+- **Congress.gov API:** caching + re-display to users is the intended use, with *no* documented cache-duration or storage limit; all data (member/committee/meeting/hearing/bill metadata, CRS bill summaries) is US-government public domain. The **5,000 req/hr** limit our `rate-limit.ts`/`cache.ts` assume is *correct* — it's Congress.gov's documented override of the generic 1,000/hr api.data.gov floor. Do not lower it. (Nicety, not filed: prefer reading `X-RateLimit-*` headers + handling 429 over hard-coding.)
+- **CRS bill summaries:** public domain (2 U.S.C. §166(d) mandate; US-gov work). Verbatim reproduction is fine — the third-party-copyright caveat that rides CRS *reports* does not practically apply to the plain-text *bill summaries*. Our verbatim render + "Congressional Research Service" attribution is correct.
+- **Geocodio:** storing/caching results is explicitly permitted (permanently, even — our 24h TTL is conservative); free tier allows public use; no attribution required.
+- **house.gov / senate.gov scrape:** no robots.txt restriction (Senate has no real robots.txt and states public info "may be distributed or copied"); public domain. Our self-identifying UA + polite cadence is fine. Note we correctly do **not** scrape congress.gov (its robots.txt blocks bots incl. AI crawlers) — API + links only.
+- **unitedstates/congress-legislators** (district offices): CC0 / public domain, no attribution required.
+
+**Legal/privacy:**
+- **FEC/electioneering + LDA lobbying: clear.** Regulation hinges on *express advocacy* / lobbying *contacts*; we do neither, and a website isn't broadcast/cable/satellite. The **position-neutral stance is load-bearing** — it's what keeps us clear. The line we must not cross: vote-for/against language, scorecards, or election-timed framing.
+- **CCPA/CPRA + GDPR: not applicable** (revenue/volume thresholds; no EU targeting).
+- **CalOPPA (California): a conspicuous privacy policy is likely *required*** — the trigger is *collecting* PII (the address), not retaining it, so "we discard it" doesn't exempt us. Filed as an issue.
+- **FTC §5 (truthfulness): our real exposure.** Privacy claims must be literally true. The footer's "sent once… then discarded — we don't … log it" overstated the whole flow: Geocodio logs the submitted address for up to ~46 days on our tier. **Fixed this session** — footer now says we don't store/log it and links Geocodio's data-retention policy; also softened the `hashAddressForKey` doc-comment which called the SHA-256 key "non-reversible" (an address hash is brute-forceable — it's a cache key, not anonymization).
+- **Accessibility: no statutory 508 duty on a private tool; WCAG 2.1 AA is the right bar and we meet AA** (#38).
+- **LLM-summary disclaimer (a #26 question): moot** — the LLM was retired in session 6, so there is no generated prose to disclaim.
+
+**Citation standard (the #26 decision to make):** adopt what we already ship — **every bill/meeting/hearing links to its official Congress.gov record, and CRS summary text is attributed verbatim to CRS.** No academic per-data-point citations. Attribution isn't legally required, but the source links reinforce the "a lens onto official data, not a replacement" positioning. Largely already implemented.
+
+**Filed for concrete follow-up:** add a CalOPPA-accurate privacy-policy page; add an "informational only / no warranty / not legal advice" footer disclaimer. The footer accuracy fix was applied directly this session. (Closed #26.)

@@ -143,13 +143,16 @@ export class GeocodioError extends Error {
 }
 
 /**
- * Derive a stable, non-reversible cache key part from an address.
+ * Derive a stable, opaque cache-key part from an address.
  *
  * We must NOT store the raw address anywhere — the footer/spec promise it is not
  * stored (privacy §, Issue #31). But we still want cache hits for the same input,
  * so we normalize (lower, trim, collapse ws, strip punctuation) then SHA-256: the
- * same address always maps to the same key, yet the key in Upstash (and in any
- * cache-error log line) reveals nothing about the address entered.
+ * same address always maps to the same key, and the raw address is never written
+ * to Upstash or any cache-error log line. This is a cache key, NOT a cryptographic
+ * anonymization guarantee — the address space is enumerable, so a determined party
+ * with the hash could brute-force it. The property we rely on is "address not
+ * stored in the clear", not "address unrecoverable" (#26 / FTC §5 accuracy).
  */
 function hashAddressForKey(address: string): string {
   const normalized = address
