@@ -1,60 +1,60 @@
-> Generated 2026-07-15 by /end-session at commit 939b180.
+> Generated 2026-07-16 by /end-session at commit 74933e9.
 
 # STATUS
 
 ## Where things stand
 
-**Session 2026-07-15 (4) — a compliance-review session (#26).** Research-heavy, small
-code footprint: the durable finding lands in `decisions.md`, two follow-up issues are
-filed, and one live accuracy fix shipped. Code touched: `app/Footer.tsx`,
-`lib/geocodio.ts` (comment only), plus `decisions.md`.
+**Session 2026-07-16 (1) — a batch of the post-MVP enhancement backlog.** Sorted the open
+issues into automatable vs. needs-owner-input, resolved the gating decisions with the owner,
+then shipped four builds + two doc/close items in one pass. MVP has been complete since
+#26; this session works the unmilestoned follow-up backlog.
 
-**#26 (compliance / data-use / citation standard) — done, closed.** Researched every data
-source's terms and the legal/privacy landscape from primary sources. **Verdict:
-substantially compliant, no blocker.** Highlights recorded so they aren't re-derived:
-- **Data sources all permit our use; attribution is required nowhere.** Congress.gov API
-  caching + re-display is the *intended* use with no duration limit; all data (incl. CRS
-  bill summaries) is US-gov public domain. The **5,000 req/hr** limit our
-  `rate-limit.ts`/`cache.ts` assume is **correct** — Congress.gov's documented override of
-  the generic 1,000/hr api.data.gov floor; do not lower it. Geocodio permits storing
-  results (our 24h TTL is conservative). house.gov/senate.gov carry no robots restriction;
-  unitedstates/congress-legislators is CC0. We correctly do **not** scrape congress.gov.
-- **Legal:** FEC/electioneering + LDA lobbying clear (position-neutral stance is
-  load-bearing). CCPA/CPRA + GDPR n/a. Accessibility: WCAG 2.1 AA is the right bar, met
-  (#38). The LLM-summary-disclaimer question is **moot** (LLM retired session 6).
-- **Citation standard adopted:** what we already ship — every bill/meeting/hearing links to
-  its Congress.gov record; CRS text attributed verbatim to CRS. No academic per-datum cites.
+**Shipped this session:**
+- **#43 — privacy-policy page (CalOPPA).** New static `/privacy` route with every required
+  clause (PII collected = the address; shared with Geocodio + its ~46-day logs; zero
+  retention on our side; SHA-256-cache-key caveat; DNT; effective date + change clause).
+  Linked conspicuously from the footer with the word "privacy". **Verified the load-bearing
+  "we don't log your address" claim is true end-to-end** (see decisions.md): code logs no
+  raw address, the address rides in the POST body (not the URL), and Log Drains are
+  Pro/Enterprise-only so our Hobby plan can't forward logs anywhere. Wording still wants a
+  counsel read before a real launch.
+- **#44 — footer disclaimer.** "As is / no warranty / not legal-voting-professional advice"
+  + source attribution (Congress.gov + CRS, not endorsed by them).
+- **#41 — abuse/quota protection.** New `lib/abuse-guard.ts`: per-IP fixed-window rate limit
+  (Upstash) on the lookup actions + a global daily Geocodio circuit breaker reserving credits
+  before each live geocode, hard-stopping at the free-tier 2,500/day. Both degrade to *allow*
+  with no Redis. Deferred layers (Turnstile, junk-address heuristics) spun out to **#45**.
+- **#39 — suppress empty committee-docket expanders.** One KV-only `peekDocketCounts` mget
+  up front; the expander renders only when the warm count is unknown or `>0`. Accepts the
+  #21-deferred coupling (owner call).
+- **#32 — session numbering.** Adopted date-scoped `YYYY-MM-DD #N` (Option B); rule added to
+  CLAUDE.md + the end-session skill. History grandfathered.
+- **#29 — House recess date via PDF.** Closed won't-do (maintenance burden > marginal copy).
 
-**Footer accuracy fix — shipped this session.** The footer's "we don't … log it" overstated
-the flow: Geocodio logs the submitted address ~46 days on our tier (FTC §5). Footer now
-says *we* don't store/log it and links Geocodio's data-retention policy. Also softened the
-`hashAddressForKey` doc-comment that called the SHA-256 key "non-reversible" — it's a cache
-key, not anonymization (address space is enumerable).
-
-**Priorities next** — no gate-free MVP work remains. **#41** (abuse protection, most
-actionable; carries owner questions). Compliance follow-ups from #26: **#43** (privacy-policy
-page, CalOPPA — the one arguably-required artifact) and **#44** (informational/no-warranty
-disclaimer). Lower: **#39** (#21 polish — suppress empty docket expanders), **#29** (House
-recess date via PDF), **#32** (session-numbering convention).
+**Priorities next** — backlog is thin. **#45** (escalate abuse protection *only if* bot
+traffic actually appears — contingent, not urgent). Standing pre-launch gate: **#43** wording
+wants a counsel read, and its privacy claim depends on staying on Hobby / not adding a
+body-capturing log drain or an observability integration (tracked in decisions.md).
 
 ## Derived facts (from CLAUDE.md commands)
 
 | Fact | Command | Result |
 |---|---|---|
-| Test status | `npm test` | ✓ 178 tests passing, 22 files (Vitest 4.1.10) |
+| Test status | `npm test` | ✓ 195 tests passing, 24 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
-| Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx` |
-| Git | `git log --oneline -1` (pre-doc-commit) | `939b180 Close session 2026-07-15 (3): a11y re-audit passed (#38), placeholder fix (#42), committee link verified (#40)` |
-| Deploy | `vercel ls` | latest: `reptracker2-98rgl3l4v-lukitux-4243s-projects.vercel.app` |
+| Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx`, `app/privacy/page.tsx` |
+| Git | `git log --oneline -1` (pre-doc-commit) | `74933e9 Close session 2026-07-15 (4): compliance review cleared (closes #26) → file #43, #44` |
+| Deploy | `vercel ls` | latest: `reptracker2-3dy80uqdl-lukitux-4243s-projects.vercel.app` · ● Ready (22h) |
 
 ## Active Milestone
 
-**MVP** — https://github.com/lux-username/reptracker_2/milestone/1 — **0 open Issues** (22 closed)
+**MVP** — https://github.com/lux-username/reptracker_2/milestone/1 — **complete, 0 open**.
+Remaining work is unmilestoned enhancement issues (only #45 open after this commit).
 
 ## Blockers / open questions
 
-- **#41** carries owner questions before build: acceptable friction (silent rate-limit vs.
-  visible challenge), per-IP limit numbers, and whether the global circuit breaker caps at
-  the free 2,500/day or allows a small paid buffer.
-- **#43** (privacy policy) wording should get a counsel read before launch — the review is
-  general informational research, not legal advice.
+- **#43** wording should get a counsel read before any real launch — the compliance work
+  establishes the posture, not legal sign-off.
+- **#43 privacy claim depends on infra staying as-is** (decisions.md 2026-07-16): staying on
+  Vercel Hobby (or not configuring a body-capturing log drain if upgraded), and not adding a
+  Sentry/analytics-type integration that could capture request payloads.

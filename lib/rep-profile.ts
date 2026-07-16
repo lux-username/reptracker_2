@@ -18,6 +18,11 @@ import type {
   SecondaryBill,
 } from "./types";
 import { fetchAssignmentIndex } from "./committees";
+import {
+  chamberForCommittee,
+  peekDocketCounts,
+  systemCodeFor,
+} from "./committee-bills";
 import { fetchSecondaryBills } from "./legislation";
 import { fetchUpcomingCommitteeActions } from "./committee-actions";
 import { fetchBillSources, extractBillSummary } from "./summaries";
@@ -135,9 +140,37 @@ export async function buildRepProfile(
   return { rep, committees: assignments, contact, upcomingCommitteeActions, secondaryBills };
 }
 
+/** Congress.gov systemCode for a committee, or null for joint committees (no
+ *  single-chamber docket endpoint), which never get a docket count. */
+function docketSystemCode(a: CommitteeAssignment): string | null {
+  return chamberForCommittee(a.code) ? systemCodeFor(a.code, a.isSubcommittee) : null;
+}
+
+/**
+ * Annotate each assignment with its warm pending-bill count (Issue #39) so the
+ * UI can hide the docket expander for a committee we know is empty. Unknown
+ * (cold KV miss / joint committee) stays `null` — the expander is shown and
+ * degrades on demand. `counts` is the single KV peek shared across all reps.
+ */
+function withDocketCounts(
+  assignments: CommitteeAssignment[],
+  counts: Map<string, number>,
+): CommitteeAssignment[] {
+  return assignments.map((a) => {
+    const sc = docketSystemCode(a);
+    const count = sc ? counts.get(sc) : undefined;
+    return { ...a, pendingCount: count ?? null };
+  });
+}
+
 /**
  * Build every rep section for a resolved district. Fetches the committee
  * assignment index once and enriches the House member + senators in parallel.
+ *
+ * One KV-only docket-count peek (Issue #39) runs up front over every committee
+ * across all reps, so empty-docket expanders can be suppressed without a live
+ * fetch per committee — the deferred coupling from #21, now accepted (owner call
+ * 2026-07-15). A cold miss leaves the count unknown and the expander is shown.
  */
 export async function buildProfiles(
   reps: ResolvedReps,
@@ -148,12 +181,22 @@ export async function buildProfiles(
     ...(reps.houseMember ? [reps.houseMember] : []),
     ...reps.senators,
   ];
+
+  const assignmentsFor = (rep: Rep) => assignmentIndex.get(rep.bioguideId) ?? [];
+
+  // Single KV peek over the distinct committees these reps sit on.
+  const systemCodes = members
+    .flatMap(assignmentsFor)
+    .map(docketSystemCode)
+    .filter((sc): sc is string => sc !== null);
+  const docketCounts = await peekDocketCounts(reps.congress, systemCodes);
+
   return Promise.all(
     members.map((rep) =>
       buildRepProfile(
         rep,
         reps.congress,
-        assignmentIndex.get(rep.bioguideId) ?? [],
+        withDocketCounts(assignmentsFor(rep), docketCounts),
         now,
       ),
     ),

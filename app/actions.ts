@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import type {
   Chamber,
   CommitteeDocket,
@@ -11,9 +12,34 @@ import type {
 import { lookupAddress, resolveCandidate } from "@/lib/resolve-reps";
 import { buildProfiles } from "@/lib/rep-profile";
 import { fetchCommitteeDocket } from "@/lib/committee-bills";
+import { checkRateLimit } from "@/lib/abuse-guard";
+
+/**
+ * The caller's IP for per-IP rate limiting (Issue #41). On Vercel the client IP
+ * is the first entry of `x-forwarded-for`; `x-real-ip` is the fallback. Returns
+ * "" when neither is present (e.g. local dev), which the limiter buckets under a
+ * shared "unknown" key.
+ */
+async function clientIp(): Promise<string> {
+  const h = await headers();
+  const fwd = h.get("x-forwarded-for");
+  if (fwd) return fwd.split(",")[0]!.trim();
+  return h.get("x-real-ip")?.trim() ?? "";
+}
+
+/** A rejected-by-rate-limit LookupResult (Issue #41): silent throttle, friendly copy. */
+function rateLimitedResult(): LookupResult {
+  return {
+    status: "error",
+    message:
+      "You've made a lot of lookups in a short time. Please wait a moment and try again.",
+  };
+}
 
 /** Look up an address string → reps, disambiguation, or a miss. */
 export async function lookupAction(address: string): Promise<LookupResult> {
+  const limit = await checkRateLimit(await clientIp(), Date.now());
+  if (!limit.allowed) return rateLimitedResult();
   return lookupAddress(address);
 }
 
@@ -21,6 +47,8 @@ export async function lookupAction(address: string): Promise<LookupResult> {
 export async function resolveCandidateAction(
   candidate: DistrictCandidate,
 ): Promise<LookupResult> {
+  const limit = await checkRateLimit(await clientIp(), Date.now());
+  if (!limit.allowed) return rateLimitedResult();
   try {
     const reps = await resolveCandidate(candidate);
     return { status: "resolved", reps };

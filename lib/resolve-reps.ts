@@ -65,6 +65,11 @@ export async function lookupAddress(address: string): Promise<LookupResult> {
           "We couldn't find that address. Try a full street address including city and state.",
       };
     }
+    // Daily circuit breaker tripped (Issue #41) — a distinct, honest message so
+    // the user knows to come back rather than thinking their address was wrong.
+    if (e instanceof GeocodioError && e.kind === "rate_limited") {
+      return { status: "error", message: e.message };
+    }
     return {
       status: "error",
       message: "Something went wrong looking up that address. Please try again.",

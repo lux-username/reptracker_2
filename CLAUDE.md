@@ -41,3 +41,4 @@ Every fact below is obtained by **running the command, never by recall**. If you
 - **Plans never live only in the journal.** If it's open work, it's an Issue.
 - Session start: read `STATUS.md` (check its stamp date), then `gh issue list --state open`.
 - Session end: run **/end-session**. Always — a skipped run is how STATUS.md starts lying.
+- **Session labels are date-scoped: `YYYY-MM-DD #N`** (N = the day's Nth session, matching the `journal/YYYY-MM-DD-N.md` filename). Mirror it in commit subjects ("Close session YYYY-MM-DD (N): …"). A bare "session N" is meaningless without the date — always qualify. Existing pre-2026-07-15 journal entries used ad-hoc global/per-day numbering; that history is grandfathered, not rewritten (Issue #32).

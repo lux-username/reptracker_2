@@ -101,6 +101,11 @@ function RoleBadge({ role }: { role: CommitteeAssignment["role"] }) {
  * The pending-docket expander for one committee (Issue #21). Rendered for House
  * and Senate committees; joint committees have no single chamber for the bills
  * endpoint (chamberForCommittee → null) so they degrade to no expander.
+ *
+ * Issue #39: when the cron-warmed docket says this committee has zero bills
+ * waiting (`pendingCount === 0`), suppress the expander entirely rather than
+ * offer one that opens to an empty state. An unknown count (null/undefined —
+ * cold KV miss) still shows the expander, which degrades on demand.
  */
 function CommitteeDocketExpander({
   committee,
@@ -111,6 +116,7 @@ function CommitteeDocketExpander({
 }) {
   const chamber = chamberForCommittee(committee.code);
   if (!chamber) return null;
+  if (committee.pendingCount === 0) return null;
   return (
     <CommitteeBills
       congress={congress}

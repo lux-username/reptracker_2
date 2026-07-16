@@ -18,7 +18,7 @@
 // cold path builds it live (bounded) and caches it — mirroring the events-index
 // warm/cold split in committee-actions.ts.
 import type { Chamber, CommitteeAssignment, CommitteeDocket, PendingBill } from "./types";
-import { cached, cacheKey, TTL } from "./cache";
+import { cached, cacheKey, redisClient, TTL } from "./cache";
 import { congressFetch } from "./rate-limit";
 import { billDisplayId, billUrl, committeePageUrl } from "./bill-format";
 import { fetchBillSources, extractBillSummary, fetchBillTitle } from "./summaries";
@@ -256,4 +256,41 @@ export function fetchCommitteeDocket(
   systemCode: string,
 ): Promise<CommitteeDocket> {
   return buildCommitteeDocket(congress, chamber, systemCode);
+}
+
+/**
+ * Peek the *warm* pending-bill count for each committee, KV-only (Issue #39).
+ *
+ * Unlike `fetchCommitteeDocket`, this NEVER builds a docket live — it only reads
+ * the cron-warmed artifacts already in KV via a single `mget`, so profile
+ * assembly can decide whether to render a committee's docket expander without
+ * adding a live fetch per committee. A committee absent from KV (cold miss),
+ * a disabled cache, or any Redis error yields no entry — the caller treats the
+ * count as unknown and shows the expander (degrade to on-demand).
+ *
+ * Returns a map keyed by `systemCode` → `totalReferred`. Keyed by systemCode
+ * alone because the docket cache key already is (systemCode encodes chamber).
+ */
+export async function peekDocketCounts(
+  congress: number,
+  systemCodes: string[],
+): Promise<Map<string, number>> {
+  const counts = new Map<string, number>();
+  const unique = [...new Set(systemCodes)];
+  if (unique.length === 0) return counts;
+
+  const client = redisClient();
+  if (!client) return counts; // no cache → all unknown, expanders shown
+
+  try {
+    const keys = unique.map((sc) => docketKey(congress, sc));
+    const dockets = await client.mget<(CommitteeDocket | null)[]>(...keys);
+    unique.forEach((sc, i) => {
+      const d = dockets[i];
+      if (d && typeof d.totalReferred === "number") counts.set(sc, d.totalReferred);
+    });
+  } catch (e) {
+    console.warn(`[committee-bills] docket-count peek failed: ${String(e)}`);
+  }
+  return counts;
 }

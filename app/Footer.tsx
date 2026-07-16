@@ -23,6 +23,14 @@ export default function Footer() {
           .
         </p>
         <p>
+          Provided for general informational purposes only, on an
+          &ldquo;as is&rdquo; basis and{" "}
+          <strong className="font-medium text-slate-600">without
+          warranties of accuracy or completeness</strong>. This is not legal,
+          voting, or professional advice. Data comes from Congress.gov and the
+          Congressional Research Service; it is not produced or endorsed by them.
+        </p>
+        <p>
           Your address is sent once to our geocoding provider (Geocodio) to find
           your district. We don&apos;t store it, log it, or keep any account for
           you; Geocodio may briefly retain it in their own access logs (up to ~46
@@ -33,9 +41,23 @@ export default function Footer() {
           >
             data-retention policy
           </ExternalLink>
-          . No tracking — we only count how many requests the site receives.
+          . No tracking — we only count how many requests the site receives. See
+          our{" "}
+          <a
+            href="/privacy"
+            className="underline underline-offset-2 hover:text-slate-700"
+          >
+            privacy policy
+          </a>{" "}
+          for details.
         </p>
         <p className="flex flex-wrap gap-x-6 gap-y-2">
+          <a
+            href="/privacy"
+            className="underline underline-offset-2 hover:text-slate-700"
+          >
+            Privacy
+          </a>
           <a
             href={`mailto:${FEEDBACK_EMAIL}`}
             className="underline underline-offset-2 hover:text-slate-700"

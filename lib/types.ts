@@ -104,6 +104,13 @@ export interface CommitteeAssignment {
   parentName: string | null;
   /** Parent full-committee code, e.g. "HSAG" (subcommittees only). */
   parentCode: string | null;
+  /**
+   * Bills currently waiting in this committee, from the cron-warmed docket in KV
+   * (Issue #39). Used only to hide the docket expander for a committee we *know*
+   * is empty (0). `null`/absent means "unknown" (cold KV miss or joint committee
+   * with no docket endpoint) — the expander is shown and degrades on demand.
+   */
+  pendingCount?: number | null;
 }
 
 /**

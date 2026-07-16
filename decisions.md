@@ -600,3 +600,36 @@ one the committee could still advance toward the floor. (Closed #40.)
 **Citation standard (the #26 decision to make):** adopt what we already ship — **every bill/meeting/hearing links to its official Congress.gov record, and CRS summary text is attributed verbatim to CRS.** No academic per-data-point citations. Attribution isn't legally required, but the source links reinforce the "a lens onto official data, not a replacement" positioning. Largely already implemented.
 
 **Filed for concrete follow-up:** add a CalOPPA-accurate privacy-policy page; add an "informational only / no warranty / not legal advice" footer disclaimer. The footer accuracy fix was applied directly this session. (Closed #26.)
+
+## 2026-07-16 — Privacy page shipped; "we don't log your address" verified true end-to-end (#43)
+
+**Built the CalOPPA privacy page (`/privacy`, #43) and verified its load-bearing FTC §5 claim — "we don't store, log, or keep your address" — is literally true across the whole stack, not just our code.** Recorded here so the verification isn't re-run from scratch and so the dependencies it rests on are explicit (a future change to any of them could silently falsify the claim).
+
+**What was verified:**
+- **Our code never logs the raw address.** Audited every `console.*` call in `app/` + `lib/` — none interpolate the address (or the `trimmed`/`q` vars holding it). The raw address is only ever `.trim()`ed, regex-tested (`looksLikeStreetAddress`), SHA-256-hashed before it touches Upstash (`hashAddressForKey`), and sent to Geocodio as the `q` param (already disclosed on the page + footer). Never written to a log line or stored in the clear.
+- **The address rides in the POST body of a server action, not the URL** — so ordinary platform request logging (path/method/status) can't capture it.
+- **No log forwarding is possible on our plan.** Vercel Log Drains ("Drains") are **Pro/Enterprise-only** — per Vercel docs (updated 2026-06-29): "If you are on the Hobby or Pro Trial plan, you'll need to upgrade to Pro to access non-audit-log drains." This project targets **Hobby** (the prewarm cron is daily-only by design; see `app/api/cron/prewarm/route.ts`), so no drain can forward logs anywhere. No Sentry/analytics/observability deps in `package.json` either.
+- **Geocodio's ~46-day retention** is the one place the address persists, and the page discloses it explicitly with a link to their data-retention policy.
+
+**Dependencies the claim rests on — if any changes, re-verify before it stays true:**
+1. Staying on Vercel Hobby (or, if upgraded to Pro, *not* configuring a log drain that captures bodies).
+2. Not adding an observability/error-tracking integration (Sentry, LogRocket, Datadog) that could capture request payloads.
+3. Not adding code that logs the raw address.
+
+**Also chosen:** the page keeps zero retention on our side (no accounts, no lookup history), states the SHA-256 cache key is a key and *not* an anonymization guarantee (mirrors the corrected `hashAddressForKey` comment and the #26 footer fix), and carries an effective date + material-change clause as CalOPPA expects. Wording still wants a counsel read before any real launch — the compliance work establishes the posture, not legal sign-off. (Closes #43.)
+
+## 2026-07-16 — Abuse protection: no-new-vendor rate limit + free-tier circuit breaker; higher-friction layers deferred (#41)
+
+**Chose the two no-new-vendor, wallet-protecting layers and deferred the rest** (owner decision, from #41's menu). Built:
+- **Per-IP rate limit** — a fixed-window (not sliding) counter per IP over a minute + a day window, in the Upstash Redis we already run, enforced in `lookupAction`/`resolveCandidateAction`. Silent throttle (no visible challenge) → friendly "slow down" copy. Defaults `RATE_LIMIT_PER_MIN`=12, `RATE_LIMIT_PER_DAY`=80 (env-tunable; owner didn't specify numbers, so chosen to never bother a real human while throttling a script).
+- **Global daily Geocodio circuit breaker** — a per-UTC-day credit counter, reserved *before* each live geocode (2 credits/call) so a concurrent burst can't race past the cap. **Capped at the free tier 2,500/day** (owner call: never incur paid overage; `GEOCODIO_DAILY_CAP` env-tunable). Placed on the cache-miss path (`geocodeLive`) so cache hits never consume budget; a trip throws a new `rate_limited` GeocodioError kind → distinct "hit its daily limit, try again later" message (not the generic error, so users don't think their address was wrong).
+
+**Both degrade to *allow* with no Redis** — same posture as `lib/cache.ts`: best-effort protection, never a reason to fail a real request over missing infra (prod runs Redis). **Deferred** (higher friction / new dependency, add only if abuse materializes): Cloudflare Turnstile and junk-address heuristics/honeypot — spun out to **#45** so they aren't lost. Rejected placing the breaker at the action layer (would count cache hits against the wallet budget — wrong) in favor of the cache-miss path.
+
+## 2026-07-16 — Session labels standardized to date-scoped `YYYY-MM-DD #N` (#32)
+
+**Chose Option B (date-scoped) over Option A (global monotonic).** Labels now always read `YYYY-MM-DD #N`, mirroring the `journal/YYYY-MM-DD-N.md` filename convention so labels and files stay in lockstep and /end-session can derive N from the day's existing files by command. Option A (one ever-incrementing counter) was rejected: it gives unambiguous citations but requires knowing the last number out-of-band, and it had already drifted (global → per-day) across the 2026-07-08→10 sprint, which is what prompted #32. Documented as a rule in `CLAUDE.md` and the end-session skill's commit step. **Existing pre-2026-07-15 journal entries are grandfathered — append-only history is not rewritten** (the drift is harmless; filenames were always the real index).
+
+## 2026-07-16 — Hide known-empty committee-docket expanders via a KV-only count peek (#39)
+
+**Chose to build it and accept the KV coupling that #21 deliberately deferred** (owner call). Profile assembly (`buildProfiles`) now does one KV-only `peekDocketCounts` mget over the distinct committees across all reps, reading `totalReferred` from the cron-warmed dockets already in KV, and annotates each `CommitteeAssignment` with `pendingCount`. `RepSection` suppresses a committee's docket expander only when the count is a *known* 0; an unknown count (cold KV miss, or a joint committee with no docket endpoint) still shows the expander, which degrades on demand. This is the tradeoff #21 named — the committees section is now coupled to warm docket data (one extra KV read per lookup, batched into a single mget) — accepted now to stop offering expanders that open to an empty "no bills waiting" state. Rejected the alternative of a live docket fetch per committee (defeats the on-demand design); the peek is KV-only and never builds live.

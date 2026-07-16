@@ -65,6 +65,8 @@ c. Verify `sessions/` is still gitignored: `git check-ignore sessions/` — if n
 
 One commit: session work + all doc updates. Reference closed issues (`fixes #N`) — the reference only closes the Issue once the commit reaches the default branch on the remote, which is why push is part of this step, not left for later.
 
+Commit subject uses the date-scoped session label (Issue #32): `Close session <YYYY-MM-DD> (<n>): …`, where `<n>` is the same day-scoped index as step 4's journal entry. Never a bare global "session N" — the date is what makes the label unambiguous.
+
 Then push: `git push`. If the current branch has no upstream, set one: `git push -u origin HEAD`.
 
 **If push fails** (no remote, auth failure, non-fast-forward, offline): do not silently continue. The commit still stands locally; tell the user out loud that the push failed, show the error, and state that the session's work and any `fixes #N` closures are **not** on the remote until they push. Do not attempt a force-push.

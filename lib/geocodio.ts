@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import type { DistrictCandidate } from "./types";
 import { isNonVoting, normalizeDistrict, parseCongressNumber } from "./jurisdictions";
 import { cached, cacheKey, TTL } from "./cache";
+import { reserveGeocodeCredits } from "./abuse-guard";
 
 // Minimal shapes for the Geocodio v1.7 `cd` (congressional district) field.
 // Only the fields we consume are typed; the payload has much more.
@@ -135,7 +136,7 @@ export function looksLikeStreetAddress(address: string): boolean {
 export class GeocodioError extends Error {
   constructor(
     message: string,
-    readonly kind: "not_found" | "error",
+    readonly kind: "not_found" | "error" | "rate_limited",
   ) {
     super(message);
     this.name = "GeocodioError";
@@ -180,6 +181,17 @@ export async function geocode(address: string): Promise<DistrictCandidate[]> {
 async function geocodeLive(address: string): Promise<DistrictCandidate[]> {
   const apiKey = process.env.GEOCODIO_API_KEY;
   if (!apiKey) throw new GeocodioError("GEOCODIO_API_KEY is not set", "error");
+
+  // Global daily circuit breaker (Issue #41): reserve this call's credits before
+  // spending them. Only the live (cache-miss) path reaches here, so cache hits
+  // never consume budget. When the day's cap is hit, stop before the network
+  // call rather than pay past the free tier.
+  if (!(await reserveGeocodeCredits())) {
+    throw new GeocodioError(
+      "This tool has hit its daily lookup limit. Please try again later.",
+      "rate_limited",
+    );
+  }
 
   const url = new URL("https://api.geocod.io/v1.7/geocode");
   url.searchParams.set("q", address);
