@@ -1,40 +1,30 @@
-> Generated 2026-07-16 by /end-session at commit 74933e9.
+> Generated 2026-07-16 by /end-session at commit cae8988.
 
 # STATUS
 
 ## Where things stand
 
-**Session 2026-07-16 (1) — a batch of the post-MVP enhancement backlog.** Sorted the open
-issues into automatable vs. needs-owner-input, resolved the gating decisions with the owner,
-then shipped four builds + two doc/close items in one pass. MVP has been complete since
-#26; this session works the unmilestoned follow-up backlog.
+**Session 2026-07-16 (2) — doc hygiene: reclassified the "pre-launch gates."** No code
+changed. Challenged by the owner on the framing that STATUS carried after session (1): a
+"gate" that can never be satisfied isn't a gate. Resolved the two so-called gates:
 
-**Shipped this session:**
-- **#43 — privacy-policy page (CalOPPA).** New static `/privacy` route with every required
-  clause (PII collected = the address; shared with Geocodio + its ~46-day logs; zero
-  retention on our side; SHA-256-cache-key caveat; DNT; effective date + change clause).
-  Linked conspicuously from the footer with the word "privacy". **Verified the load-bearing
-  "we don't log your address" claim is true end-to-end** (see decisions.md): code logs no
-  raw address, the address rides in the POST body (not the URL), and Log Drains are
-  Pro/Enterprise-only so our Hobby plan can't forward logs anywhere. Wording still wants a
-  counsel read before a real launch.
-- **#44 — footer disclaimer.** "As is / no warranty / not legal-voting-professional advice"
-  + source attribution (Congress.gov + CRS, not endorsed by them).
-- **#41 — abuse/quota protection.** New `lib/abuse-guard.ts`: per-IP fixed-window rate limit
-  (Upstash) on the lookup actions + a global daily Geocodio circuit breaker reserving credits
-  before each live geocode, hard-stopping at the free-tier 2,500/day. Both degrade to *allow*
-  with no Redis. Deferred layers (Turnstile, junk-address heuristics) spun out to **#45**.
-- **#39 — suppress empty committee-docket expanders.** One KV-only `peekDocketCounts` mget
-  up front; the expander renders only when the warm count is unknown or `>0`. Accepts the
-  #21-deferred coupling (owner call).
-- **#32 — session numbering.** Adopted date-scoped `YYYY-MM-DD #N` (Option B); rule added to
-  CLAUDE.md + the end-session skill. History grandfathered.
-- **#29 — House recess date via PDF.** Closed won't-do (maintenance burden > marginal copy).
+- **"Counsel read before launch" → accepted risk, not a gate.** There is no counsel and won't
+  be — this is a free, no-revenue tool from a solo hobbyist. Recorded an explicit risk
+  acceptance in `decisions.md`: the #26 compliance work + the #43 page (every CalOPPA clause,
+  FTC §5 claim verified true end-to-end) are a genuine good-faith effort at the standard a
+  hobby project can meet; the owner accepts the residual legal risk of shipping without a
+  lawyer. Removed the blocker framing from STATUS.
+- **Infra dependency → forever invariant, not a task.** "Stay on Hobby / no body-capturing log
+  drain / no payload-capturing observability integration" is a *don't-regress* constraint, not
+  a pre-launch to-do. It lives in `decisions.md` (the #43 entry); no open issue, since there's
+  no pending action.
 
-**Priorities next** — backlog is thin. **#45** (escalate abuse protection *only if* bot
-traffic actually appears — contingent, not urgent). Standing pre-launch gate: **#43** wording
-wants a counsel read, and its privacy claim depends on staying on Hobby / not adding a
-body-capturing log drain or an observability integration (tracked in decisions.md).
+Net effect: **#45 is the only open issue and nothing gates a launch.** MVP has been complete
+since #26; the remaining backlog is thin, unmilestoned enhancement work.
+
+**Priorities next** — backlog is thin. **#45** (escalate abuse protection *only if* real bot
+traffic appears — contingent, not urgent) is the sole open issue. If moving toward a real
+launch, there is no forced code task; the privacy wording is shipped as an accepted risk.
 
 ## Derived facts (from CLAUDE.md commands)
 
@@ -43,18 +33,20 @@ body-capturing log drain or an observability integration (tracked in decisions.m
 | Test status | `npm test` | ✓ 195 tests passing, 24 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx`, `app/privacy/page.tsx` |
-| Git | `git log --oneline -1` (pre-doc-commit) | `74933e9 Close session 2026-07-15 (4): compliance review cleared (closes #26) → file #43, #44` |
-| Deploy | `vercel ls` | latest: `reptracker2-3dy80uqdl-lukitux-4243s-projects.vercel.app` · ● Ready (22h) |
+| Git | `git log --oneline -1` (pre-doc-commit) | `cae8988 Close session 2026-07-16 (1): abuse guard, privacy page, docket polish` |
+| Deploy | `vercel ls` | latest: `reptracker2-bmckz8uoe-lukitux-4243s-projects.vercel.app` |
 
 ## Active Milestone
 
 **MVP** — https://github.com/lux-username/reptracker_2/milestone/1 — **complete, 0 open**.
-Remaining work is unmilestoned enhancement issues (only #45 open after this commit).
+Remaining work is unmilestoned enhancement issues (only #45 open).
 
 ## Blockers / open questions
 
-- **#43** wording should get a counsel read before any real launch — the compliance work
-  establishes the posture, not legal sign-off.
-- **#43 privacy claim depends on infra staying as-is** (decisions.md 2026-07-16): staying on
-  Vercel Hobby (or not configuring a body-capturing log drain if upgraded), and not adding a
-  Sentry/analytics-type integration that could capture request payloads.
+- **None blocking.** Shipping #43 without counsel is an accepted risk, not a gate
+  (decisions.md 2026-07-16) — no lawyer exists for a free solo-hobby tool, and the page is a
+  good-faith CalOPPA effort with its FTC §5 claim verified true end-to-end.
+- **Forever invariant (not a task):** the #43 privacy claim depends on infra staying as-is —
+  Vercel Hobby (or no body-capturing log drain if upgraded) and no payload-capturing
+  observability integration (Sentry/analytics). Re-verify only if any of that changes.
+  Recorded in decisions.md (#43 entry); no open issue since there's no pending action.
