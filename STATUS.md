@@ -1,30 +1,39 @@
-> Generated 2026-07-16 by /end-session at commit cae8988.
+> Generated 2026-07-23 by /end-session at commit c01efea.
 
 # STATUS
 
 ## Where things stand
 
-**Session 2026-07-16 (2) — doc hygiene: reclassified the "pre-launch gates."** No code
-changed. Challenged by the owner on the framing that STATUS carried after session (1): a
-"gate" that can never be satisfied isn't a gate. Resolved the two so-called gates:
+**Session 2026-07-23 (1) — naming exploration + a doc-drift audit that found real staleness.**
+No application code changed. Two threads:
 
-- **"Counsel read before launch" → accepted risk, not a gate.** There is no counsel and won't
-  be — this is a free, no-revenue tool from a solo hobbyist. Recorded an explicit risk
-  acceptance in `decisions.md`: the #26 compliance work + the #43 page (every CalOPPA clause,
-  FTC §5 claim verified true end-to-end) are a genuine good-faith effort at the standard a
-  hobby project can meet; the owner accepts the residual legal risk of shipping without a
-  lawyer. Removed the blocker framing from STATUS.
-- **Infra dependency → forever invariant, not a task.** "Stay on Hobby / no body-capturing log
-  drain / no payload-capturing observability integration" is a *don't-regress* constraint, not
-  a pre-launch to-do. It lives in `decisions.md` (the #43 entry); no open issue, since there's
-  no pending action.
+**1. Product name.** Explored alternatives to "Representative Tracker" — the concern being
+that "tracker" frames the representative as a subject under watch, which inverts the
+product's actual stance (the constituent is the principal). Landed on a candidate,
+**Representative Activity Lookup**, filed as a decision issue (#46) rather than
+implemented. The reasoning is worth more than the name: any candidate has to clear two
+constraints already established by prior decisions — **no synthesis** (the LLM was retired
+in session 6, so "Brief"/"Digest"/"Report" promise an editorial condensation that doesn't
+exist) and **no decision-overclaim** (#30 retired "upcoming decisions", so "Docket"/"Before
+the Vote" misdescribe what is mostly hearings and sponsored bills). Both constraints are
+recorded in `decisions.md` this session because they will outlive this particular name.
 
-Net effect: **#45 is the only open issue and nothing gates a launch.** MVP has been complete
-since #26; the remaining backlog is thin, unmilestoned enhancement work.
+**2. Doc drift.** The naming discussion surfaced that `CLAUDE.md` still described a stack
+that no longer exists — it claimed an Anthropic/Haiku LLM layer retired seven months of
+sessions ago. A follow-up audit found four more stale claims. `CLAUDE.md` is now fixed: the
+Stack section was **replaced with a pointer to `spec.md` §Tech stack** rather than
+corrected in place, because the duplication was itself the drift mechanism — every stale
+claim in it was a copy that diverged from its original. Also fixed: the project
+description no longer uses the retired "upcoming decisions" phrasing, three rows were added
+to the Derived Facts table, and `sessions/` was added to the one-home routing rule.
 
-**Priorities next** — backlog is thin. **#45** (escalate abuse protection *only if* real bot
-traffic appears — contingent, not urgent) is the sole open issue. If moving toward a real
-launch, there is no forced code task; the privacy wording is shipped as an accepted risk.
+**The pointer created a dependency:** `CLAUDE.md` now sends readers to `spec.md` §Tech
+stack, and that section carries two of the same errors (#47). Until #47 is fixed the
+pointer launders stale facts as authoritative — worse than the duplication it replaced.
+**#47 is the highest-value next task.**
+
+**Priorities next** — **#47** first (see above). Then **#46** is a decision to make, not
+work to do. #48 and #49 are small and independent.
 
 ## Derived facts (from CLAUDE.md commands)
 
@@ -33,20 +42,35 @@ launch, there is no forced code task; the privacy wording is shipped as an accep
 | Test status | `npm test` | ✓ 195 tests passing, 24 files (Vitest 4.1.10) |
 | Typecheck | `npx tsc --noEmit` | ✓ exit 0 |
 | Routes/pages | `find app -name 'route.ts' -o -name 'page.tsx'` | `app/api/cron/prewarm/route.ts`, `app/api/health/route.ts`, `app/page.tsx`, `app/privacy/page.tsx` |
-| Git | `git log --oneline -1` (pre-doc-commit) | `cae8988 Close session 2026-07-16 (1): abuse guard, privacy page, docket polish` |
-| Deploy | `vercel ls` | latest: `reptracker2-bmckz8uoe-lukitux-4243s-projects.vercel.app` |
+| Latest commit | `git log --oneline -1` (pre-doc-commit) | `c01efea Close session 2026-07-16 (2): reframe "pre-launch gates" as accepted risk + forever invariant` |
+| Open issues | `gh issue list --state open` | 5 — #45, #46, #47, #48, #49 |
+| Active milestone | `gh issue list --milestone MVP --state open` | 2 open — #46, #47 |
+| Deploy | `vercel ls` | latest: `reptracker2-2cf54ytfx-lukitux-4243s-projects.vercel.app` |
 
 ## Active Milestone
 
-**MVP** — https://github.com/lux-username/reptracker_2/milestone/1 — **complete, 0 open**.
-Remaining work is unmilestoned enhancement issues (only #45 open).
+**MVP** — https://github.com/lux-username/reptracker_2/milestone/1 — **2 open (#46, #47)**.
+
+⚠ **This reverses last session's "MVP complete, 0 open."** Nothing regressed; both issues
+were filed *into* MVP this session on the judgement that pre-launch identity (#46) and the
+accuracy of the doc `CLAUDE.md` now depends on (#47) are MVP concerns. If you disagree,
+unmilestone them and MVP returns to complete — the code has not moved.
 
 ## Blockers / open questions
 
-- **None blocking.** Shipping #43 without counsel is an accepted risk, not a gate
-  (decisions.md 2026-07-16) — no lawyer exists for a free solo-hobby tool, and the page is a
-  good-faith CalOPPA effort with its FTC §5 claim verified true end-to-end.
-- **Forever invariant (not a task):** the #43 privacy claim depends on infra staying as-is —
-  Vercel Hobby (or no body-capturing log drain if upgraded) and no payload-capturing
-  observability integration (Sentry/analytics). Re-verify only if any of that changes.
-  Recorded in decisions.md (#43 entry); no open issue since there's no pending action.
+- **#47 blocks trusting `CLAUDE.md`'s Stack pointer.** Not a launch blocker; a
+  correctness-of-documentation blocker. Highest-value next task.
+- **#46 is an open decision, not a task.** Nothing is implemented. If accepted, the
+  user-facing rename is exactly two strings (`app/layout.tsx:6`, `app/page.tsx:27`) — the
+  metadata description and hero subhead are already correct. Repo/Vercel/`prewarm.yml`
+  names are explicitly out of scope: renaming the deploy would break the prewarm cron.
+- **Untracked files in the working tree, disposition unknown** — `portfolio_draft2.md`,
+  `portfolio_draft3.md`, `documents outdated/`, `portfolio materials/`. These predate this
+  session and were deliberately **not** committed by /end-session, since they are not
+  session work and may be intended as local-only. They need a home: commit them, gitignore
+  them, or move them out of the repo. No issue filed — this is a question for the owner,
+  not a defect.
+- **Prior invariants still stand** (unchanged this session): shipping #43 without counsel
+  is an accepted risk, not a gate (decisions.md 2026-07-16); and the #43 privacy claim
+  depends on infra staying as-is — Vercel Hobby, no body-capturing log drain, no
+  payload-capturing observability. Re-verify only if that changes.
